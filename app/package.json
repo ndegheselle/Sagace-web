@@ -1,0 +1,22 @@
+{
+	"name": "app",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"build": "nuxt build",
+		"dev": "nuxt dev",
+		"generate": "nuxt generate",
+		"preview": "nuxt preview",
+		"postinstall": "nuxt prepare"
+	},
+	"dependencies": {
+		"@phosphor-icons/vue": "^2.2.1",
+		"@pinia/nuxt": "^0.11.3",
+		"@tailwindcss/vite": "^4.1.17",
+		"daisyui": "^5.5.5",
+		"nuxt": "^4.2.1",
+		"tailwindcss": "^4.1.17",
+		"vue": "^3.5.25",
+		"vue-router": "^4.6.3"
+	}
+}
