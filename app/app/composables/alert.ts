@@ -1,6 +1,7 @@
 import { ref } from 'vue';
 
-export enum EnumAlertType {
+export enum EnumPopupType {
+    Neutral,
     Info,
     Success,
     Error,
@@ -10,9 +11,9 @@ export enum EnumAlertType {
 class Alert {
     id: number;
     message: string;
-    type: EnumAlertType;
+    type: EnumPopupType;
 
-    constructor(id: number, message: string, type: EnumAlertType) {
+    constructor(id: number, message: string, type: EnumPopupType) {
         this.id = id;
         this.message = message;
         this.type = type;
@@ -27,7 +28,7 @@ export function useAlert() {
         alerts.value = alerts.value.filter(t => t.id !== id);
     }
 
-    function push(type: EnumAlertType, message: string) {
+    function push(type: EnumPopupType, message: string) {
         const id = Date.now()
         alerts.value.push({ id, type, message })
         setTimeout(() => {
@@ -38,9 +39,9 @@ export function useAlert() {
     return {
         alerts,
         close,
-        info: (msg: string) => push(EnumAlertType.Info, msg),
-        success: (msg: string) => push(EnumAlertType.Success, msg),
-        error: (msg: string) => push(EnumAlertType.Error, msg),
-        warning: (msg: string) => push(EnumAlertType.Warning, msg)
+        info: (msg: string) => push(EnumPopupType.Info, msg),
+        success: (msg: string) => push(EnumPopupType.Success, msg),
+        error: (msg: string) => push(EnumPopupType.Error, msg),
+        warning: (msg: string) => push(EnumPopupType.Warning, msg)
     }
 }

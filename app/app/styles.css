@@ -2,3 +2,4 @@
 @plugin "daisyui" {
   themes: dracula --default;
 }
+@import "phosphor-icons/src/css/icons.css";

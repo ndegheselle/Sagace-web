@@ -6,5 +6,4 @@ export default defineNuxtConfig({
 	devtools: { enabled: true },
 	css: ["./app/styles.css"],
 	vite: { plugins: [tailwindcss(),], },
-	plugins: ['~/app/features/popups/alert/alert.plugin.ts'],
 });
