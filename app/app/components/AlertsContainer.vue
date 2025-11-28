@@ -3,24 +3,21 @@ const { alerts, close } = useAlert();
 </script>
 
 <template>
-    <div class="fixed left-0 right-0 top-0 z-1000">
-
-
+    <div class="toast toast-top toast-center">
         <div role="alert" class="alert m-2" v-for="alert in alerts" :key="alert.id" :class="{
-            'alert-info': alert.type === EnumPopupType.Info,
-            'alert-warning': alert.type === EnumPopupType.Warning,
-            'alert-error': alert.type === EnumPopupType.Error,
-            'alert-success': alert.type === EnumPopupType.Success
+            'alert-info': alert.type === EnumAlertType.Info,
+            'alert-warning': alert.type === EnumAlertType.Warning,
+            'alert-error': alert.type === EnumAlertType.Error,
+            'alert-success': alert.type === EnumAlertType.Success
         }">
             <i class="ph-xl" :class="{
-                'ph-info ': alert.type === EnumPopupType.Info,
-                'ph-warning-circle': alert.type === EnumPopupType.Warning || alert.type === EnumPopupType.Error,
-                'ph-check-circle': alert.type === EnumPopupType.Success
+                'ph-info ': alert.type === EnumAlertType.Info,
+                'ph-warning-circle': alert.type === EnumAlertType.Warning || alert.type === EnumAlertType.Error,
+                'ph-check-circle': alert.type === EnumAlertType.Success
             }" />
             <span>{{ alert.message }}</span>
             <button @click="close(alert.id)" class="btn btn-sm btn-ghost btn-circle" aria-label="close"><i
                     class="ph-x ph-lg" /></button>
         </div>
-
     </div>
 </template>
