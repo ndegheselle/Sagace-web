@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 
-const dialogEl = ref<HTMLDialogElement | null>(null);
+const dialog = ref<HTMLDialogElement | null>(null);
 
 const title = ref('');
 const message = ref('');
@@ -10,7 +10,7 @@ let resolver: ((value: boolean) => void) | null = null;
 export function useConfirmation() {
 
   function registerDialog(el: HTMLDialogElement) {
-    dialogEl.value = el;
+    dialog.value = el;
   }
 
   function show(t: string, m: string, i?: string): Promise<boolean> {
@@ -21,7 +21,7 @@ export function useConfirmation() {
 
     return new Promise<boolean>((resolve) => {
       resolver = resolve;
-      dialogEl.value?.showModal();      // <-- directly open the modal here
+      dialog.value?.showModal();      // <-- directly open the modal here
     });
   }
 
@@ -36,7 +36,7 @@ export function useConfirmation() {
   }
 
   function cleanup() {
-    dialogEl.value?.close();
+    dialog.value?.close();
     resolver = null;
   }
 

@@ -38,6 +38,20 @@ yarn dev
 bun run dev
 ```
 
+## Database
+
+Initialize and start on `mongodb://localhost:27017`:
+
+```bash
+# Create schema
+npx prisma generate
+
+# Push schema to database
+npx prisma db push
+```
+
+Database setup is in `~/database/mongo-ini.js`
+
 ## Production
 
 Build the application for production:
