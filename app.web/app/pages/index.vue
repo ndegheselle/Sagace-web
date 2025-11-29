@@ -7,7 +7,7 @@
 
 <template>
   <div class="container mx-auto mt-1">
-    <button class="btn" @click="alert.info('afaf')">Toasted</button>
+    <button class="btn" @click="alert.info('afaf')">Toatsed</button>
     <button class="btn" @click="confirmation.show('Title', 'Message', 'ph-alien')">Modal</button>
   </div>
 </template>

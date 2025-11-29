@@ -1,3 +1,5 @@
+# https://stackoverflow.com/questions/69134075/im-having-a-problem-building-docker-for-my-nuxtjs-app-hot-reload-not-working
+
 version: '3.4'
 services:
   mongo:
@@ -26,12 +28,12 @@ services:
     environment:
       HOST: 0.0.0.0
       PORT: 80
-    command: sh -c "npm install && npm run dev"
+    command: sh -c "npm run dev"
     depends_on:
       - mongo
     env_file:
       - .env
-      
+
 volumes:
   mongodb-data:
     driver: local

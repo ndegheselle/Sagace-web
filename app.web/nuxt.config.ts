@@ -6,7 +6,12 @@ export default defineNuxtConfig({
     devtools: { enabled: true },
     css: ["./app/styles.css"],
     vite: {
-        plugins: [tailwindcss(),], 
+        plugins: [tailwindcss(),],
+        server: {
+            watch: {
+                usePolling: true,
+            }
+        }
     },
     modules: ["nuxt-auth-utils"],
 });
