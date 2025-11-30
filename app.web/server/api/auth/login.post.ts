@@ -1,4 +1,4 @@
-import users from "~~/server/prisma/users";
+import users from '../../../prisma/repos/users';
 
 export default defineEventHandler(async (event) => {
     const { email, password } = await readBody(event);
@@ -31,5 +31,5 @@ export default defineEventHandler(async (event) => {
         id: user.id,
         email: user.email,
         name: user.name
-    }
+    };
 })

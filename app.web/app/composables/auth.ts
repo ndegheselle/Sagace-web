@@ -1,14 +1,14 @@
-import type { User } from "@prisma/client"
+
+import type { User } from "#shared/models";
 
 export const useAuth = () => {
-    const user = useState<User>('user', () => null)
+    const user = useState<User | null>('user', () => null)
 
     const login = async (email: string, password: string) => {
-        const data = await $fetch('/api/auth/login', {
+        user.value = await $fetch<User>('/api/auth/login', {
             method: 'POST',
             body: { email, password }
         });
-        user.value = data;
     }
 
     const logout = async () => {
@@ -19,7 +19,7 @@ export const useAuth = () => {
 
     const fetchUser = async () => {
         try {
-            user.value = await $fetch('/api/auth/user');
+            user.value = await $fetch<User>('/api/auth/user');
         } catch (error) {
             user.value = null;
         }

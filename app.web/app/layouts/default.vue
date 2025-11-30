@@ -2,7 +2,7 @@
     <div class="min-h-screen flex flex-col">
         <nav class="navbar bg-base-300 shadow-sm">
             <div class="flex-1">
-                <a class="btn btn-ghost text-xl">Sagace</a>
+                <NuxtLink to="/user/login" class="btn btn-ghost text-xl">Sagace</NuxtLink>
             </div>
             <div class="flex-none">
                 <ul class="menu menu-horizontal px-1">

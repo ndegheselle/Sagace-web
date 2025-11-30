@@ -48,6 +48,9 @@ npx prisma generate
 
 # Push schema to database
 npx prisma db push
+
+# Set default values
+npx prisma db seed
 ```
 
 Database setup is in `~/database/mongo-ini.js`
