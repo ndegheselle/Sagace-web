@@ -20,6 +20,23 @@ yarn install
 bun install
 ```
 
+## Database
+
+Initialize and start on `mongodb://localhost:27017`:
+
+```bash
+# Create schema
+npx prisma generate
+
+# Push schema to database
+npx prisma db push
+
+# Set default values
+npx prisma db seed
+```
+
+Database setup is in `~/database/mongo-ini.js`.
+
 ## Development Server
 
 Start the development server on `http://localhost:3000`:
@@ -37,23 +54,6 @@ yarn dev
 # bun
 bun run dev
 ```
-
-## Database
-
-Initialize and start on `mongodb://localhost:27017`:
-
-```bash
-# Create schema
-npx prisma generate
-
-# Push schema to database
-npx prisma db push
-
-# Set default values
-npx prisma db seed
-```
-
-Database setup is in `~/database/mongo-ini.js`
 
 ## Production
 
