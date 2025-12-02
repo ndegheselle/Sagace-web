@@ -9,20 +9,11 @@ Make sure to install dependencies:
 ```bash
 # npm
 npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
 
 ## Database
 
-Initialize and start on `mongodb://localhost:27017`:
+The container should be started before running these commands :
 
 ```bash
 # Create schema
@@ -35,7 +26,7 @@ npx prisma db push
 npx prisma db seed
 ```
 
-Database setup is in `~/database/mongo-ini.js`.
+Database setup is in `~/database/`.
 
 ## Development Server
 
@@ -44,15 +35,6 @@ Start the development server on `http://localhost:3000`:
 ```bash
 # npm
 npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
 ## Production
@@ -62,15 +44,6 @@ Build the application for production:
 ```bash
 # npm
 npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
 ```
 
 Locally preview production build:
@@ -78,15 +51,6 @@ Locally preview production build:
 ```bash
 # npm
 npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
