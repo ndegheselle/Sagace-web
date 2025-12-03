@@ -1,33 +1,58 @@
 <script setup lang="ts">
+const { login } = useAuth();
 
-const confirmation = useConfirmation();
-const alert = useAlert();
+const email = ref('');
+const password = ref('');
+
+const error = ref('');
+const isLoading = ref(false);
+
+async function onLogin() {
+    isLoading.value = true;
+    error.value = '';
+    try {
+        await login(email.value, password.value);
+        navigateTo('/');
+    } catch (e: any) {
+        error.value = e.data?.message || 'Login failed';
+    } finally {
+        isLoading.value = false;
+    }
+
+}
 
 </script>
 
 <template>
-    <div class="card bg-base-200 w-96 shadow-xl m-auto p-4 mt-4">
-        <div class="card-body">
-            <h2 class="card-title">Login</h2>
-            <div>
-                <div class="flex flex-col gap-4 mt-4">
-                    <label class="input input-bordered flex items-center gap-2">
-                        <i class="ph-envelope"></i>
-                        <input type="email" class="validator grow" placeholder="E-mail" required />
-                    </label>
-                    <label class="input input-bordered flex items-center gap-2">
-                        <i class="ph-password" />
-                        <input type="password" class="grow" required minlength="8"
-                        placeholder="Password"
-                            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" />
-                    </label>
+    <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4 m-auto mt-4">
+        <legend class="fieldset-legend">Login</legend>
 
-                    <button class="btn btn-primary">
-                        <i class="ph-sign-in" />
-                        Login
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+        <label class="label">Email</label>
+        <input type="email"
+               class="input"
+               placeholder="Email"
+               :class="{ 'input-error': !!error }"
+               v-model="email" />
+
+        <span class="label">Password</span>
+        <input type="password"
+               class="input"
+               placeholder="Password"
+               :class="{ 'input-error': !!error }"
+               v-model="password" />
+        <small class="text-error"
+               v-if="error">
+            <i class="ph-warning"></i>
+            {{ error }}
+        </small>
+
+
+        <button class="btn btn-primary mt-4"
+                :disabled="isLoading"
+                @click="onLogin">
+            <span v-if="isLoading"
+                  class="loading loading-spinner loading-sm"></span>
+            Login
+        </button>
+    </fieldset>
 </template>
