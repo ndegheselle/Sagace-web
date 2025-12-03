@@ -1,8 +1,10 @@
 <script setup lang="ts">
 const { login } = useAuth();
 
-const email = ref('');
-const password = ref('');
+const credentials = reactive({
+    email: '',
+    password: ''
+});
 
 const error = ref('');
 const isLoading = ref(false);
@@ -11,7 +13,7 @@ async function onLogin() {
     isLoading.value = true;
     error.value = '';
     try {
-        await login(email.value, password.value);
+        await login(credentials.email, credentials.password);
         navigateTo('/');
     } catch (e: any) {
         error.value = e.data?.message || 'Login failed';
@@ -32,14 +34,14 @@ async function onLogin() {
                class="input"
                placeholder="Email"
                :class="{ 'input-error': !!error }"
-               v-model="email" />
+               v-model="credentials.email" />
 
         <span class="label">Password</span>
         <input type="password"
                class="input"
                placeholder="Password"
                :class="{ 'input-error': !!error }"
-               v-model="password" />
+               v-model="credentials.password" />
         <small class="text-error"
                v-if="error">
             <i class="ph-warning"></i>

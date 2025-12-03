@@ -2,33 +2,26 @@
 import type { User } from "#shared/models";
 
 export const useAuth = () => {
-    const user = useState<User | null>('user', () => null)
+    const { loggedIn, user, fetch: refreshSession, clear: clearSession } = useUserSession();
 
     const login = async (email: string, password: string) => {
-        user.value = await $fetch<User>('/api/auth/login', {
+        await $fetch<User>('/api/auth/login', {
             method: 'POST',
             body: { email, password }
         });
+        await refreshSession();
     }
 
     const logout = async () => {
-        await $fetch('/api/auth/logout', { method: 'POST' });
-        user.value = null;
-        navigateTo('/user/login');
-    }
-
-    const fetchUser = async () => {
-        try {
-            user.value = await $fetch<User>('/api/auth/user');
-        } catch (error) {
-            user.value = null;
-        }
+        await clearSession();
+        await navigateTo('/user/login');
     }
 
     return {
+        isLoggedIn: loggedIn,
         user,
         login,
         logout,
-        fetchUser
+        refresh: fetch
     };
 }

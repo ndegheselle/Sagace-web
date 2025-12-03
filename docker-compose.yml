@@ -1,5 +1,3 @@
-# https://stackoverflow.com/questions/69134075/im-having-a-problem-building-docker-for-my-nuxtjs-app-hot-reload-not-working
-
 version: '3.4'
 services:
   mongo:

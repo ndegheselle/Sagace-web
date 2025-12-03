@@ -15,7 +15,7 @@ async function create(email: string, password: string, name: string): Promise<Us
     return user;
 }
 
-async function GetByEmailAndPassword(email: string, password: string): Promise<User | null> {
+async function getByEmailAndPassword(email: string, password: string): Promise<User | null> {
     const user = await prisma.user.findUnique({
         where: { email }
     });
@@ -32,5 +32,5 @@ async function GetByEmailAndPassword(email: string, password: string): Promise<U
 
 export default {
     create,
-    GetByEmailAndPassword
+    getByEmailAndPassword
 };
