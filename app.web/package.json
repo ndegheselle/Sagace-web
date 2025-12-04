@@ -11,7 +11,8 @@
 	},
 	"dependencies": {
 		"@pinia/nuxt": "^0.11.3",
-		"@prisma/client": "6.19",
+		"@prisma/adapter-better-sqlite3": "^7.1.0",
+		"@prisma/client": "^7.1.0",
 		"@tailwindcss/vite": "^4.1.17",
 		"bcrypt": "^6.0.0",
 		"daisyui": "^5.5.5",
@@ -26,7 +27,7 @@
 	"devDependencies": {
 		"@types/bcrypt": "^6.0.0",
 		"@types/node": "^24.10.1",
-		"prisma": "6.19",
+		"prisma": "^7.1.0",
 		"tsx": "^4.20.6",
 		"typescript": "^5.9.3"
 	}

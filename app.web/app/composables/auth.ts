@@ -13,7 +13,7 @@ export const useAuth = () => {
     }
 
     const logout = async () => {
-        await clearSession();
+        clearSession();
         await navigateTo('/user/login');
     }
 
