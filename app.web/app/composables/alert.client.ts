@@ -22,7 +22,7 @@ export class Alert {
 
 const alerts = ref<Alert[]>([]);
 
-const ALERT_DEFAULT_DELAY = 3000;
+const ALERT_DEFAULT_DELAY = 5000;
 export function useAlert() {
 
     function close(id: number) {
