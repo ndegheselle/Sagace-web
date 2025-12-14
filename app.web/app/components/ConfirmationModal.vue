@@ -15,12 +15,12 @@ onMounted(() => {
         <div class="modal-box">
             <form method="dialog">
                 <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-                    <i class="ph-lg ph-x"/>
+                    <i class="fa-solid fa-xmark"></i>
                 </button>
             </form>
 
             <div class="flex items-center mb-1">
-                <i v-if="confirmation.icon.value" class="mr-2 ph-lg" :class="confirmation.icon.value"></i>
+                <i v-if="confirmation.icon.value" class="mr-2" :class="confirmation.icon.value"></i>
                 <h3 class="text-lg font-bold">{{ confirmation.title }}</h3>
             </div>
 
