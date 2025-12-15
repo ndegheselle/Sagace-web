@@ -1,6 +1,7 @@
 import { prisma } from "../prisma";
 import type { Client } from '../generated/client';
 import { Paginated } from "~~/shared/base/paginated";
+import { BaseRepository } from "./BaseRepository";
 
 async function create(client: Client): Promise<Client> {
     return await prisma.client.create({
@@ -30,8 +31,6 @@ async function deleteById(id: string): Promise<Client> {
     });
 }
 
-export default {
-    create,
-    getAll,
-    deleteById
-};
+const clientRepository = new BaseRepository<Client>(prisma.client);
+
+export default clientRepository;
