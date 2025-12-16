@@ -1,15 +1,4 @@
-import { Client } from '~~/prisma/generated/client';
 import clients from '~~/prisma/repos/clients';
+import { createCreateHandler } from '~~/server/utils/crudHandlers';
 
-export default defineEventHandler(async (event) => {
-    const client = await readBody<Client>(event);
-
-    if (!client.firstName || !client.lastName || !client.email) {
-        throw createError({
-            statusCode: 400,
-            statusMessage: 'Missing required fields',
-        })
-    }
-
-    return clients.create(client);
-})
+export default createCreateHandler(clients);

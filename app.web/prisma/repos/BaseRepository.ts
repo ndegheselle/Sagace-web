@@ -1,63 +1,71 @@
-import { Paginated } from "~~/shared/base/paginated";
+import { Paginated, PaginationOptions, SortDirection } from '~~/shared/base/paginated';
 
-/**
- * Minimal Prisma delegate interface needed for CRUD
- */
-type PrismaDelegate<T, CreateInput, UpdateInput> = {
-  create(args: { data: CreateInput }): Promise<T>;
-  findUnique(args: { where: { id: string } }): Promise<T | null>;
-  findMany(args: any): Promise<T[]>;
-  update(args: { where: { id: string }; data: UpdateInput }): Promise<T>;
-  delete(args: { where: { id: string } }): Promise<T>;
-  count(args?: any): Promise<number>;
-};
+export interface BaseEntity {
+    id: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
 
-export class BaseRepository<
-  T,
-  CreateInput,
-  UpdateInput
-> {
-  constructor(protected readonly model: PrismaDelegate<T, CreateInput, UpdateInput>) {}
+export class BaseRepository<T extends BaseEntity> {
+    constructor(private model: any) { }
 
-  async create(data: CreateInput): Promise<T> {
-    return this.model.create({ data });
-  }
+    async create(data: Omit<T, 'id' | 'createdAt' | 'updatedAt'>): Promise<T> {
+        return await this.model.create({
+            data,
+        });
+    }
 
-  async getById(id: string): Promise<T | null> {
-    return this.model.findUnique({
-      where: { id },
-    });
-  }
+    async update(id: string, data: Partial<Omit<T, 'id' | 'createdAt' | 'updatedAt'>>): Promise<T> {
+        return await this.model.update({
+            where: { id },
+            data,
+        });
+    }
 
-  async getAll(
-    page = 1,
-    limit = 10,
-    orderBy: Record<string, "asc" | "desc"> = { createdAt: "desc" }
-  ): Promise<Paginated<T>> {
-    const skip = (page - 1) * limit;
+    async delete(id: string): Promise<T> {
+        return await this.model.delete({
+            where: { id },
+        });
+    }
 
-    const [data, total] = await Promise.all([
-      this.model.findMany({
-        skip,
-        take: limit,
-        orderBy,
-      }),
-      this.model.count(),
-    ]);
+    async getById(id: string): Promise<T | null> {
+        return await this.model.findUnique({
+            where: { id },
+        });
+    }
 
-    return new Paginated<T>(data, total, page, limit);
-  }
+    async getAll(options: PaginationOptions): Promise<Paginated<T>> {
+        const {
+            page = 1,
+            limit = 10,
+            orderBy = 'createdAt',
+            orderDirection = SortDirection.DESC,
+        } = options;
 
-  async updateById(id: string, data: UpdateInput): Promise<T> {
-    return this.model.update({
-      where: { id },
-      data,
-    });
-  }
+        const skip = (page - 1) * limit;
 
-  async deleteById(id: string): Promise<T> {
-    return this.model.delete({
-      where: { id },
-    });
-  }
+        const [data, total] = await Promise.all([
+            this.model.findMany({
+                skip,
+                take: limit,
+                orderBy: {
+                    [orderBy]: orderDirection == SortDirection.ASC ? 'asc' : 'desc',
+                },
+            }),
+            this.model.count(),
+        ]);
+
+        return new Paginated<T>(data, total, options);
+    }
+
+    async exists(id: string): Promise<boolean> {
+        const count = await this.model.count({
+            where: { id },
+        });
+        return count > 0;
+    }
+
+    async count(where?: any): Promise<number> {
+        return await this.model.count({ where });
+    }
 }

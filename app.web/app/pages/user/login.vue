@@ -26,7 +26,7 @@ async function onLogin() {
 </script>
 
 <template>
-    <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4 mx-auto mt-2">
+    <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4 mx-auto mt-2 mb-auto">
         <legend class="fieldset-legend text-2xl">Login</legend>
 
         <label class="label">Email</label>
