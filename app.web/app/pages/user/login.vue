@@ -2,8 +2,8 @@
 const { login } = useAuth();
 
 const credentials = reactive({
-    email: '',
-    password: ''
+    email: 'admin',
+    password: 'Test123'
 });
 
 const error = ref('');
@@ -26,8 +26,8 @@ async function onLogin() {
 </script>
 
 <template>
-    <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4 m-auto mt-4">
-        <legend class="fieldset-legend">Login</legend>
+    <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4 mx-auto mt-2 mb-auto">
+        <legend class="fieldset-legend text-2xl">Login</legend>
 
         <label class="label">Email</label>
         <input type="email"
@@ -44,7 +44,7 @@ async function onLogin() {
                v-model="credentials.password" />
         <small class="text-error"
                v-if="error">
-            <i class="ph-warning"></i>
+            <i class="fa-solid fa-triangle-exclamation"></i>
             {{ error }}
         </small>
 

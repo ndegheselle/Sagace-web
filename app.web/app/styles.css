@@ -2,4 +2,5 @@
 @plugin "daisyui" {
   themes: dracula --default;
 }
-@import "phosphor-icons/src/css/icons.css";
+
+@import "@fortawesome/fontawesome-free/css/all.min.css";

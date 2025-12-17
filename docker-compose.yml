@@ -1,33 +1,21 @@
 version: '3.4'
 services:
-  mongo:
-    restart: always
-    image: mongo:8.0
-    container_name: sagace-database-mongo
-    command: mongod --replSet rs0
-    ports:
-      - "27017:27017"
+  front:
+    image: "node:24-alpine"
+    working_dir: /app
     volumes:
-      - ./database/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+#      - /app.web/node_modules
+      - ./app.web:/app
+    ports:
+      - "80:80"
     environment:
-      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
-
-#  front:
-#    image: "node:24-alpine"
-#    working_dir: /app
-#    volumes:
-##      - /app.web/node_modules
-#      - ./app.web:/app
-#    ports:
-#      - "80:80"
-#    environment:
-#      HOST: 0.0.0.0
-#      PORT: 80
-#    command: sh -c "npm i & npm run dev"
-#    depends_on:
-#      - mongo
-#    env_file:
-#      - .env
+      HOST: 0.0.0.0
+      PORT: 80
+    command: sh -c "npm i & npm run dev"
+    depends_on:
+      - mongo
+    env_file:
+      - .env
 
 volumes:
   mongodb-data:

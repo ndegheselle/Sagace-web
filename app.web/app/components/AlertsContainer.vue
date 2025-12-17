@@ -10,14 +10,15 @@ const { alerts, close } = useAlert();
             'alert-error': alert.type === EnumAlertType.Error,
             'alert-success': alert.type === EnumAlertType.Success
         }">
-            <i class="ph-xl" :class="{
-                'ph-info ': alert.type === EnumAlertType.Info,
-                'ph-warning-circle': alert.type === EnumAlertType.Warning || alert.type === EnumAlertType.Error,
-                'ph-check-circle': alert.type === EnumAlertType.Success
+            <i :class="{
+                'fa-solid fa-circle-info ': alert.type === EnumAlertType.Info,
+                'fa-solid fa-circle-exclamation': alert.type === EnumAlertType.Warning || alert.type === EnumAlertType.Error,
+                'fa-solid fa-circle-check': alert.type === EnumAlertType.Success
             }" />
             <span>{{ alert.message }}</span>
-            <button @click="close(alert.id)" class="btn btn-sm btn-ghost btn-circle" aria-label="close"><i
-                    class="ph-x ph-lg" /></button>
+            <button @click="close(alert.id)" class="btn btn-sm btn-ghost btn-circle" aria-label="close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
         </div>
     </div>
 </template>
