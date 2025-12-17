@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { Paginated } from '~~/shared/base/paginated';
+import type { Paginated, PaginationOptions } from '~~/shared/base/paginated';
 import type { Client } from '~~/shared/models';
 
 const clients = ref<Client[]>([]);
-const pagination = reactive({
+const total = ref(0);
+const pagination = reactive<PaginationOptions>({
     page: 1,
-    limit: 10,
-    total: 0,
+    limit: 10
 });
 
 async function load() {
@@ -17,7 +17,7 @@ async function load() {
         },
     });
     clients.value = result.data || [];
-    pagination.total = result.total || 0;
+    total.value = result.total || 0;
 }
 
 async function remove()

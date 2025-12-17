@@ -1,5 +1,5 @@
-import { prisma } from "../prisma";
 import type { Client } from '../generated/client';
-import { BaseRepository } from "./BaseRepository";
+import { prisma } from "../prisma";
+import { CrudRepository } from "./CrudRepository";
 
-export default new BaseRepository<Client>(prisma.client);;
+export default new CrudRepository<Client>(prisma.client);;

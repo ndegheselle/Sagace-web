@@ -1,12 +1,7 @@
+import type { BaseEntity } from '~~/shared/base/BaseEntity';
 import { Paginated, PaginationOptions, SortDirection } from '~~/shared/base/paginated';
 
-export interface BaseEntity {
-    id: string;
-    createdAt?: Date;
-    updatedAt?: Date;
-}
-
-export class BaseRepository<T extends BaseEntity> {
+export class CrudRepository<T extends BaseEntity> {
     constructor(private model: any) { }
 
     async create(data: Omit<T, 'id' | 'createdAt' | 'updatedAt'>): Promise<T> {
