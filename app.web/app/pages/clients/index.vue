@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import type { Paginated, PaginationOptions } from '~~/shared/base/paginated';
-import type { Client } from '~~/shared/models';
+import type { PaginationOptions } from '~~/shared/base/paginated';
+import type { ClientDTO } from '~~/shared/DTOs/ClientDTO';
+import clientsApi from '~/utils/api/ClientsClient';
 
-const clients = ref<Client[]>([]);
+const confirmation = useConfirmation();
+const clients = ref<ClientDTO[]>([]);
 const total = ref(0);
 const pagination = reactive<PaginationOptions>({
     page: 1,
@@ -10,19 +12,24 @@ const pagination = reactive<PaginationOptions>({
 });
 
 async function load() {
-    const result = await $fetch<Paginated<Client>>('/api/clients', {
-        query: {
-            page: pagination.page,
-            limit: pagination.limit,
-        },
-    });
+    const result = await clientsApi.getAll(pagination);
     clients.value = result.data || [];
     total.value = result.total || 0;
 }
 
-async function remove()
+async function remove(client: ClientDTO)
 {
+    const confirmed = await confirmation.show(
+        'Confirmer la suppression', 
+        `Êtes-vous sûr de vouloir supprimer le client <b>${client.firstName} ${client.lastName}</b> ?`, 
+        'fa-solid fa-triangle-exclamation text-warning');
 
+    if (!confirmed) {
+        return;
+    }
+
+    await clientsApi.delete(client.id);
+    await load();
 }
 
 await load();
@@ -88,7 +95,7 @@ await load();
                         </td>
 
                         <td>
-                            {{ new Date(client.createdAt).toLocaleDateString() }}
+                            {{ client.createdAt.toLocaleDateString() }}
                         </td>
 
                         <td class="text-right">
@@ -98,7 +105,7 @@ await load();
                                 </summary>
                                 <ul class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
                                     <li><a><i class="fa-solid fa-pen"></i> Modifier</a></li>
-                                    <li><a class="text-error"><i class="fa-solid fa-trash"></i> Supprimer</a></li>
+                                    <li><a class="text-error" href="#" @click.prevent="remove(client)"><i class="fa-solid fa-trash"></i> Supprimer</a></li>
                                 </ul>
                             </details>
                         </td>
@@ -114,6 +121,6 @@ await load();
             </table>
         </div>
 
-        <Pagination :page="pagination.page" :total="pagination.total" :capacity="pagination.limit" />
+        <Pagination :page="pagination.page" :total="total" :capacity="pagination.limit" />
     </div>
 </template>

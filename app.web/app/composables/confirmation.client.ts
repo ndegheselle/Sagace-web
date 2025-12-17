@@ -14,7 +14,6 @@ export function useConfirmation() {
   }
 
   function show(t: string, m: string, i?: string): Promise<boolean> {
-    console.log(i);
     title.value = t;
     message.value = m;
     icon.value = i || '';

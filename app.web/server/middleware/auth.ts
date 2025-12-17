@@ -6,5 +6,5 @@ export default defineEventHandler(async (event) => {
     if (path.startsWith('/api/auth/')) return;
 
     // Require user session for all other routes
-    await requireUserSession(event)
+    await requireUserSession(event);
 });

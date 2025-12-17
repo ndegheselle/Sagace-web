@@ -8,26 +8,30 @@ export class CrudClient<T extends BaseEntity> {
     async create(data: T) {
         await $fetch<T>(`/api/${this.baseUrl}`, {
             method: 'POST',
-            body: data
+            body: data,
+            credentials: 'include'
         });
     }
 
     async update(id: string, data: T): Promise<T> {
         return await $fetch<T>(`/api/${this.baseUrl}/${id}`, {
             method: 'PUT',
-            body: data
+            body: data,
+            credentials: 'include'
         });
     }
 
     async delete(id: string){
         await $fetch<T>(`/api/${this.baseUrl}/${id}`, {
             method: 'DELETE',
+            credentials: 'include'
         });
     }
 
     async getById(id: string): Promise<T | null> {
         return await $fetch<T | null>(`/api/${this.baseUrl}/${id}`, {
-            method: 'GET'
+            method: 'GET',
+            credentials: 'include'
         });
     }
 
@@ -39,7 +43,8 @@ export class CrudClient<T extends BaseEntity> {
                 limit: options.limit,
                 orderBy: options.orderBy,
                 orderDirection: options.orderDirection,
-            }
+            },
+            credentials: 'include'
         });
     }
 }

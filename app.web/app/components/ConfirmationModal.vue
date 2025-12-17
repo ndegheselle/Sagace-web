@@ -24,7 +24,7 @@ onMounted(() => {
                 <h3 class="text-lg font-bold">{{ confirmation.title }}</h3>
             </div>
 
-            <p>{{ confirmation.message }}</p>
+            <p v-html="confirmation.message.value"></p>
 
             <div class="modal-action">
                 <button class="btn" @click="confirmation.cancel()">Cancel</button>

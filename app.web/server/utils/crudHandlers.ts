@@ -1,8 +1,9 @@
 import { defineEventHandler, getQuery, H3Event, readBody } from 'h3';
-import { BaseEntity, BaseRepository } from '~~/prisma/repos/BaseRepository';
+import { CrudRepository } from '~~/server/prisma/repos/CrudRepository';
+import { BaseEntity } from '~~/shared/base/BaseEntity';
 
 /* LIST */
-export function createGetAllHandler<T extends BaseEntity>(repo: BaseRepository<T>) {
+export function createGetAllHandler<T extends BaseEntity>(repo: CrudRepository<T>) {
     return defineEventHandler(async (event: H3Event) => {
         const query = getQuery(event)
 
@@ -16,7 +17,7 @@ export function createGetAllHandler<T extends BaseEntity>(repo: BaseRepository<T
 }
 
 /* GET BY ID */
-export function createGetHandler<T extends BaseEntity>(repo: BaseRepository<T>) {
+export function createGetHandler<T extends BaseEntity>(repo: CrudRepository<T>) {
     return defineEventHandler(async (event: H3Event) => {
         const id = getRouterParam(event, 'id');
 
@@ -31,7 +32,7 @@ export function createGetHandler<T extends BaseEntity>(repo: BaseRepository<T>) 
 }
 
 /* CREATE */
-export function createCreateHandler<T extends BaseEntity>(repo: BaseRepository<T>) {
+export function createCreateHandler<T extends BaseEntity>(repo: CrudRepository<T>) {
     return defineEventHandler(async (event: H3Event) => {
         const body = await readBody(event);
         return repo.create(body);
@@ -39,7 +40,7 @@ export function createCreateHandler<T extends BaseEntity>(repo: BaseRepository<T
 }
 
 /* UPDATE */
-export function createUpdateHandler<T extends BaseEntity>(repo: BaseRepository<T>) {
+export function createUpdateHandler<T extends BaseEntity>(repo: CrudRepository<T>) {
     return defineEventHandler(async (event: H3Event) => {
         const id = getRouterParam(event, 'id');
         const body = await readBody(event);
@@ -56,7 +57,7 @@ export function createUpdateHandler<T extends BaseEntity>(repo: BaseRepository<T
 }
 
 /* DELETE */
-export function createDeleteHandler<T extends BaseEntity>(repo: BaseRepository<T>) {
+export function createDeleteHandler<T extends BaseEntity>(repo: CrudRepository<T>) {
     return defineEventHandler(async (event: H3Event) => {
         const id = getRouterParam(event, 'id');
 
