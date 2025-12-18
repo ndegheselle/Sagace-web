@@ -1,9 +1,9 @@
-import users from "./repos/users";
+import { create } from "../api/auth/login.post";
 import { prisma } from "./prisma";
 
 async function seed()
 {
-    await users.create('admin', 'Test123', 'Admin');
+    await create('admin', 'Test123', 'Admin');
 }
 
 seed()

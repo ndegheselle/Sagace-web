@@ -1,4 +1,4 @@
-import clients from '~~/server/prisma/repos/clients';
-import { createCreateHandler } from '~~/server/utils/crudHandlers';
+import { prisma } from '~~/server/prisma/prisma';
+import create from '~~/server/utils/crud/create';
 
-export default createCreateHandler(clients);
+export default create(prisma.client);

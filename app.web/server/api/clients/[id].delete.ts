@@ -1,4 +1,4 @@
-import clients from '~~/server/prisma/repos/clients';
-import { createDeleteHandler } from '~~/server/utils/crudHandlers';
+import { prisma } from '~~/server/prisma/prisma';
+import remove from '~~/server/utils/crud/remove';
 
-export default createDeleteHandler(clients);
+export default remove(prisma.client);

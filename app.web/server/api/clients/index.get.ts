@@ -1,4 +1,4 @@
-import clients from '~~/server/prisma/repos/clients';
-import { createGetAllHandler } from '~~/server/utils/crudHandlers';
+import { prisma } from '~~/server/prisma/prisma';
+import getAll from '~~/server/utils/crud/getAll';
 
-export default createGetAllHandler(clients);
+export default getAll(prisma.client);
