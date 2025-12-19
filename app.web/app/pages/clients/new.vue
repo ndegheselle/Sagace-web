@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import clientsApi from '~/utils/api/ClientsClient';
-import type { ClientDTO } from '~~/shared/DTOs/ClientDTO';
+import type { Client } from '~~/shared/models/Client';
 
 const alert = useAlert();
-const form = reactive<ClientDTO>({} as ClientDTO);
+const form = reactive<Client>({} as Client);
 
 const error = ref('');
 const isLoading = ref(false);

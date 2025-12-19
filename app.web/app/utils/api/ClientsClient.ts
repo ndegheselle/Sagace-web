@@ -1,4 +1,4 @@
-import { CrudClient } from '~~/shared/base/CrudClient';
-import type { ClientDTO } from '~~/shared/DTOs/ClientDTO';
+import type { Client } from '~~/shared/models/Client';
+import { CrudClient } from '../CrudClient';
 
-export default new CrudClient<ClientDTO>('clients');
+export default new CrudClient<Client>('clients');

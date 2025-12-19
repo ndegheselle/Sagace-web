@@ -1,7 +1,14 @@
 import bcrypt from 'bcrypt';
+import { User } from "./generated/client";
 import { prisma } from "./prisma";
 
-async function create(email: string, password: string, name: string): Promise<User> {
+/**
+ * @param {string} email
+ * @param {string} password
+ * @param {string} name
+ * @returns {Promise<User>}
+ */
+async function create(email, password, name) {
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await prisma.user.create({
         data: {
@@ -20,11 +27,6 @@ async function seed()
 }
 
 seed()
-  .then(async () => {
+  .finally(async () => {
     await prisma.$disconnect();
-  })
-  .catch(async (e) => {
-    console.error(e);
-    await prisma.$disconnect();
-    process.exit(1);
   });

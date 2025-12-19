@@ -2,19 +2,6 @@ import bcrypt from 'bcrypt';
 import type { User } from '~~/server/prisma/generated/client';
 import { prisma } from "~~/server/prisma/prisma";
 
-export async function create(email: string, password: string, name: string): Promise<User> {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await prisma.user.create({
-        data: {
-            email,
-            password: hashedPassword,
-            name
-        }
-    });
-    user.password = '';
-    return user;
-}
-
 export async function getByEmailAndPassword(email: string, password: string): Promise<User | null> {
     const user = await prisma.user.findUnique({
         where: { email }

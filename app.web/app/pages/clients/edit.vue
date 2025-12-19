@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { ClientDTO } from '~~/shared/DTOs/ClientDTO';
-const props = defineProps<ClientDTO>();
+import { Client } from '~~/shared/models/Client';
+const props = defineProps(new Client());
 
 const error = ref('');
 const isLoading = ref(false);

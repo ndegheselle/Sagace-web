@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: dracula --default;
+}
+
+@import "@fortawesome/fontawesome-free/css/all.min.css";

@@ -1,10 +1,9 @@
-import type { UserDTO } from "~~/shared/DTOs/UserDTO";
 
 export const useAuth = () => {
     const { loggedIn, user, fetch: refreshSession, clear: clearSession } = useUserSession();
 
     const login = async (email: string, password: string) => {
-        await $fetch<UserDTO>('/api/auth/login', {
+        await $fetch('/api/auth/login', {
             method: 'POST',
             body: { email, password }
         });

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { PaginationOptions } from '~~/shared/base/paginated';
-import type { ClientDTO } from '~~/shared/DTOs/ClientDTO';
 import clientsApi from '~/utils/api/ClientsClient';
+import type { PaginationOptions } from '~~/shared/base/paginated';
+import type { Client } from '~~/shared/models/Client';
 
 const confirmation = useConfirmation();
-const clients = ref<ClientDTO[]>([]);
+const clients = ref<Client[]>([]);
 const total = ref(0);
 const pagination = reactive<PaginationOptions>({
     page: 1,
@@ -17,7 +17,7 @@ async function load() {
     total.value = result.total || 0;
 }
 
-async function remove(client: ClientDTO)
+async function remove(client: Client)
 {
     const confirmed = await confirmation.show(
         'Confirmer la suppression', 
@@ -95,7 +95,7 @@ await load();
                         </td>
 
                         <td>
-                            {{ client.createdAt.toLocaleDateString() }}
+                            {{ client.createdAt }}
                         </td>
 
                         <td class="text-right">

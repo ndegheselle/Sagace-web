@@ -1,6 +1,5 @@
 export default defineEventHandler(async (event) => {
-    const path = event.path || ''
-
+    const path = event.path || '';
     if (path.startsWith('/api') == false) return;
     // Exclude all routes under /api/auth/*
     if (path.startsWith('/api/auth/')) return;

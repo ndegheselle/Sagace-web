@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client"
+  output   = "./generated/"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Client {
+  id        String    @id @default(uuid())
+  firstName String
+  lastName  String
+  company   String?
+  phone     String?
+  email     String    @unique
+  address   String?
+  quotes    Quote[]
+  invoices  Invoice[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Quote {
+  id        String      @id @default(uuid())
+  number    String      @unique
+  amount    Float
+  status    QuoteStatus @default(DRAFT)
+  clientId  String
+  client    Client      @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+model Invoice {
+  id        String        @id @default(uuid())
+  number    String        @unique
+  amount    Float
+  status    InvoiceStatus @default(UNPAID)
+  clientId  String
+  client    Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+enum QuoteStatus {
+  DRAFT
+  SENT
+  ACCEPTED
+  REJECTED
+}
+
+enum InvoiceStatus {
+  UNPAID
+  PAID
+  CANCELLED
+}
