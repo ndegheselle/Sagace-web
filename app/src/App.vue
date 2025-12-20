@@ -1,83 +1,72 @@
-<script setup>
-import { RouterLink, RouterView } from 'vue-router';
+<script setup lang="ts">
+import ConfirmationModal from './components/popups/ConfirmationModal.vue';
+import AlertsContainer from './components/popups/AlertsContainer.vue';
+import { useAuth } from '@/composables/auth';
+
+const { isLoggedIn, user, logout } = useAuth();
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+    <div class="min-h-screen flex flex-col">
+        <nav class="navbar bg-base-300 shadow-sm">
+            <div class="flex-1">
+                <div class="dropdown">
+                    <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+                        <i class="fa-solid fa-bars-staggered"></i>
+                    </div>
+                    <ul tabindex="-1"
+                        class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+                        <li>
+                            <RouterLink to="/clients"><i class="fa-solid fa-users"></i>Clients</RouterLink>
+                        </li>
+                    </ul>
+                </div>
 
-    <div class="wrapper">
-      <p>Pouet</p>
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+                <RouterLink to="/" class="btn btn-ghost text-xl">Sagace</RouterLink>
+            </div>
+
+            <div class="navbar-center hidden lg:flex">
+                <ul class="menu menu-horizontal px-1">
+                    <li>
+                        <RouterLink to="/clients"><i class="fa-solid fa-users"></i> Clients</RouterLink>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="navbar-end">
+                <div v-if="isLoggedIn" class="dropdown dropdown-end">
+                    <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+                        <div class="w-10 rounded-full">
+                            <img alt="Tailwind CSS Navbar component" src="https://i.pravatar.cc" />
+                        </div>
+                    </div>
+                    <ul tabindex="-1"
+                        class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+                        <li class="menu-title">{{ user?.name }}</li>
+                        <li><a @click="logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+                    </ul>
+                </div>
+                <ul v-else class="menu menu-horizontal px-1">
+                    <li>
+                        <RouterLink to="/user/login"><i class="fa-solid fa-user"></i> Login</RouterLink>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <main class="flex flex-1">
+            <RouterView />
+        </main>
+
+        <footer class="footer sm:footer-horizontal footer-center bg-base-300 text-base-content p-4 mt-auto">
+            <aside>
+                <p>
+                    Copyright © {{ new Date().getFullYear() }} - Sagaced
+                </p>
+            </aside>
+        </footer>
+
+        <ConfirmationModal />
+        <AlertsContainer />
     </div>
-  </header>
-
-  <RouterView />
 </template>
-
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-}
-</style>
