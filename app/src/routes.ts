@@ -2,7 +2,11 @@ import HomeView from './views/home.vue';
 import LoginView from './views/user/login.vue';
 
 import ClientsList from './views/clients/list.vue';
-import Clientsnew from './views/clients/new.vue';
+import ArticlesList from './views/articles/list.vue';
+import ServicesList from './views/services/list.vue';
+
+import EstimatesList from './views/estimates/list.vue';
+import EstimatesNew from './views/estimates/new.vue';
 
 export default [
     {
@@ -18,7 +22,19 @@ export default [
         component: ClientsList,
     },
     {
-        path: '/clients/new',
-        component: Clientsnew,
-    }
+        path: '/articles',
+        component: ArticlesList,
+    },
+    {
+        path: '/services',
+        component: ServicesList,
+    },
+    {
+        path: '/estimates',
+        component: EstimatesList,
+    },
+    {
+        path: '/estimates/new',
+        component: EstimatesNew,
+    },
 ];

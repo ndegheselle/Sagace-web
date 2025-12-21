@@ -1,10 +1,21 @@
 import { Paginated, PaginationOptions } from "@/lib/base/paginated";
-import type { IApiCrud } from "@/lib/base/ApiCrud";
+import type { BaseEntity, IApiCrud } from "@/lib/base/ApiCrud";
 
-export class FakeApiCrud<T> implements IApiCrud<T> {
-    constructor(private elements: T[]) {}
+function makeid(length: number) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
+export class FakeApiCrud<T extends BaseEntity> implements IApiCrud<T> {
+    constructor(protected elements: T[], protected searchFields: string[]) { }
 
     async create(data: T): Promise<T> {
+        data.id = makeid(10);
         this.elements.push(data);
         return Promise.resolve(data);
     }
@@ -35,5 +46,28 @@ export class FakeApiCrud<T> implements IApiCrud<T> {
         const paginatedData = this.elements.slice(start, end);
 
         return Promise.resolve(new Paginated<T>(paginatedData, this.elements.length, options));
+    }
+
+    async search(search: string, options: PaginationOptions): Promise<Paginated<T>> {
+        const { page, limit } = options;
+        const normalizedSearch = search.toLowerCase();
+
+        const filtered = this.elements.filter((el: any) => {
+            return this.searchFields.some((field: string) => {
+                const fieldValue = el[field];
+                return (
+                    typeof fieldValue === "string" &&
+                    fieldValue.toLowerCase().includes(normalizedSearch)
+                );
+            });
+        });
+
+        const start = (page - 1) * limit;
+        const end = start + limit;
+        const paginatedData = filtered.slice(start, end);
+
+        return Promise.resolve(
+            new Paginated<T>(paginatedData, filtered.length, options)
+        );
     }
 }

@@ -19,6 +19,22 @@ const { isLoggedIn, user, logout } = useAuth();
                         <li>
                             <RouterLink to="/clients"><i class="fa-solid fa-users"></i>Clients</RouterLink>
                         </li>
+                        <li>
+                            <RouterLink to="/estimates"><i class="fa-solid fa-file-invoice"></i>Devis</RouterLink>
+                        </li>
+                        <li>
+                            <h2 class="menu-title">Préstations</h2>
+                            <ul>
+                                <li>
+                                    <RouterLink to="/articles"><i class="fa-solid fa-boxes-stacked"></i>Articles
+                                    </RouterLink>
+                                </li>
+                                <li>
+                                    <RouterLink to="/services"><i class="fa-solid fa-screwdriver-wrench"></i>Services
+                                    </RouterLink>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
 
@@ -30,14 +46,32 @@ const { isLoggedIn, user, logout } = useAuth();
                     <li>
                         <RouterLink to="/clients"><i class="fa-solid fa-users"></i> Clients</RouterLink>
                     </li>
+                    <li>
+                        <RouterLink to="/estimates"><i class="fa-solid fa-file-invoice"></i>Devis</RouterLink>
+                    </li>
+                    <li>
+                        <details>
+                            <summary>Préstations</summary>
+                            <ul class="bg-base-100 rounded-t-none p-2">
+                                <li>
+                                    <RouterLink to="/articles"><i class="fa-solid fa-boxes-stacked"></i>Articles
+                                    </RouterLink>
+                                </li>
+                                <li>
+                                    <RouterLink to="/services"><i class="fa-solid fa-screwdriver-wrench"></i>Services
+                                    </RouterLink>
+                                </li>
+                            </ul>
+                        </details>
+                    </li>
                 </ul>
             </div>
 
             <div class="navbar-end">
                 <div v-if="isLoggedIn" class="dropdown dropdown-end">
-                    <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
-                        <div class="w-10 rounded-full">
-                            <img alt="Tailwind CSS Navbar component" src="https://i.pravatar.cc" />
+                    <div tabindex="0" role="button" class="btn btn-circle avatar">
+                        <div class="rounded-full text-lg">
+                            <i class="fa-solid fa-user "></i>
                         </div>
                     </div>
                     <ul tabindex="-1"

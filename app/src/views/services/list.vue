@@ -2,44 +2,46 @@
 import { ref, reactive, useTemplateRef } from 'vue';
 import Pagination from '@/components/Pagination.vue';
 import type { PaginationOptions } from '@/lib/base/paginated';
-import { Client, api } from '@/lib/api/client';
+import { Service, api } from '@/lib/api/service';
 import { useConfirmation } from '@/composables/popups/confirmation';
-import ClientModal from './ClientModal.vue';
+import ServiceModal from './ServiceModal.vue';
 
 let search = "";
 const confirmation = useConfirmation();
 const modalRef = useTemplateRef('modal');
 
-const clients = ref<Client[]>([]);
+const services = ref<Service[]>([]);
 const total = ref(0);
+
 const pagination = reactive<PaginationOptions>({
     page: 1,
     limit: 10
 });
 
 async function load() {
-    console.log(search);
     const result = await api.search(search, pagination);
-    clients.value = result.data || [];
+    services.value = result.data || [];
     total.value = result.total || 0;
 }
 
-async function remove(client: Client) {
+async function remove(service: Service) {
     const confirmed = await confirmation.show(
         'Confirmer la suppression',
-        `Êtes-vous sûr de vouloir supprimer le client <b>${client.firstName} ${client.lastName}</b> ?`,
-        'fa-solid fa-triangle-exclamation text-warning');
+        `Êtes-vous sûr de vouloir supprimer le service <b>${service.name}</b> ?`,
+        'fa-solid fa-triangle-exclamation text-warning'
+    );
 
     if (!confirmed) {
         return;
     }
 
-    await api.delete(client.id);
+    await api.delete(service.id);
     await load();
 }
 
-async function edit(client: Client) {
-    if (await modalRef.value?.show(client) == true)
+async function edit(service: Service)
+{
+    if (await modalRef.value?.show(service) == true)
         await load();
 }
 
@@ -50,64 +52,71 @@ load();
     <div class="container mx-auto flex flex-col my-1">
         <div class="flex">
             <h1 class="text-heading text-2xl my-2">
-                <i class="fa-solid fa-user"></i>
-                Clients
+                <i class="fa-solid fa-screwdriver-wrench"></i>
+                Services
             </h1>
 
             <div class="ms-auto my-auto flex">
                 <label class="input ms-auto input-sm">
                     <i class="fa-solid fa-magnifying-glass opacity-50"></i>
-                    <input v-on:keyup.enter="load" type="search" required placeholder="Recherche" v-model="search" />
+                    <input
+                        v-model="search"
+                        type="search"
+                        placeholder="Recherche"
+                        @keyup.enter="load"
+                    />
                 </label>
 
-                <button class="btn btn-sm ms-1" @click="edit(new Client())">
+                <button class="btn btn-sm ms-1" @click="edit(new Service())">
                     <i class="fa-solid fa-plus"></i>
                     Nouveau
                 </button>
             </div>
         </div>
+
         <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 flex-1">
             <table class="table">
-                <!-- head -->
                 <thead>
                     <tr>
-                        <th>Nom</th>
-                        <th>Entreprise</th>
-                        <th>Email</th>
-                        <th>Téléphone</th>
-                        <th>Crée le</th>
+                        <th>Service</th>
+                        <th>Code</th>
+                        <th class="text-right">Prix</th>
+                        <th class="text-right">Durée</th>
+                        <th class="text-right">Créé le</th>
                         <th class="text-right">Actions</th>
                     </tr>
                 </thead>
 
-                <!-- body -->
                 <tbody>
-                    <tr v-for="client in clients" :key="client.id">
+                    <tr v-for="service in services" :key="service.id">
                         <td>
                             <div class="font-medium">
-                                {{ client.firstName }} {{ client.lastName }}
+                                {{ service.name }}
                             </div>
                             <div class="text-sm opacity-60">
-                                {{ client.address || '—' }}
+                                {{ service.description || '—' }}
                             </div>
                         </td>
 
                         <td>
-                            {{ client.company || '—' }}
+                            {{ service.code }}
                         </td>
 
-                        <td>
-                            <a :href="`mailto:${client.email}`" class="link link-hover">
-                                {{ client.email }}
-                            </a>
+                        <td class="text-right">
+                            {{ service.price.toFixed(2) }} €
                         </td>
 
-                        <td>
-                            {{ client.phone || '—' }}
+                        <td class="text-right">
+                            <span v-if="service.durationHours">
+                                {{ service.durationHours }} h
+                            </span>
+                            <span v-else class="opacity-50">
+                                —
+                            </span>
                         </td>
 
-                        <td>
-                            {{ client.createdAt.toLocaleDateString() }}
+                        <td class="text-right">
+                            {{ service.createdAt.toLocaleDateString() }}
                         </td>
 
                         <td class="text-right">
@@ -117,36 +126,43 @@ load();
                                 </summary>
                                 <ul class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
                                     <li>
-                                        <a href="#" @click.prevent="edit(client)">
-                                            <i class="fa-solid fa-pen"></i>
-                                            Nouveau devis
-                                        </a>
-                                    </li>
-                                    <li
-                                    <li>
-                                        <a href="#" @click.prevent="edit(client)">
+                                        <a 
+                                            href="#"
+                                            @click.prevent="edit(service)">
                                             <i class="fa-solid fa-pen"></i>
                                             Modifier
                                         </a>
                                     </li>
-                                    <li><a class="text-error" href="#" @click.prevent="remove(client)"><i
-                                                class="fa-solid fa-trash"></i> Supprimer</a></li>
+                                    <li>
+                                        <a
+                                            class="text-error"
+                                            href="#"
+                                            @click.prevent="remove(service)"
+                                        >
+                                            <i class="fa-solid fa-trash"></i>
+                                            Supprimer
+                                        </a>
+                                    </li>
                                 </ul>
                             </details>
                         </td>
                     </tr>
 
                     <!-- empty state -->
-                    <tr v-if="clients.length === 0">
-                        <td colspan="7" class="text-center opacity-60 py-6">
-                            No clients found
+                    <tr v-if="services.length === 0">
+                        <td colspan="6" class="text-center opacity-60 py-6">
+                            Aucun service trouvé
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        <Pagination :page="pagination.page" :total="total" :capacity="pagination.limit" />
-        <ClientModal ref="modal" />
+        <Pagination
+            :page="pagination.page"
+            :total="total"
+            :capacity="pagination.limit"
+        />
+        <ServiceModal ref="modal" />
     </div>
 </template>
