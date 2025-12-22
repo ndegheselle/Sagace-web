@@ -1,12 +1,14 @@
 import HomeView from './views/home.vue';
 import LoginView from './views/user/login.vue';
 
-import ClientsList from './views/clients/list.vue';
-import ArticlesList from './views/articles/list.vue';
-import ServicesList from './views/services/list.vue';
+import ClientsPage from './views/clients/ClientsPage.vue';
+import ArticlesPage from './views/articles/ArticlesPage.vue';
+import ServicesPage from './views/services/ServicesPage.vue';
 
-import EstimatesList from './views/estimates/list.vue';
-import EstimatesNew from './views/estimates/new.vue';
+import EstimatesPage from './views/estimates/EstimatesPage.vue';
+import EstimateClientSelectionPage from './views/estimates/new/ClientSelectionPage.vue';
+import EstimateServiceListPage from './views/estimates/new/ServiceListPage.vue';
+import EstimateInvoiceStatusPage from './views/estimates/new/InvoiceStatusPage.vue';
 
 export default [
     {
@@ -19,22 +21,26 @@ export default [
     },
     {
         path: '/clients',
-        component: ClientsList,
+        component: ClientsPage,
     },
     {
         path: '/articles',
-        component: ArticlesList,
+        component: ArticlesPage,
     },
     {
         path: '/services',
-        component: ServicesList,
+        component: ServicesPage,
     },
     {
         path: '/estimates',
-        component: EstimatesList,
+        component: EstimatesPage,
     },
     {
         path: '/estimates/new',
-        component: EstimatesNew,
+        children: [
+            { path: 'client', component: EstimateClientSelectionPage },
+            { path: 'services', component: EstimateServiceListPage },
+            { path: 'invoice', component: EstimateInvoiceStatusPage },
+        ],
     },
 ];

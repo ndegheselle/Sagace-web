@@ -18,7 +18,6 @@ const pagination = reactive<PaginationOptions>({
 });
 
 async function load() {
-    console.log(search);
     const result = await api.search(search, pagination);
     clients.value = result.data || [];
     total.value = result.total || 0;
@@ -117,12 +116,14 @@ load();
                                 </summary>
                                 <ul class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
                                     <li>
-                                        <a href="#" @click.prevent="edit(client)">
-                                            <i class="fa-solid fa-pen"></i>
+                                        <RouterLink :to="{
+                                            path: '/estimates/new/services',
+                                            query: { clientId: client.id }
+                                        }">
+                                            <i class="fa-solid fa-file-invoice"></i>
                                             Nouveau devis
-                                        </a>
+                                        </RouterLink>
                                     </li>
-                                    <li
                                     <li>
                                         <a href="#" @click.prevent="edit(client)">
                                             <i class="fa-solid fa-pen"></i>
