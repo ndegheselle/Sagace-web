@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref, reactive, useTemplateRef } from 'vue';
 import Pagination from '@/components/Pagination.vue';
-import type { PaginationOptions } from '@/lib/base/paginated';
-import { Client, api } from '@/lib/api/client';
 import { useConfirmation } from '@/composables/popups/confirmation';
+import { Client, api } from '@/lib/api/client';
+import type { PaginationOptions } from '@/lib/base/paginated';
+import { reactive, ref, useTemplateRef } from 'vue';
 import ClientModal from './ClientModal.vue';
 
 let search = "";
@@ -140,7 +140,7 @@ load();
                     <!-- empty state -->
                     <tr v-if="clients.length === 0">
                         <td colspan="7" class="text-center opacity-60 py-6">
-                            No clients found
+                            Aucun résultat
                         </td>
                     </tr>
                 </tbody>

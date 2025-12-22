@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
 import Pagination from '@/components/Pagination.vue';
-import type { PaginationOptions } from '@/lib/base/paginated';
-import { Estimate, api, EnumEstimateStatus } from '@/lib/api/estimate';
 import { useConfirmation } from '@/composables/popups/confirmation';
+import { api, EnumEstimateStatus, Estimate } from '@/lib/api/estimate';
+import type { PaginationOptions } from '@/lib/base/paginated';
+import { reactive, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 
 let search = "";
@@ -56,7 +56,7 @@ load();
                         @keyup.enter="load"
                     />
                 </label>
-                <RouterLink to="/estimates/new" class="btn btn-sm ms-1">
+                <RouterLink to="/estimates/new/services" class="btn btn-sm ms-1">
                     <i class="fa-solid fa-plus"></i>
                     Nouveau
                 </RouterLink>
