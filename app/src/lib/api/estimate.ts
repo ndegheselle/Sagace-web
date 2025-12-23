@@ -41,7 +41,7 @@ export class Estimate implements BaseEntity {
     id: string;
     reference: string;
 
-    client: Client | undefined;
+    client: Client | null;
     lines: EstimateLine[];
     createdAt: Date;
     updatedAt: Date;
@@ -52,7 +52,7 @@ export class Estimate implements BaseEntity {
     constructor() {
         this.id = '';
         this.reference = '';
-        this.client = undefined;
+        this.client = null;
         this.lines = [];
         this.createdAt = new Date();
         this.updatedAt = new Date();

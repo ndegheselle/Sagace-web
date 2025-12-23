@@ -1,12 +1,28 @@
 <script setup lang="ts">
+import { api as apiClient } from "@/lib/api/client";
 import { Estimate } from "@/lib/api/estimate";
 import ArticleSelectModal from "@/views/billable/articles/ArticleSelectModal.vue";
 import ServiceSelectModal from "@/views/billable/services/ServiceSelectModal.vue";
-import { ref, useTemplateRef } from "vue";
+import { ref, useTemplateRef, watch } from "vue";
+import { useRoute } from 'vue-router';
 
+const route = useRoute();
 const estimate = ref<Estimate>(new Estimate());
+
 const modalArticleRef = useTemplateRef('articleModal');
 const modalserviceRef = useTemplateRef('serviceModal');
+
+watch(
+    () => route.query.clientId,
+    async (clientId) => {
+
+        let clientApi = null;
+        if (clientId && typeof clientId === 'string')
+            clientApi = await apiClient.getById(clientId);
+        estimate.value.client = clientApi;
+    },
+    { immediate: true } // <-- runs on initial load
+);
 
 async function addArticle() {
     if (await modalArticleRef.value?.show() && modalArticleRef.value?.selected) {
@@ -33,7 +49,14 @@ function remove(index: number) {
                 <span><i class="fa-solid fa-file-invoice"></i> Devis</span>
             </li>
             <li class="step">
-                <span><i class="fa-solid fa-user"></i> Client</span>
+                <div v-if="estimate.client"
+                     class="indicator">
+                    <span class="indicator-item text-success"><i class="fa-solid fa-check"></i></span>
+                    <span><i class="fa-solid fa-user"></i> {{ estimate.client.fullName }}</span>
+                </div>
+                <div v-else>
+                    <span><i class="fa-solid fa-user"></i> Client</span>
+                </div>
             </li>
             <li class="step">
                 <span><i class="fa-solid fa-file-invoice-dollar"></i> Facture</span>
@@ -48,6 +71,8 @@ function remove(index: number) {
                 <ul class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
                     <li><a @click="addArticle"><i class="fa-solid fa-box"></i>Ajouter un article</a></li>
                     <li><a @click="addService"><i class="fa-solid fa-screwdriver-wrench"></i>Ajouter un service</a></li>
+                    <div class="divider m-0 mx-4" />
+                    <li><a @click="addService"><i class="fa-solid fa-file-invoice"></i>Copier un autre devis</a></li>
                 </ul>
             </details>
         </div>
@@ -73,7 +98,7 @@ function remove(index: number) {
 
                 <tbody>
                     <tr v-for="(line, index) in estimate.lines"
-    :key="line.item.id">
+                        :key="line.item.id">
                         <td>
                             <div class="font-medium">
                                 {{ line.item.name }}
@@ -98,7 +123,8 @@ function remove(index: number) {
                             {{ line.total.toFixed(2) }} €
                         </td>
                         <td>
-                            <button class="btn btn-sm btn-error btn-soft btn-circle" @click="remove(index)">
+                            <button class="btn btn-sm btn-error btn-soft btn-circle"
+                                    @click="remove(index)">
                                 <i class="fa-solid fa-trash-can"></i>
                             </button>
                         </td>
@@ -136,9 +162,8 @@ function remove(index: number) {
             </table>
         </div>
         <div class="w-full flex mt-2">
-            <RouterLink to="/estimates/new/client"
-                        class="btn btn-primary ms-auto"
-                        :disabled="!estimate.lines.length"><i class="fa-solid fa-arrow-right"></i> Suivant</RouterLink>
+            <RouterLink :to="{ path: estimate.client ? '/estimates/new/invoice' : '/estimates/new/client' }"
+                        class="btn btn-primary ms-auto"><i class="fa-solid fa-arrow-right"></i> Suivant</RouterLink>
         </div>
 
         <ArticleSelectModal ref="articleModal" />
