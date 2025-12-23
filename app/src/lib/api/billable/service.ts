@@ -1,6 +1,6 @@
-import { FakeApiCrud } from "@/lib/base/FakeApiCrud";
-import type { BillableItem } from "./estimate";
 import type { BaseEntity } from "@/lib/base/ApiCrud";
+import { FakeApiCrud } from "@/lib/base/FakeApiCrud";
+import type { BillableItem } from "../estimate";
 
 export class Service implements BillableItem, BaseEntity  {
     id: string;
@@ -13,6 +13,8 @@ export class Service implements BillableItem, BaseEntity  {
     price: number;          // unit price (e.g. per hour or per service)
     durationHours?: number; // optional duration info
 
+    isSelected: boolean;
+
     constructor() {
         this.id = '';
         this.createdAt = new Date();
@@ -23,6 +25,7 @@ export class Service implements BillableItem, BaseEntity  {
         this.price = 0;
         this.description = '';
         this.durationHours = undefined;
+        this.isSelected = false;
     }
 
     get isNew(): boolean {

@@ -1,14 +1,14 @@
 import HomeView from './views/home.vue';
 import LoginView from './views/user/login.vue';
 
+import ArticlesPage from './views/billable/articles/ArticlesPage.vue';
+import ServicesPage from './views/billable/services/ServicesPage.vue';
 import ClientsPage from './views/clients/ClientsPage.vue';
-import ArticlesPage from './views/articles/ArticlesPage.vue';
-import ServicesPage from './views/services/ServicesPage.vue';
 
 import EstimatesPage from './views/estimates/EstimatesPage.vue';
 import EstimateClientSelectionPage from './views/estimates/new/ClientSelectionPage.vue';
-import EstimateServiceListPage from './views/estimates/new/ServiceListPage.vue';
 import EstimateInvoiceStatusPage from './views/estimates/new/InvoiceStatusPage.vue';
+import EstimateServiceListPage from './views/estimates/new/ServiceListPage.vue';
 
 export default [
     {

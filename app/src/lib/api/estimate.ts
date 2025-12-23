@@ -1,14 +1,15 @@
 import { Client } from '@/lib/api/client';
-import { FakeApiCrud } from "@/lib/base/FakeApiCrud";
 import type { BaseEntity } from "@/lib/base/ApiCrud";
+import { FakeApiCrud } from "@/lib/base/FakeApiCrud";
 
+import { fakeArticles } from '@/lib/api/billable/article';
+import { fakeServices } from '@/lib/api/billable/service';
 import { fakeClients } from '@/lib/api/client';
-import { fakeArticles } from '@/lib/api/article';
-import { fakeServices } from '@/lib/api/service';
 
 export interface BillableItem {
     id: string;
     name: string;
+    description?: string;
     price: number;
 }
 

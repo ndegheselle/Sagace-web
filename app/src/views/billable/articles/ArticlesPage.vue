@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { ref, reactive, useTemplateRef } from 'vue';
 import Pagination from '@/components/Pagination.vue';
-import type { PaginationOptions } from '@/lib/base/paginated';
-import { Service, api } from '@/lib/api/service';
 import { useConfirmation } from '@/composables/popups/confirmation';
-import ServiceModal from './ServiceModal.vue';
+import { StockArticle, api } from '@/lib/api/billable/article';
+import type { PaginationOptions } from '@/lib/base/paginated';
+import { reactive, ref, useTemplateRef } from 'vue';
+
+import ArticleModal from './ArticleModal.vue';
 
 let search = "";
 const confirmation = useConfirmation();
 const modalRef = useTemplateRef('modal');
 
-const services = ref<Service[]>([]);
+const articles = ref<StockArticle[]>([]);
 const total = ref(0);
 
 const pagination = reactive<PaginationOptions>({
@@ -20,14 +21,14 @@ const pagination = reactive<PaginationOptions>({
 
 async function load() {
     const result = await api.search(search, pagination);
-    services.value = result.data || [];
+    articles.value = result.data || [];
     total.value = result.total || 0;
 }
 
-async function remove(service: Service) {
+async function remove(article: StockArticle) {
     const confirmed = await confirmation.show(
         'Confirmer la suppression',
-        `Êtes-vous sûr de vouloir supprimer le service <b>${service.name}</b> ?`,
+        `Êtes-vous sûr de vouloir supprimer l’article <b>${article.name}</b> ?`,
         'fa-solid fa-triangle-exclamation text-warning'
     );
 
@@ -35,13 +36,13 @@ async function remove(service: Service) {
         return;
     }
 
-    await api.delete(service.id);
+    await api.delete(article.id);
     await load();
 }
 
-async function edit(service: Service)
+async function edit(article: StockArticle)
 {
-    if (await modalRef.value?.show(service) == true)
+    if (await modalRef.value?.show(article) == true)
         await load();
 }
 
@@ -52,8 +53,8 @@ load();
     <div class="container mx-auto flex flex-col my-1">
         <div class="flex">
             <h1 class="text-heading text-2xl my-2">
-                <i class="fa-solid fa-screwdriver-wrench"></i>
-                Services
+                <i class="fa-solid fa-boxes-stacked"></i>
+                Articles
             </h1>
 
             <div class="ms-auto my-auto flex">
@@ -67,7 +68,7 @@ load();
                     />
                 </label>
 
-                <button class="btn btn-sm ms-1" @click="edit(new Service())">
+                <button class="btn btn-sm ms-1" @click="edit(new StockArticle())">
                     <i class="fa-solid fa-plus"></i>
                     Nouveau
                 </button>
@@ -78,45 +79,51 @@ load();
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Service</th>
-                        <th>Code</th>
+                        <th>Article</th>
+                        <th>SKU</th>
                         <th class="text-right">Prix</th>
-                        <th class="text-right">Durée</th>
+                        <th class="text-right">Stock</th>
                         <th class="text-right">Créé le</th>
                         <th class="text-right">Actions</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    <tr v-for="service in services" :key="service.id">
+                    <tr v-for="article in articles" :key="article.id">
                         <td>
                             <div class="font-medium">
-                                {{ service.name }}
+                                {{ article.name }}
                             </div>
                             <div class="text-sm opacity-60">
-                                {{ service.description || '—' }}
+                                {{ article.description || '—' }}
                             </div>
                         </td>
 
                         <td>
-                            {{ service.code }}
+                            {{ article.sku }}
                         </td>
 
                         <td class="text-right">
-                            {{ service.price.toFixed(2) }} €
+                            {{ article.price.toFixed(2) }} €
                         </td>
 
                         <td class="text-right">
-                            <span v-if="service.durationHours">
-                                {{ service.durationHours }} h
+                            <span
+                                :class="[
+                                    'badge',
+                                    article.quantity === 0
+                                        ? 'badge-error'
+                                        : article.quantity < 10
+                                        ? 'badge-warning'
+                                        : 'badge-success'
+                                ]"
+                            >
+                                {{ article.quantity }}
                             </span>
-                            <span v-else class="opacity-50">
-                                —
-                            </span>
                         </td>
 
                         <td class="text-right">
-                            {{ service.createdAt.toLocaleDateString() }}
+                            {{ article.createdAt.toLocaleDateString() }}
                         </td>
 
                         <td class="text-right">
@@ -128,7 +135,7 @@ load();
                                     <li>
                                         <a 
                                             href="#"
-                                            @click.prevent="edit(service)">
+                                            @click.prevent="edit(article)">
                                             <i class="fa-solid fa-pen"></i>
                                             Modifier
                                         </a>
@@ -137,7 +144,7 @@ load();
                                         <a
                                             class="text-error"
                                             href="#"
-                                            @click.prevent="remove(service)"
+                                            @click.prevent="remove(article)"
                                         >
                                             <i class="fa-solid fa-trash"></i>
                                             Supprimer
@@ -149,9 +156,9 @@ load();
                     </tr>
 
                     <!-- empty state -->
-                    <tr v-if="services.length === 0">
+                    <tr v-if="articles.length === 0">
                         <td colspan="6" class="text-center opacity-60 py-6">
-                            Aucun service trouvé
+                            No articles found
                         </td>
                     </tr>
                 </tbody>
@@ -163,6 +170,6 @@ load();
             :total="total"
             :capacity="pagination.limit"
         />
-        <ServiceModal ref="modal" />
+        <ArticleModal ref="modal" />
     </div>
 </template>

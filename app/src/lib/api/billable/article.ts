@@ -1,6 +1,6 @@
-import { FakeApiCrud } from "@/lib/base/FakeApiCrud";
-import type { BillableItem } from "./estimate";
 import type { BaseEntity } from "@/lib/base/ApiCrud";
+import { FakeApiCrud } from "@/lib/base/FakeApiCrud";
+import type { BillableItem } from "../estimate";
 
 export class StockArticle implements BillableItem, BaseEntity {
     id: string;
@@ -13,6 +13,8 @@ export class StockArticle implements BillableItem, BaseEntity {
     price: number;
     quantity: number;
 
+    isSelected: boolean;
+
     constructor() {
         this.id = '';
         this.createdAt = new Date();
@@ -23,6 +25,7 @@ export class StockArticle implements BillableItem, BaseEntity {
         this.price = 0;
         this.quantity = 0;
         this.description = '';
+        this.isSelected = false;
     }
 
     get isNew(): boolean {
