@@ -31,7 +31,6 @@ async function confirm() {
 }
 
 function show(client: Client): Promise<boolean> {
-    console.log(client)
     Object.assign(form, client);
     error.value = '';
     return modal.show();

@@ -5,9 +5,13 @@ import { Client, api } from '@/lib/api/client';
 import type { PaginationOptions } from '@/lib/base/paginated';
 import { reactive, ref, useTemplateRef } from 'vue';
 import ClientModal from './ClientModal.vue';
+import { Estimate, api as estimateApi } from '@/lib/api/estimate';
+import { useRouter } from 'vue-router';
+import { debounce } from '@/lib/base/debounce';
 
 let search = "";
 const confirmation = useConfirmation();
+const router = useRouter();
 const modalRef = useTemplateRef('modal');
 
 const clients = ref<Client[]>([]);
@@ -42,13 +46,22 @@ async function edit(client: Client) {
         await load();
 }
 
+async function createEstimate(client: Client)
+{
+    const estimate = new Estimate();
+    estimate.client = client;
+    const id = await estimateApi.create(estimate);
+    router.push(`/estimates/${id}/items`);
+}
+
+const debouncedLoad = debounce(load, 300);
 load();
 </script>
 
 <template>
-    <div class="container mx-auto flex flex-col my-1">
+    <div class="container mx-auto flex flex-col my-2">
         <div class="flex">
-            <h1 class="text-heading text-2xl my-2">
+            <h1 class="text-heading text-2xl">
                 <i class="fa-solid fa-user"></i>
                 Clients
             </h1>
@@ -56,7 +69,7 @@ load();
             <div class="ms-auto my-auto flex">
                 <label class="input ms-auto input-sm">
                     <i class="fa-solid fa-magnifying-glass opacity-50"></i>
-                    <input v-on:keyup.enter="load" type="search" required placeholder="Recherche" v-model="search" />
+                    <input @input="debouncedLoad" type="search" placeholder="Recherche" v-model="search" />
                 </label>
 
                 <button class="btn btn-sm ms-1" @click="edit(new Client())">
@@ -65,7 +78,7 @@ load();
                 </button>
             </div>
         </div>
-        <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 flex-1">
+        <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 flex-1 mt-1">
             <table class="table">
                 <!-- head -->
                 <thead>
@@ -116,13 +129,10 @@ load();
                                 </summary>
                                 <ul class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
                                     <li>
-                                        <RouterLink :to="{
-                                            path: '/estimates/new/services',
-                                            query: { clientId: client.id }
-                                        }">
+                                        <a href="#" @click.prevent="createEstimate(client)">
                                             <i class="fa-solid fa-file-invoice"></i>
                                             Nouveau devis
-                                        </RouterLink>
+                                        </a>
                                     </li>
                                     <li>
                                         <a href="#" @click.prevent="edit(client)">

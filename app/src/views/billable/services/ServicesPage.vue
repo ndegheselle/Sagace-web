@@ -5,6 +5,7 @@ import { Service, api } from '@/lib/api/billable/service';
 import type { PaginationOptions } from '@/lib/base/paginated';
 import { reactive, ref, useTemplateRef } from 'vue';
 import ServiceModal from './ServiceModal.vue';
+import { debounce } from '@/lib/base/debounce';
 
 let search = "";
 const confirmation = useConfirmation();
@@ -45,11 +46,12 @@ async function edit(service: Service)
         await load();
 }
 
+const debouncedLoad = debounce(load, 300);
 load();
 </script>
 
 <template>
-    <div class="container mx-auto flex flex-col my-1">
+    <div class="container mx-auto flex flex-col my-2">
         <div class="flex">
             <h1 class="text-heading text-2xl my-2">
                 <i class="fa-solid fa-screwdriver-wrench"></i>
@@ -59,12 +61,7 @@ load();
             <div class="ms-auto my-auto flex">
                 <label class="input ms-auto input-sm">
                     <i class="fa-solid fa-magnifying-glass opacity-50"></i>
-                    <input
-                        v-model="search"
-                        type="search"
-                        placeholder="Recherche"
-                        @keyup.enter="load"
-                    />
+                    <input @input="debouncedLoad" type="search" placeholder="Recherche" v-model="search" />
                 </label>
 
                 <button class="btn btn-sm ms-1" @click="edit(new Service())">
@@ -74,7 +71,7 @@ load();
             </div>
         </div>
 
-        <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 flex-1">
+        <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 flex-1 mt-1">
             <table class="table">
                 <thead>
                     <tr>

@@ -1,58 +1,43 @@
 <script setup lang="ts">
-import { api as apiClient } from "@/lib/api/client";
 import { Estimate } from "@/lib/api/estimate";
 import ArticleSelectModal from "@/views/billable/articles/ArticleSelectModal.vue";
 import ServiceSelectModal from "@/views/billable/services/ServiceSelectModal.vue";
-import { ref, useTemplateRef, watch } from "vue";
-import { useRoute } from 'vue-router';
-
-const route = useRoute();
-const estimate = ref<Estimate>(new Estimate());
+import { useTemplateRef } from "vue";
 
 const modalArticleRef = useTemplateRef('articleModal');
 const modalserviceRef = useTemplateRef('serviceModal');
 
-watch(
-    () => route.query.clientId,
-    async (clientId) => {
-
-        let clientApi = null;
-        if (clientId && typeof clientId === 'string')
-            clientApi = await apiClient.getById(clientId);
-        estimate.value.client = clientApi;
-    },
-    { immediate: true } // <-- runs on initial load
-);
-
 async function addArticle() {
     if (await modalArticleRef.value?.show() && modalArticleRef.value?.selected) {
-        estimate.value.addItem(modalArticleRef.value?.selected, 1);
+        props.estimate?.addItem(modalArticleRef.value?.selected, 1);
     }
 }
 
 async function addService() {
     if (await modalserviceRef.value?.show() && modalserviceRef.value?.selected) {
-        estimate.value.addItem(modalserviceRef.value?.selected, 1);
+        props.estimate?.addItem(modalserviceRef.value?.selected, 1);
     }
 }
 
 function remove(index: number) {
-    estimate.value.lines.splice(index, 1);
+    props.estimate?.lines.splice(index, 1);
 }
 
+const props = defineProps({
+  estimate: Estimate
+});
 </script>
 
 <template>
-    <div class="container mx-auto flex flex-col my-1">
+    <div class="container mx-auto flex flex-col my-2">
         <ul class="steps mt-4">
             <li class="step step-primary">
                 <span><i class="fa-solid fa-file-invoice"></i> Devis</span>
             </li>
             <li class="step">
-                <div v-if="estimate.client"
-                     class="indicator">
+                <div v-if="props.estimate?.client" class="indicator">
                     <span class="indicator-item text-success"><i class="fa-solid fa-check"></i></span>
-                    <span><i class="fa-solid fa-user"></i> {{ estimate.client.fullName }}</span>
+                    <span><i class="fa-solid fa-user"></i> {{ props.estimate.client.fullName }}</span>
                 </div>
                 <div v-else>
                     <span><i class="fa-solid fa-user"></i> Client</span>
@@ -63,21 +48,7 @@ function remove(index: number) {
             </li>
         </ul>
 
-        <div class="divider mx-auto w-1/2"></div>
-
-        <div class="flex">
-            <details class="dropdown dropdown-end ms-auto">
-                <summary class="btn"><i class="fa-solid fa-plus"></i>Ajouter</summary>
-                <ul class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                    <li><a @click="addArticle"><i class="fa-solid fa-box"></i>Ajouter un article</a></li>
-                    <li><a @click="addService"><i class="fa-solid fa-screwdriver-wrench"></i>Ajouter un service</a></li>
-                    <div class="divider m-0 mx-4" />
-                    <li><a @click="addService"><i class="fa-solid fa-file-invoice"></i>Copier un autre devis</a></li>
-                </ul>
-            </details>
-        </div>
-
-        <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 mt-1">
+        <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 mt-4">
             <table class="table">
                 <colgroup>
                     <col>
@@ -97,8 +68,7 @@ function remove(index: number) {
                 </thead>
 
                 <tbody>
-                    <tr v-for="(line, index) in estimate.lines"
-                        :key="line.item.id">
+                    <tr v-for="(line, index) in props.estimate?.lines" :key="line.item.id">
                         <td>
                             <div class="font-medium">
                                 {{ line.item.name }}
@@ -113,27 +83,41 @@ function remove(index: number) {
                         </td>
 
                         <td class="text-right">
-                            <input class="input input-sm"
-                                   type="number"
-                                   min="1"
-                                   v-model="line.quantity" />
+                            <input class="input input-sm" type="number" min="1" v-model="line.quantity" />
                         </td>
 
                         <td class="text-right font-medium">
                             {{ line.total.toFixed(2) }} €
                         </td>
                         <td>
-                            <button class="btn btn-sm btn-error btn-soft btn-circle"
-                                    @click="remove(index)">
+                            <button class="btn btn-sm btn-error btn-soft btn-circle" @click="remove(index)">
                                 <i class="fa-solid fa-trash-can"></i>
                             </button>
                         </td>
                     </tr>
 
-                    <tr v-if="estimate.lines.length === 0">
-                        <td colspan="5"
-                            class="text-center text-base-content/50">
-                            No lines added
+                    <tr v-if="props.estimate?.lines.length === 0">
+                        <td colspan="5" class="text-center text-base-content/50">
+                            Aucune lignes
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" class="p-0">
+                            <div class="flex bg-base-200 p-2">
+                                <details class="dropdown dropdown-center m-auto">
+                                    <summary class="btn btn-soft btn-xs m-1"><i class="fa-solid fa-plus"></i>Ajouter une ligne</summary>
+                                    <ul class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                                        <li><a @click="addArticle"><i class="fa-solid fa-box"></i>Ajouter un article</a>
+                                        </li>
+                                        <li><a @click="addService"><i class="fa-solid fa-screwdriver-wrench"></i>Ajouter
+                                                un service</a></li>
+                                        <div class="divider m-0 mx-4" />
+                                        <li><a @click="addService"><i class="fa-solid fa-file-invoice"></i>Copier un
+                                                autre devis</a></li>
+                                    </ul>
+                                </details>
+                            </div>
+
                         </td>
                     </tr>
                 </tbody>
@@ -141,29 +125,27 @@ function remove(index: number) {
                 <!-- Totals -->
                 <tfoot>
                     <tr>
-                        <td colspan="3"
-                            class="text-right">Total HT</td>
-                        <td class="text-right">{{ estimate.totalHT.toFixed(2) }} €</td>
+                        <td colspan="3" class="text-right">Total HT</td>
+                        <td class="text-right">{{ props.estimate?.totalHT.toFixed(2) }} €</td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td colspan="3"
-                            class="text-right">TVA (20%)</td>
-                        <td class="text-right">{{ estimate.tva.toFixed(2) }} €</td>
+                        <td colspan="3" class="text-right">TVA (20%)</td>
+                        <td class="text-right">{{ props.estimate?.tva.toFixed(2) }} €</td>
                         <td></td>
                     </tr>
                     <tr class="font-bold">
-                        <td colspan="3"
-                            class="text-right">Total TTC</td>
-                        <td class="text-right">{{ estimate.totalTTC.toFixed(2) }} €</td>
+                        <td colspan="3" class="text-right">Total TTC</td>
+                        <td class="text-right">{{ props.estimate?.totalTTC.toFixed(2) }} €</td>
                         <td></td>
                     </tr>
                 </tfoot>
             </table>
         </div>
-        <div class="w-full flex mt-2">
-            <RouterLink :to="{ path: estimate.client ? '/estimates/new/invoice' : '/estimates/new/client' }"
-                        class="btn btn-primary ms-auto"><i class="fa-solid fa-arrow-right"></i> Suivant</RouterLink>
+        <div class="w-full flex mt-1">
+            <RouterLink to="/estimates" class="btn"><i class="fa-solid fa-arrow-left"></i> Retour au devis</RouterLink>
+            <RouterLink :to="{ path: props.estimate?.client ? `/estimates/${props.estimate?.id}/invoice` : `/estimates/${props.estimate?.id}/client` }"
+                class="btn btn-primary ms-auto"><i class="fa-solid fa-arrow-right"></i> Suivant</RouterLink>
         </div>
 
         <ArticleSelectModal ref="articleModal" />

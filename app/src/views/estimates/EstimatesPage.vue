@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import Pagination from '@/components/Pagination.vue';
 import { useConfirmation } from '@/composables/popups/confirmation';
-import { api, EnumEstimateStatus, Estimate } from '@/lib/api/estimate';
+import { api, Estimate } from '@/lib/api/estimate';
 import type { PaginationOptions } from '@/lib/base/paginated';
 import { reactive, ref } from 'vue';
-import { RouterLink } from 'vue-router';
+import { RouterLink, useRouter } from 'vue-router';
+import EstimateStatusBadge from '@/views/estimates/EstimateStatusBadge.vue';
+import { debounce } from '@/lib/base/debounce';
 
 let search = "";
 const confirmation = useConfirmation();
+const router = useRouter();
 const estimates = ref<Estimate[]>([]);
 const total = ref(0);
 const pagination = reactive<PaginationOptions>({
@@ -34,14 +37,20 @@ async function remove(estimate: Estimate) {
     await load();
 }
 
+async function create() {
+    const id = await api.create(new Estimate());
+    router.push(`/estimates/${id}/items`);
+}
+
+const debouncedLoad = debounce(load, 300);
 load();
 </script>
 
 <template>
-    <div class="container mx-auto flex flex-col my-1">
+    <div class="container mx-auto flex flex-col my-2">
         <!-- Header -->
         <div class="flex">
-            <h1 class="text-heading text-2xl my-2">
+            <h1 class="text-heading text-2xl">
                 <i class="fa-solid fa-file-invoice"></i>
                 Devis
             </h1>
@@ -49,22 +58,17 @@ load();
             <div class="ms-auto my-auto flex">
                 <label class="input ms-auto input-sm">
                     <i class="fa-solid fa-magnifying-glass opacity-50"></i>
-                    <input
-                        type="search"
-                        v-model="search"
-                        placeholder="Recherche"
-                        @keyup.enter="load"
-                    />
+                    <input @input="debouncedLoad" type="search" placeholder="Recherche" v-model="search" />
                 </label>
-                <RouterLink to="/estimates/new/services" class="btn btn-sm ms-1">
+                <button @click="create" class="btn btn-sm ms-1">
                     <i class="fa-solid fa-plus"></i>
                     Nouveau
-                </RouterLink>
+                </button>
             </div>
         </div>
 
         <!-- Estimates table -->
-        <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 flex-1">
+        <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 flex-1 mt-1">
             <table class="table">
                 <thead>
                     <tr>
@@ -88,18 +92,7 @@ load();
                         </td>
                         <td class="text-right">{{ estimate.totalTTC.toFixed(2) }} €</td>
                         <td class="text-right">
-                            <span
-                                :class="[
-                                    'badge',
-                                    estimate.status === EnumEstimateStatus.Draft
-                                        ? 'badge-neutral'
-                                        : estimate.status === EnumEstimateStatus.Sent
-                                        ? 'badge-warning'
-                                        : 'badge-success'
-                                ]"
-                            >
-                                {{ EnumEstimateStatus[estimate.status] }}
-                            </span>
+                            <EstimateStatusBadge :status="estimate.status" />
                         </td>
                         <td class="text-right">{{ estimate.createdAt.toLocaleDateString() }}</td>
                         <td class="text-right">
@@ -108,8 +101,12 @@ load();
                                     <i class="fa-solid fa-ellipsis-vertical"></i>
                                 </summary>
                                 <ul class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                                    <li><RouterLink :to="`/estimates/edit/${estimate.id}`"><i class="fa-solid fa-pen"></i> Modifier</RouterLink></li>
-                                    <li><a class="text-error" href="#" @click.prevent="remove(estimate)"><i class="fa-solid fa-trash"></i> Supprimer</a></li>
+                                    <li>
+                                        <RouterLink :to="`/estimates/${estimate.id}/items`"><i
+                                                class="fa-solid fa-pen"></i> Modifier</RouterLink>
+                                    </li>
+                                    <li><a class="text-error" href="#" @click.prevent="remove(estimate)"><i
+                                                class="fa-solid fa-trash"></i> Supprimer</a></li>
                                 </ul>
                             </details>
                         </td>

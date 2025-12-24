@@ -6,9 +6,10 @@ import ServicesPage from './views/billable/services/ServicesPage.vue';
 import ClientsPage from './views/clients/ClientsPage.vue';
 
 import EstimatesPage from './views/estimates/EstimatesPage.vue';
-import EstimateClientSelectionPage from './views/estimates/new/ClientSelectionPage.vue';
-import EstimateInvoiceStatusPage from './views/estimates/new/InvoiceStatusPage.vue';
-import EstimateServiceListPage from './views/estimates/new/ServiceListPage.vue';
+import LayoutEdit from './views/estimates/edit/LayoutEdit.vue';
+import EstimateClientPage from './views/estimates/edit/ClientPage.vue';
+import EstimateInvoicePage from './views/estimates/edit/InvoicePage.vue';
+import EstimateItemsPage from './views/estimates/edit/ItemsPage.vue';
 
 export default [
     {
@@ -36,11 +37,12 @@ export default [
         component: EstimatesPage,
     },
     {
-        path: '/estimates/new',
+        path: '/estimates/:id',
+        component: LayoutEdit,
         children: [
-            { path: 'client', component: EstimateClientSelectionPage },
-            { path: 'services', component: EstimateServiceListPage },
-            { path: 'invoice', component: EstimateInvoiceStatusPage },
+            { path: 'items', component: EstimateItemsPage },
+            { path: 'client', component: EstimateClientPage },
+            { path: 'invoice', component: EstimateInvoicePage },
         ],
     },
 ];

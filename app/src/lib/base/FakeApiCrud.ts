@@ -14,19 +14,19 @@ function makeid(length: number) {
 export class FakeApiCrud<T extends BaseEntity> implements IApiCrud<T> {
     constructor(protected elements: T[], protected searchFields: string[]) { }
 
-    async create(data: T): Promise<T> {
+    async create(data: T): Promise<string> {
         data.id = makeid(10);
         this.elements.push(data);
-        return Promise.resolve(data);
+        return Promise.resolve(data.id);
     }
 
-    async update(id: string, data: T): Promise<T> {
+    async update(id: string, data: T): Promise<void> {
         const index = this.elements.findIndex((el: any) => el.id === id);
         if (index === -1) {
             throw new Error("Element not found");
         }
         this.elements[index] = data;
-        return Promise.resolve(data);
+        return Promise.resolve();
     }
 
     async delete(id: string): Promise<void> {

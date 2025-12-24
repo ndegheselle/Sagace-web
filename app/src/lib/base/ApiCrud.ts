@@ -6,8 +6,8 @@ export interface BaseEntity
 }
 
 export interface IApiCrud<T extends BaseEntity> {
-    create(data: T): Promise<T>;
-    update(id: string, data: T): Promise<T>;
+    create(data: T): Promise<string>;
+    update(id: string, data: T): Promise<void>;
     delete(id: string): Promise<void>;
     getById(id: string): Promise<T | null>;
     getAll(options: PaginationOptions): Promise<Paginated<T>>;
