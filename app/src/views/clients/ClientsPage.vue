@@ -5,7 +5,7 @@ import { Client, api } from '@/lib/api/client';
 import type { PaginationOptions } from '@/lib/base/paginated';
 import { reactive, ref, useTemplateRef } from 'vue';
 import ClientModal from './ClientModal.vue';
-import { Estimate, api as estimateApi } from '@/lib/api/estimate';
+import { Estimate, api as estimateApi } from '@/lib/api/document/estimate';
 import { useRouter } from 'vue-router';
 import { debounce } from '@/lib/base/debounce';
 
@@ -51,7 +51,7 @@ async function createEstimate(client: Client)
     const estimate = new Estimate();
     estimate.client = client;
     const id = await estimateApi.create(estimate);
-    router.push(`/estimates/${id}/items`);
+    router.push(`/documents/estimates/${id}/items`);
 }
 
 const debouncedLoad = debounce(load, 300);

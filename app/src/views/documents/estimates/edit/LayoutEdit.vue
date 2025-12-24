@@ -2,7 +2,7 @@
 import { RouterView } from 'vue-router';
 import { useRoute, useRouter } from 'vue-router';
 import { ref, watch } from 'vue';
-import { Estimate, api } from '@/lib/api/estimate';
+import { Estimate, api } from '@/lib/api/document/estimate';
 import { useAlert } from '@/composables/popups/alert';
 
 const route = useRoute();
@@ -18,7 +18,7 @@ watch(() => route.params.id, async (id) => {
 
     if (!estimateApi)
     {
-        router.push('/estimates');
+        router.push('/documents/estimates');
         alert.error(`Aucun devis trouvé pour l'id [${id}].`);
         return;
     }

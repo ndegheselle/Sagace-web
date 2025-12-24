@@ -2,7 +2,7 @@
 @import "tailwindcss";
 
 @plugin "daisyui" {
-  themes: dracula --default;
+  themes: dracula --default, corporate;
 }
 
 /* Customize style */

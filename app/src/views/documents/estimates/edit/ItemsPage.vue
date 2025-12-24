@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Estimate } from "@/lib/api/estimate";
+import { Estimate } from "@/lib/api/document/estimate";
 import ArticleSelectModal from "@/views/billable/articles/ArticleSelectModal.vue";
 import ServiceSelectModal from "@/views/billable/services/ServiceSelectModal.vue";
 import { useTemplateRef } from "vue";
@@ -49,7 +49,7 @@ const props = defineProps({
         </ul>
 
         <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 mt-4">
-            <table class="table">
+            <table class="table table-sm">
                 <colgroup>
                     <col>
                     <col>
@@ -60,9 +60,9 @@ const props = defineProps({
                 <thead>
                     <tr>
                         <th>Désignation</th>
-                        <th class="text-right">Prix unitaire</th>
+                        <th class="text-right">Prix unitaire HT</th>
                         <th class="text-right">Qte</th>
-                        <th class="text-right">Total</th>
+                        <th class="text-right">Total HT</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -79,7 +79,7 @@ const props = defineProps({
                         </td>
 
                         <td class="text-right">
-                            {{ line.item.price.toFixed(2) }} €
+                            {{ line.item.unitPrice.toFixed(2) }} €
                         </td>
 
                         <td class="text-right">
@@ -87,7 +87,7 @@ const props = defineProps({
                         </td>
 
                         <td class="text-right font-medium">
-                            {{ line.total.toFixed(2) }} €
+                            {{ line.totalHT.toFixed(2) }} €
                         </td>
                         <td>
                             <button class="btn btn-sm btn-error btn-soft btn-circle" @click="remove(index)">
@@ -142,9 +142,10 @@ const props = defineProps({
                 </tfoot>
             </table>
         </div>
+        
         <div class="w-full flex mt-1">
-            <RouterLink to="/estimates" class="btn"><i class="fa-solid fa-arrow-left"></i> Retour au devis</RouterLink>
-            <RouterLink :to="{ path: props.estimate?.client ? `/estimates/${props.estimate?.id}/invoice` : `/estimates/${props.estimate?.id}/client` }"
+            <RouterLink to="/documents/estimates" class="btn"><i class="fa-solid fa-arrow-left"></i> Retour au devis</RouterLink>
+            <RouterLink :to="{ path: props.estimate?.client ? `/documents/estimates/${props.estimate?.id}/invoice` : `/documents/estimates/${props.estimate?.id}/client` }"
                 class="btn btn-primary ms-auto"><i class="fa-solid fa-arrow-right"></i> Suivant</RouterLink>
         </div>
 

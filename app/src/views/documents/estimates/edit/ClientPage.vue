@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ClientSelection from '@/views/clients/ClientSelection.vue';
-import { Estimate } from "@/lib/api/estimate";
+import { Estimate } from "@/lib/api/document/estimate";
 
 const props = defineProps({
   estimate: Estimate
@@ -11,10 +11,16 @@ const props = defineProps({
     <div class="container mx-auto flex flex-col my-2">
         <ul class="steps mt-4">
             <li class="step step-primary">
-                <RouterLink to="/estimates/new/items"><i class="fa-solid fa-file-invoice"></i> Devis</RouterLink>
+                <RouterLink to="/documents/estimates/new/items"><i class="fa-solid fa-file-invoice"></i> Devis</RouterLink>
             </li>
             <li class="step step-primary">
-                <span><i class="fa-solid fa-user"></i> Client</span>
+                <div v-if="props.estimate?.client" class="indicator">
+                    <span class="indicator-item text-success"><i class="fa-solid fa-check"></i></span>
+                    <span><i class="fa-solid fa-user"></i> {{ props.estimate.client.fullName }}</span>
+                </div>
+                <div v-else>
+                    <span><i class="fa-solid fa-user"></i> Client</span>
+                </div>
             </li>
             <li class="step">
                 <span><i class="fa-solid fa-file-invoice-dollar"></i> Facture</span>
@@ -32,8 +38,8 @@ const props = defineProps({
         </div>
 
         <div class="w-full flex mt-1">
-            <RouterLink :to="{ path: `/estimates/${props.estimate?.id}/items` }" class="btn"><i class="fa-solid fa-arrow-left"></i> Précédent</RouterLink>
-            <RouterLink :to="{ path: `/estimates/${props.estimate?.id}/invoice` }" class="btn btn-primary ms-auto"><i class="fa-solid fa-arrow-right"></i> Suivant</RouterLink>
+            <RouterLink :to="{ path: `/documents/estimates/${props.estimate?.id}/items` }" class="btn"><i class="fa-solid fa-arrow-left"></i> Précédent</RouterLink>
+            <RouterLink :to="{ path: `/documents/estimates/${props.estimate?.id}/invoice` }" class="btn btn-primary ms-auto"><i class="fa-solid fa-arrow-right"></i> Suivant</RouterLink>
         </div>
     </div>
 </template>

@@ -1,48 +1,67 @@
 import HomeView from './views/home.vue';
 import LoginView from './views/user/login.vue';
 
+import Default from '@/layouts/Default.vue';
+
 import ArticlesPage from './views/billable/articles/ArticlesPage.vue';
 import ServicesPage from './views/billable/services/ServicesPage.vue';
 import ClientsPage from './views/clients/ClientsPage.vue';
 
-import EstimatesPage from './views/estimates/EstimatesPage.vue';
-import LayoutEdit from './views/estimates/edit/LayoutEdit.vue';
-import EstimateClientPage from './views/estimates/edit/ClientPage.vue';
-import EstimateInvoicePage from './views/estimates/edit/InvoicePage.vue';
-import EstimateItemsPage from './views/estimates/edit/ItemsPage.vue';
+import EstimatesPage from './views/documents/estimates/EstimatesPage.vue';
+
+import LayoutEdit from './views/documents/estimates/edit/LayoutEdit.vue';
+import EstimateClientPage from './views/documents/estimates/edit/ClientPage.vue';
+import EstimateInvoicePage from './views/documents/estimates/edit/InvoicePage.vue';
+import EstimateItemsPage from './views/documents/estimates/edit/ItemsPage.vue';
+import EstimatePrintPage from '@/views/documents/estimates/print/EstimatePrintPage.vue';
+
+import InvoicesPage from './views/documents/invoices/InvoicesPage.vue';
 
 export default [
     {
-        path: '/',
-        component: HomeView,
+        path: '/documents/estimates/:id/print',
+        component: EstimatePrintPage,
     },
     {
-        path: '/user/login',
-        component: LoginView,
-    },
-    {
-        path: '/clients',
-        component: ClientsPage,
-    },
-    {
-        path: '/articles',
-        component: ArticlesPage,
-    },
-    {
-        path: '/services',
-        component: ServicesPage,
-    },
-    {
-        path: '/estimates',
-        component: EstimatesPage,
-    },
-    {
-        path: '/estimates/:id',
-        component: LayoutEdit,
+        component: Default,
         children: [
-            { path: 'items', component: EstimateItemsPage },
-            { path: 'client', component: EstimateClientPage },
-            { path: 'invoice', component: EstimateInvoicePage },
-        ],
-    },
+            {
+                path: '/',
+                component: HomeView,
+            },
+            {
+                path: '/user/login',
+                component: LoginView,
+            },
+            {
+                path: '/clients',
+                component: ClientsPage,
+            },
+            {
+                path: '/articles',
+                component: ArticlesPage,
+            },
+            {
+                path: '/services',
+                component: ServicesPage,
+            },
+            {
+                path: '/documents/estimates',
+                component: EstimatesPage,
+            },
+            {
+                path: '/documents/estimates/:id',
+                component: LayoutEdit,
+                children: [
+                    { path: 'items', component: EstimateItemsPage },
+                    { path: 'client', component: EstimateClientPage },
+                    { path: 'invoice', component: EstimateInvoicePage },
+                ],
+            },
+            {
+                path: '/documents/invoices',
+                component: InvoicesPage,
+            },
+        ]
+    }
 ];
