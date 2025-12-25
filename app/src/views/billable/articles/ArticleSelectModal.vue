@@ -83,7 +83,7 @@ load();
                     <span class="opacity-50 m-auto">Aucun résultat</span>
                 </li>
 
-                <li class="list-row cursor-pointer"
+                <li class="list-row cursor-pointer duration-300"
                     :class="{ 'bg-base-300': article.isSelected }"
                     v-for="article in articles"
                     :key="article.id"
@@ -97,7 +97,7 @@ load();
                         <div class="uppercase opacity-60">{{ article.sku }}</div>
                     </div>
                     <div class="text-right opacity-60">
-                        <div>{{ article.price.toFixed(2) }} €</div>
+                        <div>{{ article.unitPrice.toFixed(2) }} €</div>
                         <span :class="[
                             'badge',
                             article.quantity === 0

@@ -16,11 +16,16 @@ import EstimateItemsPage from './views/documents/estimates/edit/ItemsPage.vue';
 import EstimatePrintPage from '@/views/documents/estimates/print/EstimatePrintPage.vue';
 
 import InvoicesPage from './views/documents/invoices/InvoicesPage.vue';
+import InvoicePrintPage from './views/documents/invoices/print/InvoicePrintPage.vue';
 
 export default [
     {
         path: '/documents/estimates/:id/print',
         component: EstimatePrintPage,
+    },
+    {
+        path: '/documents/invoices/:id/print',
+        component: InvoicePrintPage,
     },
     {
         component: Default,
@@ -61,7 +66,7 @@ export default [
             {
                 path: '/documents/invoices',
                 component: InvoicesPage,
-            },
+            }
         ]
     }
 ];

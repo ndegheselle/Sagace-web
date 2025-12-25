@@ -36,7 +36,7 @@ function confirm() {
     modal.confirm();
 }
 
-function select(service: Service & { isSelected?: boolean }) {
+function select(service: Service) {
     if (service.isSelected) {
         service.isSelected = false;
         selected.value = null;
@@ -89,7 +89,7 @@ load();
 
                 <li v-for="service in services"
                     :key="service.id"
-                    class="list-row cursor-pointer"
+                    class="list-row cursor-pointer duration-300"
                     :class="{ 'bg-base-300': service.isSelected }"
                     @click="select(service)">
                     <div class="my-auto">
@@ -109,7 +109,7 @@ load();
                     </div>
 
                     <div class="text-right opacity-60">
-                        <div>{{ service.price.toFixed(2) }} €</div>
+                        <div>{{ service.unitPrice.toFixed(2) }} €</div>
                         <div v-if="service.durationHours"
                              class="badge badge-outline">
                             {{ service.durationHours }} h

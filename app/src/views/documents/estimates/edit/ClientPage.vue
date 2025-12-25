@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import ClientSelection from '@/views/clients/ClientSelection.vue';
 import { Estimate } from "@/lib/api/document/estimate";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+function next() {
+    router.push(`/documents/estimates/${props.estimate?.id}/invoice`);
+}
 
 const props = defineProps({
   estimate: Estimate
@@ -28,7 +34,8 @@ const props = defineProps({
         </ul>
 
         <h1 class="text-2xl font-bold text-center mt-4">Sélectionner un client</h1>
-        <ClientSelection class="mt-4" />
+        <ClientSelection class="mt-4" :selected="props.estimate?.client" @update:selected="value => props.estimate?.client = value" />
+
         <div class="divider">OU</div>
         <div class="bg-base-200 rounded-box shadow-md text-center">
             <div class="max-w-md mx-auto my-10">
@@ -39,7 +46,7 @@ const props = defineProps({
 
         <div class="w-full flex mt-1">
             <RouterLink :to="{ path: `/documents/estimates/${props.estimate?.id}/items` }" class="btn"><i class="fa-solid fa-arrow-left"></i> Précédent</RouterLink>
-            <RouterLink :to="{ path: `/documents/estimates/${props.estimate?.id}/invoice` }" class="btn btn-primary ms-auto"><i class="fa-solid fa-arrow-right"></i> Suivant</RouterLink>
+            <button @click="next" class="btn btn-primary ms-auto"><i class="fa-solid fa-arrow-right"></i> Suivant</button>
         </div>
     </div>
 </template>

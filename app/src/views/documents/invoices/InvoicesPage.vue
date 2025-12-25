@@ -1,16 +1,13 @@
 <script setup lang="ts">
 import Pagination from '@/components/Pagination.vue';
-import { useConfirmation } from '@/composables/popups/confirmation';
 import { api, Invoice } from '@/lib/api/document/invoice';
 import type { PaginationOptions } from '@/lib/base/paginated';
 import { reactive, ref } from 'vue';
-import { RouterLink, useRouter } from 'vue-router';
+import { RouterLink } from 'vue-router';
 import InvoiceStatusBadge from '@/views/documents/invoices/InvoiceStatusBadge.vue';
 import { debounce } from '@/lib/base/debounce';
 
 let search = '';
-const confirmation = useConfirmation();
-const router = useRouter();
 
 const invoices = ref<Invoice[]>([]);
 const total = ref(0);
@@ -20,28 +17,14 @@ const pagination = reactive<PaginationOptions>({
     limit: 10,
 });
 
+function print(invoice: Invoice) {
+    window.open(`/documents/invoices/${invoice.id}/print`, '_blank');
+}
+
 async function load() {
     const result = await api.search(search, pagination);
     invoices.value = result.data || [];
     total.value = result.total || 0;
-}
-
-async function remove(invoice: Invoice) {
-    const confirmed = await confirmation.show(
-        'Confirmer la suppression',
-        `Êtes-vous sûr de vouloir supprimer la facture <b>${invoice.invoiceNumber}</b> ?`,
-        'fa-solid fa-triangle-exclamation text-warning'
-    );
-
-    if (!confirmed) return;
-
-    await api.delete(invoice.id);
-    await load();
-}
-
-async function create() {
-    const id = await api.create(new Invoice());
-    router.push(`/invoices/${id}/items`);
 }
 
 const debouncedLoad = debounce(load, 300);
@@ -61,11 +44,6 @@ load();
                     <i class="fa-solid fa-magnifying-glass opacity-50"></i>
                     <input v-model="search" type="search" placeholder="Recherche" @input="debouncedLoad" />
                 </label>
-
-                <button class="btn btn-sm ms-1" @click="create">
-                    <i class="fa-solid fa-plus"></i>
-                    Nouvelle
-                </button>
             </div>
         </div>
 
@@ -117,16 +95,9 @@ load();
 
                                 <ul class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
                                     <li>
-                                        <RouterLink :to="`/invoices/${invoice.id}/items`">
-                                            <i class="fa-solid fa-pen"></i>
-                                            Modifier
-                                        </RouterLink>
-                                    </li>
-
-                                    <li>
-                                        <a href="#" class="text-error" @click.prevent="remove(invoice)">
-                                            <i class="fa-solid fa-trash"></i>
-                                            Supprimer
+                                        <a href="#" @click.prevent="print(invoice)">
+                                            <i class="fa-solid fa-print"></i>
+                                            Imprimer
                                         </a>
                                     </li>
                                 </ul>

@@ -1,58 +1,85 @@
 <script setup lang="ts">
-import { useRoute, useRouter } from 'vue-router';
-import { ref, watch, nextTick } from 'vue';
-import { Estimate, api } from '@/lib/api/document/estimate';
-import { useAlert } from '@/composables/popups/alert';
-import { useAuth } from '@/composables/auth';
+import { useRoute, useRouter } from 'vue-router'
+import { ref, watch, computed, nextTick } from 'vue'
+import { Invoice, api } from '@/lib/api/document/invoice'
+import { useAlert } from '@/composables/popups/alert'
+import { useAuth } from '@/composables/auth'
 
-const { user } = useAuth();
-const route = useRoute();
-const router = useRouter();
-const alert = useAlert();
-const estimate = ref<Estimate>();
+const { user } = useAuth()
+const route = useRoute()
+const router = useRouter()
+const alert = useAlert()
 
-watch(() => route.params.id, async (id) => {
-    let estimateApi: Estimate | null = null;
-    if (id && typeof id == 'string') {
-        estimateApi = await api.getById(id);
-    }
+const invoice = ref<Invoice>()
 
-    if (!estimateApi) {
-        router.push('/documents/estimates');
-        alert.error(`Aucun devis trouvé pour l'id [${id}].`);
-        return;
-    }
+watch(
+    () => route.params.id,
+    async (id) => {
+        let invoiceApi: Invoice | null = null
 
-    estimate.value = estimateApi;
+        if (id && typeof id === 'string') {
+            invoiceApi = await api.getById(id)
+        }
 
-    await nextTick();
-    window.print();
-}, { immediate: true });
+        if (!invoiceApi) {
+            router.push('/documents/invoices')
+            alert.error(`Aucune facture trouvée pour l'id [${id}].`)
+            return
+        }
 
+        invoice.value = invoiceApi;
+        await nextTick();
+        window.print();
+    },
+    { immediate: true }
+)
+
+const issueDate = computed(() =>
+    invoice.value?.issuedAt
+        ? new Date(invoice.value.issuedAt).toLocaleDateString()
+        : '—'
+)
+
+const dueDate = computed(() =>
+    invoice.value?.dueDate
+        ? new Date(invoice.value.dueDate).toLocaleDateString()
+        : '—'
+)
 </script>
 <template>
     <div data-theme="corporate" class="h-full paper">
         <div class="print-content">
+            <h1 class="text-5xl">
+                Facture {{ invoice?.invoiceNumber }}
+            </h1>
 
-            <h1 class="text-5xl">Devis {{ estimate?.reference }}</h1>
-            <span class="opacity-80">Date : {{ new Date().toLocaleDateString() }}</span>
+            <div class="opacity-80 mt-1 space-y-1">
+                <div>Date d’émission : {{ issueDate }}</div>
+                <div>Date d’échéance : {{ dueDate }}</div>
+            </div>
+
+            <!-- Parties -->
             <div class="grid grid-cols-2 gap-1 mt-4">
                 <div class="rounded-box border border-base-300 py-2 px-4">
-                    <div class="font-bold uppercase">{{ user?.company.name }}</div>
+                    <div class="font-bold uppercase">
+                        {{ user?.company.name }}
+                    </div>
                     <div>{{ user?.company.SIRET }}</div>
                     <div>{{ user?.company.adress }}</div>
                     <div class="mt-2">{{ user?.company.phone }}</div>
                     <div>{{ user?.company.email }}</div>
                 </div>
+
                 <div class="rounded-box border border-base-300 py-2 px-4 text-right">
-                    <div class="font-bold uppercase">A l'attention de</div>
-                    <div>{{ estimate?.client?.fullName }}</div>
-                    <div>{{ estimate?.client?.address }}</div>
-                    <div class="mt-2">{{ estimate?.client?.phone }}</div>
-                    <div>{{ estimate?.client?.email }}</div>
+                    <div class="font-bold uppercase">Facturé à</div>
+                    <div>{{ invoice?.client?.fullName }}</div>
+                    <div>{{ invoice?.client?.address }}</div>
+                    <div class="mt-2">{{ invoice?.client?.phone }}</div>
+                    <div>{{ invoice?.client?.email }}</div>
                 </div>
             </div>
 
+            <!-- Lines -->
             <div class="overflow-x-auto rounded-box border border-base-300 bg-base-100 mt-1">
                 <table class="table table-sm">
                     <colgroup>
@@ -61,17 +88,20 @@ watch(() => route.params.id, async (id) => {
                         <col style="width: 6rem">
                         <col style="width: 6rem">
                     </colgroup>
+
                     <thead>
                         <tr>
                             <th class="border-base-300">Désignation</th>
-                            <th class="text-right border-base-300">Prix unitaire HT</th>
+                            <th class="text-right border-base-300">
+                                Prix unitaire HT
+                            </th>
                             <th class="text-right border-base-300">Qte</th>
                             <th class="text-right border-base-300">Total HT</th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        <tr v-for="line in estimate?.lines" :key="line.item.id">
+                        <tr v-for="line in invoice?.lines" :key="line.item.id">
                             <td class="border-base-300">
                                 <div class="font-medium">
                                     {{ line.item.name }}
@@ -94,9 +124,9 @@ watch(() => route.params.id, async (id) => {
                             </td>
                         </tr>
 
-                        <tr v-if="estimate?.lines.length === 0">
+                        <tr v-if="invoice?.lines.length === 0">
                             <td colspan="4" class="text-center text-base-content/50 border-base-300">
-                                Aucune lignes
+                                Aucune ligne
                             </td>
                         </tr>
                     </tbody>
@@ -104,51 +134,67 @@ watch(() => route.params.id, async (id) => {
                     <!-- Totals -->
                     <tfoot>
                         <tr>
-                            <td colspan="3" class="text-right border-base-300">Total HT</td>
-                            <td class="text-right border-base-300">{{ estimate?.totalHT.toFixed(2) }} €</td>
+                            <td colspan="3" class="text-right border-base-300">
+                                Total HT
+                            </td>
+                            <td class="text-right border-base-300">
+                                {{ invoice?.totalHT.toFixed(2) }} €
+                            </td>
                         </tr>
                         <tr>
-                            <td colspan="3" class="text-right border-base-300">TVA (20%)</td>
-                            <td class="text-right border-base-300">{{ estimate?.tva.toFixed(2) }} €</td>
+                            <td colspan="3" class="text-right border-base-300">
+                                TVA (20%)
+                            </td>
+                            <td class="text-right border-base-300">
+                                {{ invoice?.tva.toFixed(2) }} €
+                            </td>
                         </tr>
                         <tr class="font-bold">
-                            <td colspan="3" class="text-right border-base-300">Total TTC</td>
-                            <td class="text-right border-base-300">{{ estimate?.totalTTC.toFixed(2) }} €</td>
+                            <td colspan="3" class="text-right border-base-300">
+                                Total TTC
+                            </td>
+                            <td class="text-right border-base-300">
+                                {{ invoice?.totalTTC.toFixed(2) }} €
+                            </td>
                         </tr>
                     </tfoot>
                 </table>
             </div>
 
+            <!-- Payment info -->
             <div class="flex mt-2">
                 <div class="text-xs opacity-70 space-y-2 mt-2 flex-1">
                     <p class="m-0">
-                        <strong>Validité du devis :</strong>
-                        Devis valable <strong>30 jours</strong> à compter de sa date d’émission.
-                    </p>
-                    <p class="m-0">
                         <strong>Conditions de paiement :</strong>
-                        Paiement à réception du devis. Aucun escompte accordé pour paiement anticipé.
+                        Paiement exigible à la date d’échéance indiquée.
                     </p>
+
+                    <p v-if="invoice?.paymentMethod" class="m-0">
+                        <strong>Moyen de paiement :</strong>
+                        {{ invoice.paymentMethod }}
+                    </p>
+
+                    <p v-if="invoice?.paidAt" class="m-0">
+                        <strong>Facture réglée le :</strong>
+                        {{ new Date(invoice.paidAt).toLocaleDateString() }}
+                    </p>
+
                     <p class="m-0">
-                        En cas de retard de paiement, des pénalités seront exigibles sans qu’un rappel
-                        soit nécessaire, au taux légal en vigueur, ainsi qu’une indemnité forfaitaire
-                        pour frais de recouvrement de <strong>40 €</strong>
+                        En cas de retard de paiement, des pénalités seront exigibles
+                        au taux légal en vigueur ainsi qu’une indemnité forfaitaire
+                        de <strong>40 €</strong> pour frais de recouvrement
                         (articles L441-10 et D441-5 du Code de commerce).
                     </p>
-                    <p class="m-0">
-                        La signature du présent devis vaut acceptation pleine et entière des prestations
-                        décrites ci-dessus.
-                    </p>
                 </div>
+
                 <div class="w-48 ml-4">
                     <p class="text-end">Signature</p>
-                    <div class="w-full h-24 rounded-box border border-base-300">
-                    </div>
+                    <div class="w-full h-24 rounded-box border border-base-300"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Footer entreprise -->
+        <!-- Footer -->
         <footer class="print-footer border-t border-base-300 pt-2 mt-2">
             <div class="text-xs text-center opacity-60">
                 <p>
@@ -162,9 +208,7 @@ watch(() => route.params.id, async (id) => {
         </footer>
     </div>
 </template>
-
 <style>
-    
 .paper {
     padding: 2rem;
     max-width: 64rem;
@@ -173,6 +217,7 @@ watch(() => route.params.id, async (id) => {
 }
 
 @media print {
+
     html,
     body {
         background: white !important;

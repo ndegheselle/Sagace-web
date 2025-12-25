@@ -3,7 +3,7 @@ import { Estimate } from "@/lib/api/document/estimate";
 
 function print()
 {
-    window.open(`/estimates/${props.estimate?.id}/print`, '_blank');
+    window.open(`/documents/estimates/${props.estimate?.id}/print`, '_blank');
 }
 
 const props = defineProps({

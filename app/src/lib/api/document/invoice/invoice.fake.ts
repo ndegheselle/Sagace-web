@@ -7,17 +7,8 @@ import { fakeClients } from "@/lib/api/client/client.fake";
 import { Invoice, InvoiceStatus } from "./invoice.model";
 
 let invoiceCounter = 1;
-
-function createRandomString(length: number, chars: string): string {
-    let result = "";
-    for (let i = 0; i < length; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return result;
-}
-
-function createRandomInvoiceNumber(): string {
-    return `INV-${new Date().getFullYear()}-${createRandomString(5, "0123456789")}`;
+function createInvoiceNumber(counter: number): string {
+    return `F-${new Date().getFullYear()}-${counter.toString().padStart(6, "0")}`;
 }
 
 function createFakeInvoice(overrides: Partial<Invoice> = {}): Invoice {
@@ -30,8 +21,8 @@ function createFakeInvoice(overrides: Partial<Invoice> = {}): Invoice {
         new Date(issuedAt.getTime() + 14 * 24 * 60 * 60 * 1000);
 
     Object.assign(invoice, {
-        id: overrides.id ?? `invoice-${invoiceCounter++}`,
-        invoiceNumber: overrides.invoiceNumber ?? createRandomInvoiceNumber(),
+        id: overrides.id ?? `invoice-${invoiceCounter}`,
+        invoiceNumber: overrides.invoiceNumber ?? createInvoiceNumber(invoiceCounter),
         client: overrides.client ?? fakeClients[invoiceCounter % fakeClients.length],
         issuedAt,
         dueDate,
@@ -41,6 +32,8 @@ function createFakeInvoice(overrides: Partial<Invoice> = {}): Invoice {
         createdAt: overrides.createdAt ?? now,
         updatedAt: overrides.updatedAt ?? now
     });
+
+    invoiceCounter++;
 
     // Articles
     invoice.addItem(fakeArticles[0]!, 1);

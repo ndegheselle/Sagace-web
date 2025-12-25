@@ -1,4 +1,4 @@
-import { CommercialDocument } from "@/lib/api/document/document";
+import { CommercialDocument } from "@/lib/api/document";
 
 export enum EnumEstimateStatus {
     Draft,
