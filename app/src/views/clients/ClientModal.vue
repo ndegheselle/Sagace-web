@@ -36,7 +36,7 @@ function show(client: Client): Promise<boolean> {
     return modal.show();
 }
 
-defineExpose({ show });
+defineExpose({ client: form, show });
 </script>
 
 <template>

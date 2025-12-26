@@ -2,27 +2,56 @@
 import ClientSelection from '@/views/clients/ClientSelection.vue';
 import { Estimate } from "@/lib/api/document/estimate";
 import { useRouter } from "vue-router";
+import { ref, useTemplateRef } from 'vue';
+import { Client } from '@/lib/api/client';
+import { api as estimateApi } from '@/lib/api/document/estimate';
+import ClientModal from '@/views/clients/ClientModal.vue';
 
 const router = useRouter();
+const modalRef = useTemplateRef('modal');
+
+function previous() {
+    save();
+    router.push(`/documents/estimates/${props.estimate?.id}/items`);
+}
+
 function next() {
+    save();
     router.push(`/documents/estimates/${props.estimate?.id}/invoice`);
 }
 
+function save() {
+    if (!props.estimate)
+        return;
+
+    props.estimate.client = selectedClient.value;
+    estimateApi.update(props.estimate.id, props.estimate);
+}
+
+async function create() {
+    if (await modalRef.value?.show(new Client()) == true && modalRef.value?.client) {
+        selectedClient.value = modalRef.value.client;
+        next();
+    }
+}
+
 const props = defineProps({
-  estimate: Estimate
+    estimate: Estimate
 });
+const selectedClient = ref<Client | null>(props.estimate?.client ?? null);
 </script>
 
 <template>
     <div class="container mx-auto flex flex-col my-2">
         <ul class="steps mt-4">
             <li class="step step-primary">
-                <RouterLink to="/documents/estimates/new/items"><i class="fa-solid fa-file-invoice"></i> Devis</RouterLink>
+                <RouterLink to="/documents/estimates/new/items"><i class="fa-solid fa-file-invoice"></i> Devis
+                </RouterLink>
             </li>
             <li class="step step-primary">
-                <div v-if="props.estimate?.client" class="indicator">
+                <div v-if="selectedClient" class="indicator">
                     <span class="indicator-item text-success"><i class="fa-solid fa-check"></i></span>
-                    <span><i class="fa-solid fa-user"></i> {{ props.estimate.client.fullName }}</span>
+                    <span><i class="fa-solid fa-user"></i> {{ selectedClient?.fullName }}</span>
                 </div>
                 <div v-else>
                     <span><i class="fa-solid fa-user"></i> Client</span>
@@ -33,20 +62,25 @@ const props = defineProps({
             </li>
         </ul>
 
-        <h1 class="text-2xl font-bold text-center mt-4">Sélectionner un client</h1>
-        <ClientSelection class="mt-4" :selected="props.estimate?.client" @update:selected="value => props.estimate?.client = value" />
+            <h1 class="text-2xl font-bold text-center mt-4">Sélectionner un client</h1>
+            <ClientSelection class="mt-4 flex-1" :selected="selectedClient"
+                @update:selected="value => selectedClient = value" />
 
-        <div class="divider">OU</div>
-        <div class="bg-base-200 rounded-box shadow-md text-center">
-            <div class="max-w-md mx-auto my-10">
-                <h1 class="text-2xl font-bold"><i class="fa-regular fa-user"></i> Créer un nouveau client</h1>
-                <button class="btn btn-soft mt-4"><i class="fa-solid fa-plus"></i> Nouveau</button>
+            <div class="divider">OU</div>
+            <div class="bg-base-200 rounded-box shadow-md text-center">
+                <div class="max-w-md mx-auto my-10">
+                    <h1 class="text-2xl font-bold"><i class="fa-regular fa-user"></i> Créer un nouveau client</h1>
+                    <button class="btn btn-soft mt-4" @click="create"><i class="fa-solid fa-plus"></i> Nouveau</button>
+                </div>
             </div>
-        </div>
 
         <div class="w-full flex mt-1">
-            <RouterLink :to="{ path: `/documents/estimates/${props.estimate?.id}/items` }" class="btn"><i class="fa-solid fa-arrow-left"></i> Précédent</RouterLink>
-            <button @click="next" class="btn btn-primary ms-auto"><i class="fa-solid fa-arrow-right"></i> Suivant</button>
+            <button @click="previous" class="btn"><i class="fa-solid fa-arrow-left"></i>
+                Précédent</button>
+            <button @click="next" class="btn btn-primary ms-auto"><i class="fa-solid fa-arrow-right"></i>
+                Suivant</button>
         </div>
+
+        <ClientModal ref="modal" />
     </div>
 </template>

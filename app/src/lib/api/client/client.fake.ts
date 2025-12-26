@@ -30,6 +30,9 @@ export const fakeClients = [
     createFakeClient({ firstName: "Alice", lastName: "Johnson", email: "alice.johnson@example.com", company: "Johnson Ltd" }),
     createFakeClient({ firstName: "Bob", lastName: "Brown", email: "bob.brown@example.com", company: "Brown & Co" }),
     createFakeClient({ firstName: "Charlie", lastName: "Davis", email: "charlie.davis@example.com", company: "Davis Tech" }),
+    createFakeClient({ firstName: "Charlie", lastName: "Davis", email: "charlie.davis@example.com", company: "Davis Tech" }),
+    createFakeClient({ firstName: "Charlie", lastName: "Davis", email: "charlie.davis@example.com", company: "Davis Tech" }),
+    createFakeClient({ firstName: "Charlie", lastName: "Davis", email: "charlie.davis@example.com", company: "Davis Tech" }),
 ];
 
 // Initialize the API with fake clients

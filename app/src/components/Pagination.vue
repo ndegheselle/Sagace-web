@@ -1,16 +1,37 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
+
 const capacityOptions = [5, 10, 25, 50, 100];
 
 const page = defineModel<number>('page', { default: 1 });
 const total = defineModel<number>('total', { default: 25 });
 const capacity = defineModel<number>('capacity', { default: 25 });
 
-const totalPages = computed(() => Math.ceil(total.value / capacity.value));
+const emit = defineEmits<{
+    (e: 'change', payload: { page: number; capacity: number }): void;
+}>();
+
+const totalPages = computed(() =>
+    Math.max(1, Math.ceil(total.value / capacity.value))
+);
+
+watch(capacity, () => {
+    if (page.value > totalPages.value) {
+        page.value = totalPages.value;
+    }
+});
+
+watch([page, capacity], () => {
+    emit('change', {
+        page: page.value,
+        capacity: capacity.value,
+    });
+});
 </script>
 
+
 <template>
-    <div class="flex w-full mt-1">
+    <div class="flex w-full">
         <div class="join">
             <button class="join-item btn btn-sm" :class="{ 'btn-disabled': page <= 1 }" aria-label="Première page"
                 @click="page = 1">
@@ -20,7 +41,7 @@ const totalPages = computed(() => Math.ceil(total.value / capacity.value));
                 @click="page = page - 1">
                 <i class="fa-solid fa-chevron-left"></i>
             </button>
-            <span class="join-item px-2 opacity-50 py-1">
+            <span class="join-item btn btn-sm">
                 {{ page }} / {{ totalPages }}
             </span>
             <button class="join-item btn btn-sm" :class="{ 'btn-disabled': page >= totalPages }"
@@ -28,7 +49,7 @@ const totalPages = computed(() => Math.ceil(total.value / capacity.value));
                 <i class="fa-solid fa-chevron-right"></i>
             </button>
             <button class="join-item btn btn-sm" :class="{ 'btn-disabled': page >= totalPages }"
-                @click="page = totalPages" aria-label="Dernière page">
+                aria-label="Dernière page" @click="page = totalPages">
                 <i class="fa-solid fa-forward-step"></i>
             </button>
         </div>

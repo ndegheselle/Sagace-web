@@ -3,7 +3,10 @@ import { Estimate } from "@/lib/api/document/estimate";
 import ArticleSelectModal from "@/views/billable/articles/ArticleSelectModal.vue";
 import ServiceSelectModal from "@/views/billable/services/ServiceSelectModal.vue";
 import { useTemplateRef } from "vue";
+import { api as estimateApi } from '@/lib/api/document/estimate';
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const modalArticleRef = useTemplateRef('articleModal');
 const modalserviceRef = useTemplateRef('serviceModal');
 
@@ -23,8 +26,27 @@ function remove(index: number) {
     props.estimate?.lines.splice(index, 1);
 }
 
+function previous() {
+    save();
+    router.push(`/documents/estimates`);
+}
+
+function next() {
+    save();
+    if (props.estimate?.client)
+        router.push(`/documents/estimates/${props.estimate?.id}/invoice`);
+    else
+        router.push(`/documents/estimates/${props.estimate?.id}/client`);
+}
+
+function save() {
+    if (!props.estimate)
+        return;
+    estimateApi.update(props.estimate.id, props.estimate);
+}
+
 const props = defineProps({
-  estimate: Estimate
+    estimate: Estimate
 });
 </script>
 
@@ -48,105 +70,114 @@ const props = defineProps({
             </li>
         </ul>
 
-        <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 mt-4">
-            <table class="table table-sm">
-                <colgroup>
-                    <col>
-                    <col>
-                    <col style="width: 8rem">
-                    <col style="width: 8rem">
-                    <col style="width: 4rem">
-                </colgroup>
-                <thead>
-                    <tr>
-                        <th>Désignation</th>
-                        <th class="text-right">Prix unitaire HT</th>
-                        <th class="text-right">Qte</th>
-                        <th class="text-right">Total HT</th>
-                        <th></th>
-                    </tr>
-                </thead>
+        <div class="flex-1">
 
-                <tbody>
-                    <tr v-for="(line, index) in props.estimate?.lines" :key="line.item.id">
-                        <td>
-                            <div class="font-medium">
-                                {{ line.item.name }}
-                            </div>
-                            <div class="text-sm opacity-60">
-                                {{ line.item.description || '—' }}
-                            </div>
-                        </td>
+            <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 mt-4">
+                <table class="table table-sm">
+                    <colgroup>
+                        <col>
+                        <col>
+                        <col style="width: 8rem">
+                        <col style="width: 8rem">
+                        <col style="width: 4rem">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>Désignation</th>
+                            <th class="text-right">Prix unitaire HT</th>
+                            <th class="text-right">Qte</th>
+                            <th class="text-right">Total HT</th>
+                            <th></th>
+                        </tr>
+                    </thead>
 
-                        <td class="text-right">
-                            {{ line.item.unitPrice.toFixed(2) }} €
-                        </td>
+                    <tbody>
+                        <tr v-for="(line, index) in props.estimate?.lines" :key="line.item.id">
+                            <td>
+                                <div class="font-medium">
+                                    {{ line.item.name }}
+                                </div>
+                                <div class="text-sm opacity-60">
+                                    {{ line.item.description || '—' }}
+                                </div>
+                            </td>
 
-                        <td class="text-right">
-                            <input class="input input-sm" type="number" min="1" v-model="line.quantity" />
-                        </td>
+                            <td class="text-right">
+                                {{ line.item.unitPrice.toFixed(2) }} €
+                            </td>
 
-                        <td class="text-right font-medium">
-                            {{ line.totalHT.toFixed(2) }} €
-                        </td>
-                        <td>
-                            <button class="btn btn-sm btn-error btn-soft btn-circle" @click="remove(index)">
-                                <i class="fa-solid fa-trash-can"></i>
-                            </button>
-                        </td>
-                    </tr>
+                            <td class="text-right">
+                                <input class="input input-sm" type="number" min="1" v-model="line.quantity" />
+                            </td>
 
-                    <tr v-if="props.estimate?.lines.length === 0">
-                        <td colspan="5" class="text-center text-base-content/50">
-                            Aucune lignes
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="5" class="p-0">
-                            <div class="flex bg-base-200 p-2">
-                                <details class="dropdown dropdown-center m-auto">
-                                    <summary class="btn btn-soft btn-xs m-1"><i class="fa-solid fa-plus"></i>Ajouter une ligne</summary>
-                                    <ul class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                                        <li><a @click="addArticle"><i class="fa-solid fa-box"></i>Ajouter un article</a>
-                                        </li>
-                                        <li><a @click="addService"><i class="fa-solid fa-screwdriver-wrench"></i>Ajouter
-                                                un service</a></li>
-                                        <div class="divider m-0 mx-4" />
-                                        <li><a @click="addService"><i class="fa-solid fa-file-invoice"></i>Copier un
-                                                autre devis</a></li>
-                                    </ul>
-                                </details>
-                            </div>
+                            <td class="text-right font-medium">
+                                {{ line.totalHT.toFixed(2) }} €
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-error btn-soft btn-circle" @click="remove(index)">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </td>
+                        </tr>
 
-                        </td>
-                    </tr>
-                </tbody>
+                        <tr v-if="props.estimate?.lines.length === 0">
+                            <td colspan="5" class="text-center text-base-content/50">
+                                Aucune lignes
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" class="p-0">
+                                <div class="flex bg-base-200 p-2">
+                                    <details class="dropdown dropdown-center m-auto">
+                                        <summary class="btn btn-soft btn-xs m-1"><i class="fa-solid fa-plus"></i>Ajouter
+                                            une
+                                            ligne</summary>
+                                        <ul
+                                            class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                                            <li><a @click="addArticle"><i class="fa-solid fa-box"></i>Ajouter un
+                                                    article</a>
+                                            </li>
+                                            <li><a @click="addService"><i
+                                                        class="fa-solid fa-screwdriver-wrench"></i>Ajouter
+                                                    un service</a></li>
+                                            <div class="divider m-0 mx-4" />
+                                            <li><a @click="addService"><i class="fa-solid fa-file-invoice"></i>Copier un
+                                                    autre devis</a></li>
+                                        </ul>
+                                    </details>
+                                </div>
 
-                <!-- Totals -->
-                <tfoot>
-                    <tr>
-                        <td colspan="3" class="text-right">Total HT</td>
-                        <td class="text-right">{{ props.estimate?.totalHT.toFixed(2) }} €</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td colspan="3" class="text-right">TVA (20%)</td>
-                        <td class="text-right">{{ props.estimate?.tva.toFixed(2) }} €</td>
-                        <td></td>
-                    </tr>
-                    <tr class="font-bold">
-                        <td colspan="3" class="text-right">Total TTC</td>
-                        <td class="text-right">{{ props.estimate?.totalTTC.toFixed(2) }} €</td>
-                        <td></td>
-                    </tr>
-                </tfoot>
-            </table>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                    <!-- Totals -->
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" class="text-right">Total HT</td>
+                            <td class="text-right">{{ props.estimate?.totalHT.toFixed(2) }} €</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="text-right">TVA (20%)</td>
+                            <td class="text-right">{{ props.estimate?.tva.toFixed(2) }} €</td>
+                            <td></td>
+                        </tr>
+                        <tr class="font-bold">
+                            <td colspan="3" class="text-right">Total TTC</td>
+                            <td class="text-right">{{ props.estimate?.totalTTC.toFixed(2) }} €</td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
         </div>
-        
+
         <div class="w-full flex mt-1">
-            <RouterLink to="/documents/estimates" class="btn"><i class="fa-solid fa-arrow-left"></i> Retour au devis</RouterLink>
-            <RouterLink :to="{ path: props.estimate?.client ? `/documents/estimates/${props.estimate?.id}/invoice` : `/documents/estimates/${props.estimate?.id}/client` }"
-                class="btn btn-primary ms-auto"><i class="fa-solid fa-arrow-right"></i> Suivant</RouterLink>
+            <button @click="previous" class="btn"><i class="fa-solid fa-arrow-left"></i>
+                Précédent</button>
+            <button @click="next" class="btn btn-primary ms-auto"><i class="fa-solid fa-arrow-right"></i>
+                Suivant</button>
         </div>
 
         <ArticleSelectModal ref="articleModal" />
