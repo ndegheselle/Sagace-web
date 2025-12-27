@@ -36,6 +36,7 @@ async function refresh(search: string, pagination: { page: number, limit: number
     const result = await api.search(search, pagination);
     articles.value = result.data || [];
     total.value = result.total || 0;
+    console.log(articles.value)
 }
 </script>
 
@@ -57,6 +58,7 @@ async function refresh(search: string, pagination: { page: number, limit: number
                 <th>Article</th>
                 <th>SKU</th>
                 <th class="text-right">Prix</th>
+                <th class="text-right">TVA</th>
                 <th class="text-right">Stock</th>
                 <th class="text-right">Créé le</th>
                 <th class="text-right">Actions</th>
@@ -75,6 +77,9 @@ async function refresh(search: string, pagination: { page: number, limit: number
                 </td>
                 <td class="text-right">
                     {{ article.unitPrice.toFixed(2) }} €
+                </td>
+                <td class="text-right">
+                    {{ article.vatRateType * 100 }} %
                 </td>
                 <td class="text-right">
                     <span

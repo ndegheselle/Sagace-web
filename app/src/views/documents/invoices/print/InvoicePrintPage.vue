@@ -84,16 +84,18 @@ const dueDate = computed(() =>
                 <table class="table table-sm">
                     <colgroup>
                         <col>
-                        <col>
+                        <col style="width: 4rem">
                         <col style="width: 6rem">
+                        <col style="width: 4rem">
                         <col style="width: 6rem">
                     </colgroup>
 
                     <thead>
                         <tr>
                             <th class="border-base-300">Désignation</th>
+                            <th class="text-right border-base-300">TVA</th>
                             <th class="text-right border-base-300">
-                                Prix unitaire HT
+                                PU HT
                             </th>
                             <th class="text-right border-base-300">Qte</th>
                             <th class="text-right border-base-300">Total HT</th>
@@ -110,7 +112,9 @@ const dueDate = computed(() =>
                                     {{ line.item.description || '—' }}
                                 </div>
                             </td>
-
+                            <td class="text-right border-base-300">
+                                {{ line.item.vatRateType * 100 }} %
+                            </td>
                             <td class="text-right border-base-300">
                                 {{ line.item.unitPrice.toFixed(2) }} €
                             </td>
@@ -125,7 +129,7 @@ const dueDate = computed(() =>
                         </tr>
 
                         <tr v-if="invoice?.lines.length === 0">
-                            <td colspan="4" class="text-center text-base-content/50 border-base-300">
+                            <td colspan="100" class="text-center text-base-content/50 border-base-300">
                                 Aucune ligne
                             </td>
                         </tr>
@@ -134,7 +138,7 @@ const dueDate = computed(() =>
                     <!-- Totals -->
                     <tfoot>
                         <tr>
-                            <td colspan="3" class="text-right border-base-300">
+                            <td colspan="4" class="text-right border-base-300">
                                 Total HT
                             </td>
                             <td class="text-right border-base-300">
@@ -142,15 +146,15 @@ const dueDate = computed(() =>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="3" class="text-right border-base-300">
-                                TVA (20%)
+                            <td colspan="4" class="text-right border-base-300">
+                                TVA
                             </td>
                             <td class="text-right border-base-300">
                                 {{ invoice?.tva.toFixed(2) }} €
                             </td>
                         </tr>
                         <tr class="font-bold">
-                            <td colspan="3" class="text-right border-base-300">
+                            <td colspan="4" class="text-right border-base-300">
                                 Total TTC
                             </td>
                             <td class="text-right border-base-300">

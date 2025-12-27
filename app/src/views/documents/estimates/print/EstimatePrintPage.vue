@@ -29,13 +29,22 @@ watch(() => route.params.id, async (id) => {
     window.print();
 }, { immediate: true });
 
+function addDays(date: Date | undefined, days: number) {
+  var result = new Date(date || new Date());
+  result.setDate(result.getDate() + days);
+  return result;
+}
 </script>
 <template>
     <div data-theme="corporate" class="h-full paper">
         <div class="print-content">
 
             <h1 class="text-5xl">Devis {{ estimate?.reference }}</h1>
-            <span class="opacity-80">Date : {{ new Date().toLocaleDateString() }}</span>
+            <div class="opacity-80 mt-1 space-y-1">
+                <div>Date d’émission : {{ estimate?.generatedAt?.toLocaleDateString() }}</div>
+                <div>Date d’échéance : {{ addDays(estimate?.generatedAt, 30).toLocaleDateString() }}</div>
+            </div>
+
             <div class="grid grid-cols-2 gap-1 mt-4">
                 <div class="rounded-box border border-base-300 py-2 px-4">
                     <div class="font-bold uppercase">{{ user?.company.name }}</div>
@@ -57,14 +66,16 @@ watch(() => route.params.id, async (id) => {
                 <table class="table table-sm">
                     <colgroup>
                         <col>
-                        <col>
+                        <col style="width: 4rem">
                         <col style="width: 6rem">
+                        <col style="width: 4rem">
                         <col style="width: 6rem">
                     </colgroup>
                     <thead>
                         <tr>
                             <th class="border-base-300">Désignation</th>
-                            <th class="text-right border-base-300">Prix unitaire HT</th>
+                            <th class="text-right border-base-300">TVA</th>
+                            <th class="text-right border-base-300">PU HT</th>
                             <th class="text-right border-base-300">Qte</th>
                             <th class="text-right border-base-300">Total HT</th>
                         </tr>
@@ -82,9 +93,11 @@ watch(() => route.params.id, async (id) => {
                             </td>
 
                             <td class="text-right border-base-300">
+                                {{ line.item.vatRateType * 100 }} %
+                            </td>
+                            <td class="text-right border-base-300">
                                 {{ line.item.unitPrice.toFixed(2) }} €
                             </td>
-
                             <td class="text-right border-base-300">
                                 {{ line.quantity }}
                             </td>
@@ -95,7 +108,7 @@ watch(() => route.params.id, async (id) => {
                         </tr>
 
                         <tr v-if="estimate?.lines.length === 0">
-                            <td colspan="4" class="text-center text-base-content/50 border-base-300">
+                            <td colspan="100" class="text-center text-base-content/50 border-base-300">
                                 Aucune lignes
                             </td>
                         </tr>
@@ -104,15 +117,15 @@ watch(() => route.params.id, async (id) => {
                     <!-- Totals -->
                     <tfoot>
                         <tr>
-                            <td colspan="3" class="text-right border-base-300">Total HT</td>
+                            <td colspan="4" class="text-right border-base-300">Total HT</td>
                             <td class="text-right border-base-300">{{ estimate?.totalHT.toFixed(2) }} €</td>
                         </tr>
                         <tr>
-                            <td colspan="3" class="text-right border-base-300">TVA (20%)</td>
+                            <td colspan="4" class="text-right border-base-300">TVA</td>
                             <td class="text-right border-base-300">{{ estimate?.tva.toFixed(2) }} €</td>
                         </tr>
                         <tr class="font-bold">
-                            <td colspan="3" class="text-right border-base-300">Total TTC</td>
+                            <td colspan="4" class="text-right border-base-300">Total TTC</td>
                             <td class="text-right border-base-300">{{ estimate?.totalTTC.toFixed(2) }} €</td>
                         </tr>
                     </tfoot>

@@ -45,8 +45,8 @@ const selectedClient = ref<Client | null>(props.estimate?.client ?? null);
     <div class="container mx-auto flex flex-col my-2">
         <ul class="steps mt-4">
             <li class="step step-primary">
-                <RouterLink to="/documents/estimates/new/items"><i class="fa-solid fa-file-invoice"></i> Devis
-                </RouterLink>
+                <RouterLink :to="{ path: `/documents/estimates/${props.estimate?.id}/items` }"><i
+                        class="fa-solid fa-file-invoice"></i> Devis</RouterLink>
             </li>
             <li class="step step-primary">
                 <div v-if="selectedClient" class="indicator">

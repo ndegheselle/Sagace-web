@@ -1,6 +1,7 @@
 import { CommercialDocument } from "@/lib/api/document";
 
 export enum EnumEstimateStatus {
+    Template,
     Draft,
     Sent,
     Accepted,
@@ -8,6 +9,7 @@ export enum EnumEstimateStatus {
 }
 
 export class Estimate extends CommercialDocument {
-    validUntil?: Date;
+    reference: string = '';
+    generatedAt?: Date;
     status: EnumEstimateStatus = EnumEstimateStatus.Draft;
 }

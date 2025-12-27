@@ -1,13 +1,6 @@
 import { Client } from "@/lib/api/client";
 import type { BaseEntity } from "@/lib/base/ApiCrud";
-
-export interface BillableItem {
-    id: string;
-    name: string;
-    description?: string;
-    unitPrice: number;
-    vatRate: number;
-}
+import type { BillableItem } from "@/lib/api/billable/BillableItem";
 
 export class BillableLine {
     item: BillableItem;
@@ -23,7 +16,7 @@ export class BillableLine {
 
         this.item = item;
         this.unitPrice = item.unitPrice;
-        this.vatRate = item.vatRate;
+        this.vatRate = item.vatRateType;
         this.quantity = quantity;
     }
 
@@ -38,7 +31,6 @@ export class BillableLine {
 
 export abstract class CommercialDocument implements BaseEntity {
     id: string = '';
-    reference: string = '';
     client: Client | null = null;
     lines: BillableLine[] = [];
     notes: string = '';

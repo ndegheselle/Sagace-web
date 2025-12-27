@@ -57,6 +57,7 @@ async function refresh(search: string, pagination: { page: number, limit: number
                 <th>Service</th>
                 <th>Code</th>
                 <th class="text-right">Prix</th>
+                <th class="text-right">TVA</th>
                 <th class="text-right">Durée</th>
                 <th class="text-right">Créé le</th>
                 <th class="text-right">Actions</th>
@@ -75,6 +76,9 @@ async function refresh(search: string, pagination: { page: number, limit: number
                 </td>
                 <td class="text-right">
                     {{ service.unitPrice.toFixed(2) }} €
+                </td>
+                                <td class="text-right">
+                    {{ service.vatRateType * 100 }} %
                 </td>
                 <td class="text-right">
                     <span v-if="service.durationHours">

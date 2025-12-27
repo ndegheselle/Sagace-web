@@ -1,34 +1,20 @@
 import type { BaseEntity } from "@/lib/base/ApiCrud";
-import type { BillableItem } from "@/lib/api/document";
+import { type BillableItem, VatRateType } from "@/lib/api/billable/BillableItem";
 
 export class StockArticle implements BillableItem, BaseEntity {
-    id: string;
-    createdAt: Date;
-    updatedAt: Date | undefined;
+    id: string = '';
+    createdAt: Date = new Date();
+    updatedAt: Date | undefined = undefined;
 
-    name: string;
-    sku: string;
-    description?: string;
-    unitPrice: number;
-    vatRate: number;
+    name: string = '';
+    sku: string = '';
+    description?: string = '';
+    unitPrice: number = 0;
+    vatRateType: VatRateType = VatRateType.STANDARD;
 
-    quantity: number;
+    quantity: number = 0;
 
-    isSelected: boolean;
-
-    constructor() {
-        this.id = '';
-        this.createdAt = new Date();
-        this.updatedAt = undefined;
-
-        this.name = '';
-        this.sku = '';
-        this.unitPrice = 0;
-        this.vatRate = 0.2;
-        this.quantity = 0;
-        this.description = '';
-        this.isSelected = false;
-    }
+    isSelected: boolean = false;
 
     get isNew(): boolean {
         return !this.id;

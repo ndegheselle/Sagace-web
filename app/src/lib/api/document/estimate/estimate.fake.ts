@@ -5,6 +5,8 @@ import { fakeServices } from "@/lib/api/billable/service/service.fake";
 import { fakeClients } from "@/lib/api/client/client.fake";
 
 import { Estimate, EnumEstimateStatus } from './estimate.model';
+import { api as invoiceApi } from "@/lib/api/document/invoice";
+import { InvoiceFactory } from "@/lib/api/document/invoice/invoice.fake";
 
 let estimateCounter = 1;
 
@@ -29,7 +31,6 @@ function createFakeEstimate(overrides: Partial<Estimate> = {}): Estimate {
     const reference = overrides.reference ?? createRandomRef();
     const notes = overrides.notes ?? `Notes for ${reference}`;
     const status = overrides.status ?? EnumEstimateStatus.Draft;
-    const validUntil = overrides.validUntil ?? new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
 
     Object.assign(estimate, {
         id,
@@ -37,7 +38,6 @@ function createFakeEstimate(overrides: Partial<Estimate> = {}): Estimate {
         client,
         notes,
         status,
-        validUntil,
         createdAt: overrides.createdAt ?? now,
         updatedAt: overrides.updatedAt ?? now
     });
@@ -62,5 +62,25 @@ const fakeEstimates = [
     createFakeEstimate({ status: EnumEstimateStatus.Accepted })
 ];
 
+class FakeEstimatesApi extends FakeApiCrud<Estimate>
+{
+    constructor()
+    {
+        super(fakeEstimates, ['reference'])
+    }
+    
+    async toInvoice(estimateId: string): Promise<string> {
+        const estimate = await this.getById(estimateId);
+        if (estimate == null)
+            return '';
+
+        estimate.status = EnumEstimateStatus.Accepted;
+        const invoice = InvoiceFactory.fromEstimate(estimate);
+        const invoiceId = await invoiceApi.create(invoice);
+        await this.update(estimate.id, estimate);
+        return invoiceId;
+    }
+}
+
 // Initialize the API with fake clients
-export const api = new FakeApiCrud<Estimate>(fakeEstimates, ['reference']);
+export const api = new FakeEstimatesApi();

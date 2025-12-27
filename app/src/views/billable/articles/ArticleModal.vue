@@ -3,6 +3,7 @@ import { useAlert } from '@/composables/popups/alert';
 import { useDeferredModal } from '@/composables/popups/modal';
 import { StockArticle, api } from '@/lib/api/billable/article';
 import { reactive, ref, useTemplateRef } from 'vue';
+import { VatRateType } from '@/lib/api/billable/BillableItem';
 
 const dialog = useTemplateRef<HTMLDialogElement>('dialog');
 const modal = useDeferredModal(dialog);
@@ -29,8 +30,7 @@ async function confirm() {
     }
 }
 
-function show(article: StockArticle) : Promise<boolean>
-{
+function show(article: StockArticle): Promise<boolean> {
     Object.assign(form, article);
     error.value = '';
     return modal.show();
@@ -64,13 +64,38 @@ defineExpose({
                     placeholder="Description de l'article" />
 
                 <!-- Price & Quantity -->
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-3 gap-4">
                     <div>
                         <label class="label">Prix (€)</label>
-                        <input v-model.number="form.price" type="number" min="0" step="0.01"
+                        <input v-model.number="form.unitPrice" type="number" min="0" step="0.01"
                             class="input input-bordered w-full" placeholder="99.99" required />
                     </div>
-
+                    <div>
+                        <label class="label">TVA (%)</label>
+                        <select class="select" v-model="form.vatRateType">
+                            <option value="0.2">Taux normal (20%)</option>
+                            <option disabled>Électroménager, vêtements, services de conseil, logiciels, voitures neuves,
+                                meubles, etc.</option>
+                            <option value="0.1">Produits et services spécifiques (10%)</option>
+                            <option disabled>Restauration (hors boissons alcoolisées), travaux de rénovation,
+                                hébergement touristique, transports de voyageurs, certains produits agricoles.</option>
+                            <option value="0.055">
+                                Produits de première nécessité (5,5%)
+                            </option>
+                            <option disabled>Alimentation (hors boissons alcoolisées et plats préparés), livres, gaz,
+                                électricité, équipements pour personnes handicapées, abonnements aux cantines scolaires.
+                            </option value="0.021">
+                            <option>Produits très spécifiques (2,1%)</option>
+                            <option disabled>Médicaments remboursables par la Sécurité sociale, presse (journaux,
+                                magazines), certaines représentations théâtrales ou musicales.</option>
+                            <option value="0">Exportations hors UE, opérations exonérées (0%)</option>
+                            <option disabled>Exportations de biens vers des pays hors UE, certaines opérations bancaires
+                                ou financières.</option>
+                            <option value="0">Cas particuliers (Exonération)</option>
+                            <option disabled>Services médicaux, locations nues (hors meublés), formations
+                                professionnelles continues, certaines activités agricoles.</option>
+                        </select>
+                    </div>
                     <div>
                         <label class="label">Quantité</label>
                         <input v-model.number="form.quantity" type="number" min="0" class="input input-bordered w-full"

@@ -1,33 +1,19 @@
 import type { BaseEntity } from "@/lib/base/ApiCrud";
-import type { BillableItem } from "@/lib/api/document";
+import { type BillableItem, VatRateType } from "@/lib/api/billable/BillableItem";
 
 export class Service implements BillableItem, BaseEntity  {
-    id: string;
-    createdAt: Date;
-    updatedAt: Date | undefined;
+    id: string = '';
+    createdAt: Date = new Date();
+    updatedAt: Date | undefined = undefined;
 
-    name: string;
-    code: string;
-    description?: string;
-    unitPrice: number;
-    vatRate: number;
-    durationHours?: number; // optional duration info
+    name: string = '';
+    code: string = '';
+    description?: string = '';
+    unitPrice: number = 0;
+    vatRateType: VatRateType = VatRateType.STANDARD;
+    durationHours?: number = 0; // optional duration info
 
-    isSelected: boolean;
-
-    constructor() {
-        this.id = '';
-        this.createdAt = new Date();
-        this.updatedAt = undefined;
-
-        this.name = '';
-        this.code = '';
-        this.unitPrice = 0;
-        this.vatRate = 0.2;
-        this.description = '';
-        this.durationHours = undefined;
-        this.isSelected = false;
-    }
+    isSelected: boolean = false;
 
     get isNew(): boolean {
         return !this.id;

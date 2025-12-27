@@ -5,6 +5,7 @@ import { fakeServices } from "@/lib/api/billable/service/service.fake";
 import { fakeClients } from "@/lib/api/client/client.fake";
 
 import { Invoice, InvoiceStatus } from "./invoice.model";
+import { Estimate } from "@/lib/api/document/estimate";
 
 let invoiceCounter = 1;
 function createInvoiceNumber(counter: number): string {
@@ -62,5 +63,36 @@ const fakeInvoices = [
     })
 ];
 
+class FakeInvoicesApi extends FakeApiCrud<Invoice>
+{
+    constructor()
+    {
+        super(fakeInvoices, ["invoiceNumber"]);
+    }
+}
+
+export class InvoiceFactory {
+    static fromEstimate(estimate: Estimate): Invoice {
+        const invoice = new Invoice();
+
+        // Copy common fields from CommercialDocument
+        invoice.id = estimate.id;
+        invoice.invoiceNumber = createInvoiceNumber(invoiceCounter++);
+        invoice.client = estimate.client;
+        invoice.lines = [...estimate.lines]; // Copy all billable lines
+        invoice.notes = estimate.notes;
+        invoice.createdAt = new Date();
+        invoice.updatedAt = new Date();
+
+        // Set invoice-specific fields
+        invoice.estimateId = estimate.id;
+        invoice.issuedAt = new Date(); // Set issuedAt to current date
+        invoice.dueDate = new Date();
+        invoice.dueDate.setDate(invoice.dueDate.getDate() + 30); // Default: due in 30 days
+
+        return invoice;
+    }
+}
+
 // Initialize the API with fake invoices
-export const api = new FakeApiCrud<Invoice>(fakeInvoices, ["invoiceNumber"]);
+export const api = new FakeInvoicesApi();
