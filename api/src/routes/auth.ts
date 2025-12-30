@@ -1,4 +1,4 @@
-import { FastifyInstance, FastifyPluginAsync } from 'fastify';
+import type { FastifyInstance, FastifyPluginAsync } from 'fastify';
 
 // Replace with real DB logic
 async function fakeUserLookup(email: string, password: string) {
@@ -29,8 +29,7 @@ const authRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) => {
         }
 
         const token = fastify.jwt.sign({
-            id: user.id,
-            role: user.role,
+            id: user.id
         });
 
         return reply.send({ token });

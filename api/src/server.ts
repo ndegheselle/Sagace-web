@@ -1,18 +1,23 @@
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import AutoLoad from '@fastify/autoload';
 import cookie from '@fastify/cookie';
 import cors from '@fastify/cors';
 import fastify from 'fastify';
-import path from 'path';
-import jwt from './plugins/jwt';
+import path from 'node:path';
+import jwt from './plugins/jwt.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = fastify({ logger: true });
 
-// --- Plugins ---
+// Plugins
 app.register(cookie);
 app.register(cors, {
-  // Vue dev server
   origin: process.env.CORS_ORIGIN,
-  credentials: true
+  credentials: true,
 });
 app.register(jwt);
 
@@ -22,7 +27,6 @@ app.register(AutoLoad, {
   options: {
     prefix: '/api',
   },
-  // Use directory name as prefix
   dirNameRoutePrefix: true
 });
 

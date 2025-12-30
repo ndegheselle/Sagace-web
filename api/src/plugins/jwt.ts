@@ -1,14 +1,19 @@
 import jwt from '@fastify/jwt';
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import fp from 'fastify-plugin';
 
-export default fp(async (fastify) => {
+export default fp(async (fastify: FastifyInstance) => {
+    const secret = process.env.JWT_SECRET;
+    if (!secret)
+        throw new Error('JWT_SECRET is not defined');
+
     fastify.register(jwt, {
-        secret: process.env.JWT_SECRET,
+        secret,
     });
 
     fastify.decorate(
         'authenticate',
-        async function (request, reply) {
+        async function (request: FastifyRequest, reply: FastifyReply) {
             try {
                 await request.jwtVerify();
             } catch (err) {
