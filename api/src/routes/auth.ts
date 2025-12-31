@@ -1,4 +1,4 @@
-import type { FastifyInstance, FastifyPluginAsync } from 'fastify';
+import type { FastifyInstance, FastifyPluginAsync, FastifyRequest, FastifyReply } from 'fastify';
 
 // Replace with real DB logic
 async function fakeUserLookup(email: string, password: string) {
@@ -13,7 +13,7 @@ async function fakeUserLookup(email: string, password: string) {
 }
 
 const authRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) => {
-    fastify.post('/login', async (request, reply) => {
+    fastify.post('/login', async (request: FastifyRequest, reply: FastifyReply) => {
         const { email, password } = request.body as {
             email: string
             password: string

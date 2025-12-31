@@ -1,28 +1,28 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { EnumEstimateStatus } from '@/lib/api/document/estimate';
+import { EstimateStatus } from '@/lib/api/document/estimate';
 
 const props = defineProps<{
-    status: EnumEstimateStatus | undefined
+    status: EstimateStatus | undefined
 }>();
 
-const statusClassMap: Record<EnumEstimateStatus, string> = {
-    [EnumEstimateStatus.Template]: 'badge-primary',
-    [EnumEstimateStatus.Draft]: 'badge-neutral',
-    [EnumEstimateStatus.Sent]: 'badge-warning',
-    [EnumEstimateStatus.Accepted]: 'badge-success',
-    [EnumEstimateStatus.Refused]: 'badge-error'
+const statusClassMap: Record<EstimateStatus, string> = {
+    [EstimateStatus.Template]: 'badge-primary',
+    [EstimateStatus.Draft]: 'badge-neutral',
+    [EstimateStatus.Sent]: 'badge-warning',
+    [EstimateStatus.Accepted]: 'badge-success',
+    [EstimateStatus.Refused]: 'badge-error'
 }
-const badgeClass = computed(() => statusClassMap[props.status || EnumEstimateStatus.Draft]);
+const badgeClass = computed(() => statusClassMap[props.status || EstimateStatus.Draft]);
 
-const statusLabelMap: Record<EnumEstimateStatus, string> = {
-    [EnumEstimateStatus.Template]: 'Modèle',
-    [EnumEstimateStatus.Draft]: 'Brouillon',
-    [EnumEstimateStatus.Sent]: 'Imprimé',
-    [EnumEstimateStatus.Accepted]: 'Accepté',
-    [EnumEstimateStatus.Refused]: 'Refusé'
+const statusLabelMap: Record<EstimateStatus, string> = {
+    [EstimateStatus.Template]: 'Modèle',
+    [EstimateStatus.Draft]: 'Brouillon',
+    [EstimateStatus.Sent]: 'Imprimé',
+    [EstimateStatus.Accepted]: 'Accepté',
+    [EstimateStatus.Refused]: 'Refusé'
 }
-const statusLabel = computed(() => statusLabelMap[props.status || EnumEstimateStatus.Draft]);
+const statusLabel = computed(() => statusLabelMap[props.status || EstimateStatus.Draft]);
 </script>
 
 <template>

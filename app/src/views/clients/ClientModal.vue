@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, reactive, useTemplateRef } from 'vue';
-import { Client, api } from '@/lib/api/client';
+import { Client, api } from '@/lib/api/clients';
 import { useAlert } from '@/composables/popups/alert';
 import { useDeferredModal } from '@/composables/popups/modal';
 

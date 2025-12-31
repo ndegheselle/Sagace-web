@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useConfirmation } from '@/composables/popups/confirmation';
-import { Client, api } from '@/lib/api/client';
+import { Client, api } from '@/lib/api/clients';
 import { useTemplateRef, ref } from 'vue';
 import ClientModal from './ClientModal.vue';
 import { Estimate, api as estimateApi } from '@/lib/api/document/estimate';

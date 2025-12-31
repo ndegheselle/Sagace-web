@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EnumEstimateStatus, Estimate } from "@/lib/api/document/estimate";
+import { EstimateStatus, Estimate } from "@/lib/api/document/estimate";
 import EstimateStatusBadge from "@/views/documents/estimates/EstimateStatusBadge.vue";
 import { api } from "@/lib/api/document/estimate";
 import { useRouter } from "vue-router";
@@ -10,7 +10,7 @@ function print() {
     if (!props.estimate)
         return;
 
-    props.estimate.status = EnumEstimateStatus.Sent;
+    props.estimate.status = EstimateStatus.Sent;
     window.open(`/documents/estimates/${props.estimate.id}/print`, '_blank');
     api.update(props.estimate.id, props.estimate);
 }
@@ -18,14 +18,14 @@ function print() {
 function reject() {
     if (!props.estimate)
         return;
-    props.estimate.status = EnumEstimateStatus.Refused;
+    props.estimate.status = EstimateStatus.Refused;
     api.update(props.estimate.id, props.estimate);
 }
 
 async function toInvoice() {
     if (!props.estimate)
         return;
-    props.estimate.status = EnumEstimateStatus.Accepted;
+    props.estimate.status = EstimateStatus.Accepted;
     const invoiceId = await api.toInvoice(props.estimate.id);
     router.push(`/documents/invoices/${invoiceId}/print`);
 

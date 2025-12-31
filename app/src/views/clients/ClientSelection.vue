@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ListPaginatedSearch from '@/components/data/ListPaginatedSearch.vue';
-import { Client, api } from '@/lib/api/client';
+import { Client, api } from '@/lib/api/clients';
 import type { PaginationOptions } from '@/lib/base/paginated';
 import { ref } from 'vue';
 
