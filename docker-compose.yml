@@ -1,22 +1,46 @@
-version: '3.4'
+version: "3.8"
+
 services:
-  front:
-    image: "node:24-alpine"
+  # MongoDB Service
+  mongodb:
+    image: mongo:latest
+    restart: unless-stopped
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - app_network
+
+  # Fastify API Service
+  api:
+    image: "node:alpine"
     working_dir: /app
     volumes:
-#      - /app.web/node_modules
-      - ./app.web:/app
-    ports:
-      - "80:80"
-    environment:
-      HOST: 0.0.0.0
-      PORT: 80
-    command: sh -c "npm i & npm run dev"
+      - ./api:/app
+    expose:
+      - "80"
+    command: sh -c "npm run dev "
     depends_on:
-      - mongo
-    env_file:
-      - .env
+      - api
 
+  # Vue.js App Service
+  front:
+    image: "node:alpine"
+    working_dir: /app
+    volumes:
+      - ./app:/app
+    expose:
+      - "80"
+    command: sh -c "npm run dev "
+    depends_on:
+      - api
+
+# Volumes
 volumes:
-  mongodb-data:
-    driver: local
+  mongodb_data:
+
+# Networks
+networks:
+  app_network:
+    driver: bridge
