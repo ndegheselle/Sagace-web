@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useConfirmation } from '@/composables/popups/confirmation';
-import { api, Estimate } from '@/lib/api/document/estimate';
+import { api, Estimate } from '@/lib/api/documents/estimates';
 import { useTemplateRef, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import EstimateStatusBadge from '@/views/documents/estimates/EstimateStatusBadge.vue';

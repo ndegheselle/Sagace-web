@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { EstimateStatus } from '@/lib/api/document/estimate';
+import { EstimateStatus } from '@/lib/api/documents/estimates';
 
 const props = defineProps<{
     status: EstimateStatus | undefined

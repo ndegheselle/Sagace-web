@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { EstimateStatus, Estimate } from "@/lib/api/document/estimate";
+import { EstimateStatus, Estimate } from "@/lib/api/documents/estimates";
 import EstimateStatusBadge from "@/views/documents/estimates/EstimateStatusBadge.vue";
-import { api } from "@/lib/api/document/estimate";
+import { api } from "@/lib/api/documents/estimates";
 import { useRouter } from "vue-router";
 
 const router = useRouter();

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import ClientSelection from '@/views/clients/ClientSelection.vue';
-import { Estimate } from "@/lib/api/document/estimate";
+import { Estimate } from "@/lib/api/documents/estimates";
 import { useRouter } from "vue-router";
 import { ref, useTemplateRef } from 'vue';
 import { Client } from '@/lib/api/clients';
-import { api as estimateApi } from '@/lib/api/document/estimate';
+import { api as estimateApi } from '@/lib/api/documents/estimates';
 import ClientModal from '@/views/clients/ClientModal.vue';
 
 const router = useRouter();

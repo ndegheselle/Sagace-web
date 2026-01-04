@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { useAlert } from '@/composables/popups/alert';
 import { useDeferredModal } from '@/composables/popups/modal';
-import { StockArticle, api } from '@/lib/api/billable/article';
+import { StockArticle, api } from '@/lib/api/billables/articles';
 import { reactive, ref, useTemplateRef } from 'vue';
-import { VatRateType } from '@/lib/api/billable/BillableItem';
 
 const dialog = useTemplateRef<HTMLDialogElement>('dialog');
 const modal = useDeferredModal(dialog);

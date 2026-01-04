@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { api, Invoice } from '@/lib/api/document/invoice';
+import { api, Invoice } from '@/lib/api/documents/invoices';
 import type { PaginationOptions } from '@/lib/base/paginated';
 import InvoiceStatusBadge from '@/views/documents/invoices/InvoiceStatusBadge.vue';
 import TablePaginatedSearch from '@/components/data/TablePaginatedSearch.vue';

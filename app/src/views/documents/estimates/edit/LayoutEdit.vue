@@ -2,7 +2,7 @@
 import { RouterView } from 'vue-router';
 import { useRoute, useRouter } from 'vue-router';
 import { ref, watch } from 'vue';
-import { Estimate, api } from '@/lib/api/document/estimate';
+import { Estimate, api } from '@/lib/api/documents/estimates';
 import { useAlert } from '@/composables/popups/alert';
 
 const route = useRoute();

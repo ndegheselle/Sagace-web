@@ -6,41 +6,24 @@ services:
     image: mongo:latest
     restart: unless-stopped
     volumes:
-      - mongodb_data:/data/db
+      - ./database/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     ports:
       - "27017:27017"
-    networks:
-      - app_network
 
   # Fastify API Service
   api:
     image: "node:alpine"
     working_dir: /app
-    volumes:
-      - ./api:/app
     expose:
       - "80"
-    command: sh -c "npm run dev "
     depends_on:
-      - api
+      - mongodb
 
   # Vue.js App Service
   front:
     image: "node:alpine"
     working_dir: /app
-    volumes:
-      - ./app:/app
     expose:
       - "80"
-    command: sh -c "npm run dev "
     depends_on:
       - api
-
-# Volumes
-volumes:
-  mongodb_data:
-
-# Networks
-networks:
-  app_network:
-    driver: bridge

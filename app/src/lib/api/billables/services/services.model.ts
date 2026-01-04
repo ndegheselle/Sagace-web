@@ -1,5 +1,5 @@
 import type { BaseEntity } from "@/lib/base/ApiCrud";
-import { type BillableItem, VatRateType } from "@/lib/api/billable/BillableItem";
+import { type BillableItem, VatRateType } from "@/lib/api/billables/BillableItem";
 
 export class Service implements BillableItem, BaseEntity  {
     id: string = '';

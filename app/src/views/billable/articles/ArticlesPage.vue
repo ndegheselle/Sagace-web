@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useConfirmation } from '@/composables/popups/confirmation';
-import { StockArticle, api } from '@/lib/api/billable/article';
+import { StockArticle, api } from '@/lib/api/billables/articles';
 import { useTemplateRef, ref } from 'vue';
 import ArticleModal from './ArticleModal.vue';
 import TablePaginatedSearch from '@/components/data/TablePaginatedSearch.vue';

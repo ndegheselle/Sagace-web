@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useRoute, useRouter } from 'vue-router'
-import { ref, watch, computed, nextTick } from 'vue'
-import { Invoice, api } from '@/lib/api/document/invoice'
-import { useAlert } from '@/composables/popups/alert'
-import { useAuth } from '@/composables/auth'
+import { useRoute, useRouter } from 'vue-router';
+import { ref, watch, computed, nextTick } from 'vue';
+import { Invoice, api } from '@/lib/api/documents/invoices';
+import { useAlert } from '@/composables/popups/alert';
+import { useAuth } from '@/composables/auth';
 
 const { user } = useAuth()
 const route = useRoute()

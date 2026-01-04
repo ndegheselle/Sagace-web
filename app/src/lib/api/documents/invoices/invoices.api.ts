@@ -1,2 +1,2 @@
-import { api as fakeApi } from './invoice.fake';
+import { api as fakeApi } from './invoices.fake';
 export const api = fakeApi;

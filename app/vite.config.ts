@@ -9,7 +9,13 @@ export default defineConfig({
         vue(),
         tailwindcss()
     ],
-
+    server: {
+        host: true,
+        port: Number(process.env.VITE_APP_PORT),
+        watch: {
+            usePolling: true
+        }
+    },
     resolve: {
         alias: {
             '@': fileURLToPath(new URL('./src', import.meta.url))
