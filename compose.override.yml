@@ -1,14 +1,18 @@
 version: "3.8"
 
 services:
+  mongodb:
+    ports:
+      - "27017:27017"
+
   # Fastify API Service
   api:
     volumes:
       - ./api:/app
     environment:
       - PORT=3000
-    expose:
-      - "3000"
+    ports:
+      - "3000:3000"
     command: sh -c "npm install && npm run dev"
 
   # Vue.js App Service
@@ -17,6 +21,6 @@ services:
       - ./app:/app
     environment:
       - PORT=5173
-    expose:
-      - "5173"
+    ports:
+      - "5173:5173"
     command: sh -c "npm install && npm run dev"
