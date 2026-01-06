@@ -1,4 +1,4 @@
-import { User, Company } from "./auth.model";
+import { User, Company } from 'sagace-common/models/user';
 
 let userCounter = 1;
 function createFakeCompany(overrides: Partial<Company> = {}): Company {

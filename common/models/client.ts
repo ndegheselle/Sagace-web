@@ -1,7 +1,7 @@
-import type { BaseEntity } from "@/lib/base/ApiCrud";
+import type { BaseEntity } from "../base/BaseEntity.ts";    
 
 export class Client implements BaseEntity {
-    id: string = '';
+    _id: string = '';
     createdAt: Date = new Date();
     updatedAt: Date | undefined;
 
@@ -19,6 +19,6 @@ export class Client implements BaseEntity {
     }
     
     get isNew(): boolean {
-        return !this.id;
+        return !this._id;
     }
 }

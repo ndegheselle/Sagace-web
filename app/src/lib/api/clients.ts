@@ -1,5 +1,5 @@
 import { FakeApiCrud } from "@/lib/base/api/FakeApiCrud";
-import { Client } from "./clients.model";
+import { Client } from 'sagace-common/models/client';
 
 let clientCounter = 1;
 function createFakeClient(overrides: Partial<Client> = {}): Client {

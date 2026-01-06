@@ -1,67 +1,17 @@
-import { Paginated, PaginationOptions, SortDirection } from "sagace-common/base/paginated";
+import { PaginationOptions } from "sagace-common/base/paginated";
 import type { FastifyInstance, FastifyRequest, FastifyReply  } from "fastify";
+import type { CrudRepository } from "./CrudRepository";
+import type { BaseEntity } from "sagace-common/base/BaseEntity";
 
-function sanitizeSearch(search?: string): string | undefined {
-    if (!search) return undefined;
+function sanitizeSearch(search?: string): string {
+    if (!search) return '';
     const s = search.trim().toLowerCase();
-    return s.length ? s : undefined;
+    return s.length ? s : '';
 }
 
-function buildPagination(options: PaginationOptions) {
-    const { page, limit } = options;
-
-    // Negative page or limit => return all
-    if (page < 0 || limit < 0) {
-        return {};
-    }
-
-    const skip = (page - 1) * limit;
-    return { skip, take: limit };
-}
-
-function buildOrderBy(options: PaginationOptions) {
-    const { orderBy, orderDirection } = options;
-    if (!orderBy) return undefined;
-
-    return {
-        [orderBy]: orderDirection === SortDirection.DESC ? "desc" : "asc",
-    };
-}
-
-export type TableDelegate<T extends { id: string }> = {
-    findMany(args?: {
-        skip?: number;
-        take?: number;
-        where?: unknown;
-        orderBy?: any;
-    }): Promise<T[]>;
-
-    count(args?: {
-        where?: unknown;
-    }): Promise<number>;
-
-    findUnique(args: {
-        where: { id: string };
-    }): Promise<T | null>;
-
-    create(args: {
-        data: T;
-    }): Promise<T>;
-
-    update(args: {
-        where: { id: string };
-        data: Partial<T>;
-    }): Promise<T>;
-
-    delete(args: {
-        where: { id: string };
-    }): Promise<T>;
-}
-
-export class CrudController<T extends { id: string }> {
+export class CrudController<T extends BaseEntity> {
     constructor(
-        private readonly table: TableDelegate<T>,
-        private readonly searchFields: (keyof T)[]
+        private readonly table: CrudRepository<T>
     ) {}
 
     registerRoutes(fastify: FastifyInstance) {
@@ -76,61 +26,21 @@ export class CrudController<T extends { id: string }> {
     // GET /
     async getAll(request: FastifyRequest) {
         const query = request.query as PaginationOptions;
-
-        const pagination = buildPagination(query);
-        const orderBy = buildOrderBy(query);
-
-        const [data, total] = await Promise.all([
-            this.table.findMany({
-                skip: pagination.skip,
-                take: pagination.take,
-                orderBy,
-            }),
-            this.table.count(),
-        ]);
-
-        return new Paginated<T>(data, total, query);
+        return this.table.getAll(query);
     }
 
     // GET /search
     async search(request: FastifyRequest) {
         const { search, ...rest } = request.query as any;
         const sanitized = sanitizeSearch(search);
-
-        const pagination = buildPagination(rest);
-        const orderBy = buildOrderBy(rest);
-
-        const where = sanitized
-            ? {
-                  OR: this.searchFields.map((field) => ({
-                      [field as string]: {
-                          contains: sanitized,
-                          mode: "insensitive",
-                      },
-                  })),
-              }
-            : undefined;
-
-        const [data, total] = await Promise.all([
-            this.table.findMany({
-                skip: pagination.skip,
-                take: pagination.take,
-                where,
-                orderBy,
-            }),
-            this.table.count({ where }),
-        ]);
-
-        return new Paginated<T>(data, total, rest);
+        return this.table.search(sanitized, rest);
     }
 
     // GET /:id
     async getById(request: FastifyRequest, reply: FastifyReply) {
         const { id } = request.params as { id: string };
 
-        const entity = await this.table.findUnique({
-            where: { id },
-        });
+        const entity = await this.table.getById(id);
 
         if (!entity) {
             reply.code(404);
@@ -144,10 +54,9 @@ export class CrudController<T extends { id: string }> {
     async create(request: FastifyRequest, reply: FastifyReply) {
         const data = request.body as T;
 
-        const entity = await this.table.create({ data });
-
+        const id = await this.table.create(data);
         reply.code(201);
-        return { id: entity.id };
+        return { id: id };
     }
 
     // PUT /:id
@@ -155,18 +64,12 @@ export class CrudController<T extends { id: string }> {
         const { id } = request.params as { id: string };
         const data = request.body as T;
 
-        await this.table.update({
-            where: { id },
-            data,
-        });
+        await this.table.update(id, data);
     }
 
     // DELETE /:id
     async remove(request: FastifyRequest) {
         const { id } = request.params as { id: string };
-
-        await this.table.delete({
-            where: { id },
-        });
+        await this.table.delete(id);
     }
 }

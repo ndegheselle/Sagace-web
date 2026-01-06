@@ -1,8 +1,8 @@
-import type { BaseEntity } from "@/lib/base/ApiCrud";
-import { type BillableItem, VatRateType } from "@/lib/api/billables/BillableItem";
+import { type BillableItem, VatRateType } from "./BillableItem.ts";
+import type { BaseEntity } from "../../base/BaseEntity.ts";
 
 export class Service implements BillableItem, BaseEntity  {
-    id: string = '';
+    _id: string = '';
     createdAt: Date = new Date();
     updatedAt: Date | undefined = undefined;
 
@@ -16,6 +16,6 @@ export class Service implements BillableItem, BaseEntity  {
     isSelected: boolean = false;
 
     get isNew(): boolean {
-        return !this.id;
+        return !this._id;
     }
 }

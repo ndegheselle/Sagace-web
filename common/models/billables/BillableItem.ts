@@ -7,7 +7,7 @@ export enum VatRateType {
 }
 
 export interface BillableItem {
-    id: string;
+    _id: string;
     name: string;
     description?: string;
     unitPrice: number;
