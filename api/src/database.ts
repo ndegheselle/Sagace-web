@@ -19,6 +19,5 @@ async function connect() {
 }
 
 // Call connect() immediately to establish the connection
-connect().catch(console.error);
-
-export { client };
+await connect().catch(console.error);
+export const database = client.db();

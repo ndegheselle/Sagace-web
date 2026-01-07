@@ -1,7 +1,7 @@
-import { PaginationOptions } from "sagace-common/base/paginated";
-import type { FastifyInstance, FastifyRequest, FastifyReply  } from "fastify";
-import type { CrudRepository } from "./CrudRepository";
+import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import type { BaseEntity } from "sagace-common/base/BaseEntity";
+import { PaginationOptions } from "sagace-common/base/paginated";
+import type { CrudRepository } from "./CrudRepository";
 
 function sanitizeSearch(search?: string): string {
     if (!search) return '';
@@ -22,11 +22,11 @@ export class CrudController<T extends BaseEntity> {
         fastify.put("/:id", this.update.bind(this));
         fastify.delete("/:id", this.remove.bind(this));
     }
-
+    
     // GET /
     async getAll(request: FastifyRequest) {
-        const query = request.query as PaginationOptions;
-        return this.table.getAll(query);
+        const {page, limit, orderBy, orderDirection} = request.query as any;
+        return this.table.getAll(new PaginationOptions(Number(page), Number(limit), orderBy, orderDirection));
     }
 
     // GET /search
@@ -39,6 +39,7 @@ export class CrudController<T extends BaseEntity> {
     // GET /:id
     async getById(request: FastifyRequest, reply: FastifyReply) {
         const { id } = request.params as { id: string };
+        console.log("Getting by ID", id);
 
         const entity = await this.table.getById(id);
 

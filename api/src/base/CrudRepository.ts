@@ -1,4 +1,4 @@
-import { Collection, ObjectId, type Document, type Filter, type SortDirection as MongoSortDirection } from 'mongodb';
+import { Collection, type Document, type Filter, type SortDirection as MongoSortDirection } from 'mongodb';
 import { Paginated, PaginationOptions } from 'sagace-common/base/paginated';
 
 export class CrudRepository<T extends Document> {
@@ -11,13 +11,13 @@ export class CrudRepository<T extends Document> {
 
     async update(id: string, data: T): Promise<void> {
         await this.collection.updateOne(
-            { _id: new ObjectId(id) } as Filter<T>,
+            { _id: id } as Filter<T>,
             { $set: { ...data, updatedAt: new Date() } }
         );
     }
 
     async delete(id: string): Promise<void> {
-        await this.collection.deleteOne({ _id: new ObjectId(id) } as Filter<T>);
+        await this.collection.deleteOne({ _id: id } as Filter<T>);
     }
 
     async count(): Promise<number> {
@@ -25,17 +25,16 @@ export class CrudRepository<T extends Document> {
     }
 
     async getById(id: string): Promise<T | null> {
-        const doc = await this.collection.findOne({ _id: new ObjectId(id) } as Filter<T>);
+        const doc = await this.collection.findOne({ _id: id } as Filter<T>);
         return doc as T | null;
     }
 
     async getAll(options: PaginationOptions): Promise<Paginated<T>> {
-        const { page, limit, orderBy, orderDirection } = options;
-        const skip = page > 0 && limit > 0 ? (page - 1) * limit : 0;
-        const take = page > 0 && limit > 0 ? limit : 0;
+        const skip = options.page < 0 || options.limit < 0 ? 0 : (options.page - 1) * options.limit;
+        const take = options.page < 0 || options.limit < 0 ? 0 : options.limit;
 
-        const sort: Record<string, MongoSortDirection> = orderBy
-            ? { [orderBy]: orderDirection === 1 ? 1 : -1 }
+        const sort: Record<string, MongoSortDirection> = options.orderBy
+            ? { [options.orderBy]: options.orderDirection === 1 ? 1 : -1 }
             : {};
 
         const query = this.collection.find({});
@@ -55,22 +54,19 @@ export class CrudRepository<T extends Document> {
         );
     }
 
-    async search(search: string, options: PaginationOptions, searchFields: string[] = []): Promise<Paginated<T>> {
-        const { page, limit, orderBy, orderDirection } = options;
-        const skip = page > 0 && limit > 0 ? (page - 1) * limit : 0;
-        const take = page > 0 && limit > 0 ? limit : 0;
+    async search(search: string, options: PaginationOptions): Promise<Paginated<T>> {
+        const skip = options.page < 0 || options.limit < 0 ? 0 : (options.page - 1) * options.limit;
+        const take = options.page < 0 || options.limit < 0 ? 0 : options.limit;
 
-        const sort: Record<string, MongoSortDirection> = orderBy
-            ? { [orderBy]: orderDirection === 1 ? 1 : -1 }
+        const sort: Record<string, MongoSortDirection> = options.orderBy
+            ? { [options.orderBy]: options.orderDirection === 1 ? 1 : -1 }
             : {};
 
         // Build the $or query dynamically based on searchFields
         const query: any = {
-            $or: searchFields.length > 0
-                ? searchFields.map(field => ({
+            $or: this.searchFields.map(field => ({
                     [field]: { $regex: search, $options: 'i' }
-                }))
-                : [{ name: { $regex: search, $options: 'i' } }],
+                })),
         };
 
         const mongoQuery = this.collection.find(query);
