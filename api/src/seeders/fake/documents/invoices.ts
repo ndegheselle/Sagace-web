@@ -1,7 +1,7 @@
 import { fakeArticles } from '@/seeders/fake/billables/articles';
 import { fakeServices } from '@/seeders/fake/billables/services';
 import { fakeClients } from '@/seeders/fake/clients';
-import { Invoice, InvoiceStatus } from 'sagace-common/models/documents/invoice';
+import { Invoice, InvoiceStatus } from '@/models/documents/InvoicesRepository';
 
 let invoiceCounter = 1;
 function createInvoiceNumber(counter: number): string {
@@ -20,7 +20,7 @@ function createFakeInvoice(overrides: Partial<Invoice> = {}): Invoice {
     Object.assign(invoice, {
         _id: overrides._id ?? `invoice-${invoiceCounter}`,
         invoiceNumber: overrides.invoiceNumber ?? createInvoiceNumber(invoiceCounter),
-        client: overrides.client ?? fakeClients[invoiceCounter % fakeClients.length],
+        clientId: overrides.clientId ?? fakeClients[invoiceCounter % fakeClients.length]._id,
         issuedAt,
         dueDate,
         paidAt: overrides.paidAt,

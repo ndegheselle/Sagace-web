@@ -5,9 +5,10 @@ import { useTemplateRef, ref } from 'vue';
 import ClientModal from './ClientModal.vue';
 import { Estimate, api as estimateApi } from '@/lib/api/documents/estimates';
 import { useRouter } from 'vue-router';
+import { formatDate } from '@/lib/base/DateUtils';
 
 import TablePaginatedSearch from '@/components/data/TablePaginatedSearch.vue';
-import type { PaginationOptions } from '@/lib/base/paginated';
+import type { PaginationOptions } from 'sagace-common/base/paginated';
 
 const confirmation = useConfirmation();
 const router = useRouter();
@@ -27,7 +28,7 @@ async function remove(client: Client) {
         return;
     }
 
-    await api.delete(client.id);
+    await api.delete(client._id);
     tableRef.value?.refresh();
 }
 
@@ -97,7 +98,7 @@ async function refresh(search: string, pagination: PaginationOptions) {
                 </td>
 
                 <td>
-                    {{ client.createdAt.toLocaleDateString() }}
+                    {{ formatDate(client.createdAt) }}
                 </td>
 
                 <td class="text-right">

@@ -1,6 +1,6 @@
-import type { BaseEntity } from "../../base/BaseEntity.ts";
+import type { BaseEntity } from "sagace-common/base/BaseEntity.ts";
+import { Client } from "../clients.ts";
 import type { BillableItem } from "../billables/BillableItem.ts";
-import { Client } from "../client.ts";
 
 export class BillableLine {
     item: BillableItem;

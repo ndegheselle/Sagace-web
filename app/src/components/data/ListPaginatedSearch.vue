@@ -1,8 +1,9 @@
-<script setup lang="ts" generic="T extends { id: string | number }">
+<script setup lang="ts" generic="T extends BaseEntity">
 import { reactive, ref, watch, onMounted } from 'vue';
-import type { PaginationOptions } from '@/lib/base/paginated';
+import type { PaginationOptions } from 'sagace-common/base/paginated';
 import Pagination from '@/components/Pagination.vue';
-import { debounce } from '@/lib/base/debounce';
+import { debounce } from 'sagace-common/base/debounce';
+import type { BaseEntity } from 'sagace-common/base/BaseEntity';
 
 const props = defineProps<{
     selected: T | null;
@@ -31,7 +32,7 @@ async function refresh() {
 }
 
 async function select(item: T) {
-    if (selected.value?.id === item.id) {
+    if (selected.value?._id === item._id) {
         selected.value = null;
         emit('update:selected', null);
         return;
@@ -65,8 +66,8 @@ watch(() => props.selected, (newVal) => {
             </li>
 
             <!-- List Items -->
-            <li v-for="item in items" :key="item.id" class="list-row duration-300 cursor-pointer"
-                :class="{ 'bg-base-300': selected?.id === item.id }" @click="select(item)">
+            <li v-for="item in items" :key="item._id" class="list-row duration-300 cursor-pointer"
+                :class="{ 'bg-base-300': selected?.id === item._id }" @click="select(item)">
                 <slot name="row" :item="item" />
             </li>
         </ul>

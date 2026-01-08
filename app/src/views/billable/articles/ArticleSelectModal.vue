@@ -2,7 +2,7 @@
 import ListPaginatedSearch from '@/components/data/ListPaginatedSearch.vue';
 import { useDeferredModal } from '@/composables/popups/modal';
 import { StockArticle, api } from '@/lib/api/billables/articles';
-import type { PaginationOptions } from '@/lib/base/paginated';
+import type { PaginationOptions } from 'sagace-common/base/paginated';
 import { ref, useTemplateRef } from 'vue';
 
 const dialog = useTemplateRef<HTMLDialogElement>('dialog');
@@ -51,7 +51,7 @@ defineExpose({
             <input
               type="checkbox"
               class="checkbox"
-              :checked="selected?.id === article.id"
+              :checked="selected?._id === article._id"
               readonly
             />
           </div>

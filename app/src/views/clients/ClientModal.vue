@@ -19,7 +19,7 @@ async function confirm() {
             await api.create(form);
             alert.success('Client créé avec succès');
         } else {
-            await api.update(form.id, form);
+            await api.update(form._id, form);
             alert.success('Client modifié avec succès');
         }
         modal.confirm();

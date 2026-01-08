@@ -1,16 +1,18 @@
 import { database } from "@/database";
 
-import type { StockArticle } from "sagace-common/models/billables/article";
-import type { Service } from "sagace-common/models/billables/service";
-import type { Client } from "sagace-common/models/client";
-import type { Estimate } from "sagace-common/models/documents/estimate";
-import type { Invoice } from "sagace-common/models/documents/invoice";
+import type { StockArticle } from "@/models/billables/ArticlesRepository";
+import type { Service } from "@/models/billables/ServicesRepository";
+import type { Client } from "@/models/ClientsRepository";
+import type { Estimate } from "@/models/documents/EstimatesRepository";
+import type { Invoice } from "@/models/documents/InvoicesRepository";
+import type { User } from "@/models/UsersRepository";
 
 import { fakeArticles } from '@/seeders/fake/billables/articles';
 import { fakeServices } from '@/seeders/fake/billables/services';
 import { fakeClients } from '@/seeders/fake/clients';
 import { fakeEstimates } from '@/seeders/fake/documents/estimates';
 import { fakeInvoices } from '@/seeders/fake/documents/invoices';
+import { fakeUser } from '@/seeders/fake/users';
 
 
 async function seed() : Promise<void> {
@@ -19,6 +21,7 @@ async function seed() : Promise<void> {
     const servicesCollection = database.collection<Service>('services');
     const estimatesCollection = database.collection<Estimate>('estimates');
     const invoicesCollection = database.collection<Invoice>('invoices');
+    const usersCollection = database.collection<User>('users');
 
     await clientsCollection.deleteMany({});
     await clientsCollection.insertMany(fakeClients);
@@ -34,6 +37,9 @@ async function seed() : Promise<void> {
     
     await invoicesCollection.deleteMany({});
     await invoicesCollection.insertMany(fakeInvoices);
+
+    await usersCollection.deleteMany({});
+    await usersCollection.insertOne(fakeUser);
 }
 
 await seed()

@@ -1,16 +1,6 @@
 import type { FastifyInstance, FastifyPluginAsync, FastifyReply, FastifyRequest } from 'fastify';
-
-// Replace with real DB logic
-async function fakeUserLookup(email: string, password: string) {
-    if (email !== 'admin@test.com') return null
-
-    return {
-        id: '1',
-        email,
-        password: 'password',
-        role: 'admin',
-    }
-}
+import { usersRepo } from '@/models/UsersRepository';
+import bcrypt from 'bcrypt';
 
 const authRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) => {
     fastify.post('/login', async (request: FastifyRequest, reply: FastifyReply) => {
@@ -23,13 +13,19 @@ const authRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) => {
             return reply.code(400).send({ message: 'Missing credentials' });
         }
 
-        const user = await fakeUserLookup(email, password);
+        const user = await usersRepo.findByEmail(email);
         if (!user) {
             return reply.code(401).send({ message: 'Invalid email or password' });
         }
 
+        // Compare the provided password with the stored hashed password
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            return reply.code(401).send({ message: 'Invalid email or password' });
+        }
+
         const token = fastify.jwt.sign({
-            id: user.id
+            id: user._id
         });
 
         return reply.send({ token });

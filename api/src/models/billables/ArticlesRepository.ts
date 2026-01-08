@@ -1,7 +1,8 @@
-import { ApiCrud } from "@/lib/base/api/ApiCrud";
-import { type BillableItem, VatRateType } from "./BillableItem.ts";
+import { database } from '@/database';
+import type { Db } from 'mongodb';
+import { CrudRepository } from '@/base/CrudRepository';
 import type { BaseEntity } from "sagace-common/base/BaseEntity.ts";
-import settings from "@/lib/api/settings";
+import { type BillableItem, VatRateType } from './BillableItem';
 
 export class StockArticle implements BillableItem, BaseEntity {
     _id: string = '';
@@ -23,4 +24,10 @@ export class StockArticle implements BillableItem, BaseEntity {
     }
 }
 
-export const api = new ApiCrud(StockArticle, settings.apiUrl + '/billables/articles');
+export class ArticlesRepository extends CrudRepository<StockArticle> {
+    constructor(db: Db) {
+        super(db.collection<StockArticle>('articles'), ['name', 'sku']);
+    }
+}
+
+export const articlesRepo = new ArticlesRepository(database);

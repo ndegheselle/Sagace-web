@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { api, Invoice } from '@/lib/api/documents/invoices';
-import type { PaginationOptions } from '@/lib/base/paginated';
+import type { PaginationOptions } from 'sagace-common/base/paginated';
 import InvoiceStatusBadge from '@/views/documents/invoices/InvoiceStatusBadge.vue';
 import TablePaginatedSearch from '@/components/data/TablePaginatedSearch.vue';
 import { ref } from 'vue';
+import { formatDate } from '@/lib/base/DateUtils';
 
 const total = ref<number>(0);
 const invoices = ref<Invoice[]>([]);
 
 function print(invoice: Invoice) {
-    window.open(`/documents/invoices/${invoice.id}/print`, '_blank');
+    window.open(`/documents/invoices/${invoice._id}/print`, '_blank');
 }
 
 async function refresh(search: string, pagination: PaginationOptions) {
@@ -52,7 +53,7 @@ async function refresh(search: string, pagination: PaginationOptions) {
                     <InvoiceStatusBadge :status="invoice.status" />
                 </td>
                 <td class="text-right">
-                    {{ invoice.dueDate?.toLocaleDateString() || '—' }}
+                    {{ formatDate(invoice.dueDate) }}
                 </td>
                 <td class="text-right">
                     <details class="dropdown dropdown-end">

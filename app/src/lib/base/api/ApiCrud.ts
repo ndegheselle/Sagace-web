@@ -1,5 +1,5 @@
-import { Paginated, PaginationOptions } from "sagace-common/base/pagination";
-import { BaseEntity } from "sagace-common/base/BaseEntity";
+import { Paginated, PaginationOptions } from "sagace-common/base/paginated";
+import type { BaseEntity } from "sagace-common/base/BaseEntity";
 
 export interface IApiCrud<T extends BaseEntity> {
     create(data: T): Promise<string>;
@@ -13,11 +13,20 @@ export interface IApiCrud<T extends BaseEntity> {
 
 export class ApiCrud<T extends BaseEntity> implements IApiCrud<T> {
     constructor(
+        private readonly createInstance: {new (): T},
         private readonly baseUrl: string,
         private readonly headers: HeadersInit = {
             "Content-Type": "application/json",
         }
     ) {}
+
+    private toEntity(json: any): T {
+        if (json === null || json === undefined)
+            return json;
+        const entity = new this.createInstance();
+        Object.assign(entity, json);
+        return entity;
+    }
 
     private buildQuery(params: Record<string, any>): string {
         const query = new URLSearchParams();
@@ -41,7 +50,7 @@ export class ApiCrud<T extends BaseEntity> implements IApiCrud<T> {
             return null;
         if (!response.ok)
             throw new Error(`Failed to get entity with id ${id}`);
-        return response.json();
+        return this.toEntity(await response.json());
     }
 
     async getAll(options: PaginationOptions): Promise<Paginated<T>> {
@@ -49,13 +58,14 @@ export class ApiCrud<T extends BaseEntity> implements IApiCrud<T> {
 
         const response = await fetch(`${this.baseUrl}?${query}`, {
             method: "GET",
-            headers: this.headers,
+            headers: this.headers, 
         });
 
         if (!response.ok)
             throw new Error("Failed to fetch entities");
 
-        return response.json();
+        const json = await response.json();
+        return new Paginated<T>(json.data.map((item: any) => this.toEntity(item)), json.total, options);
     }
 
     async search(search: string, options: PaginationOptions): Promise<Paginated<T>> {
@@ -72,7 +82,8 @@ export class ApiCrud<T extends BaseEntity> implements IApiCrud<T> {
         if (!response.ok)
             throw new Error("Failed to search entities");
 
-        return response.json();
+        const json = await response.json();
+        return new Paginated<T>(json.data.map((item: any) => this.toEntity(item)), json.total, options);
     }
 
     async create(data: T): Promise<string> {

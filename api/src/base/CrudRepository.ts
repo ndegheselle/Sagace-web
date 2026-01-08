@@ -2,7 +2,10 @@ import { Collection, type Document, type Filter, type SortDirection as MongoSort
 import { Paginated, PaginationOptions } from 'sagace-common/base/paginated';
 
 export class CrudRepository<T extends Document> {
-    constructor(protected collection: Collection<T>, protected searchFields: string[]) { }
+    constructor(
+        protected collection: Collection<T>, 
+        protected searchFields: string[], 
+        protected projection: Record<string, 0 | 1>| undefined = undefined,) { }
 
     async create(data: T): Promise<string> {
         const result = await this.collection.insertOne(data as any);
@@ -25,7 +28,7 @@ export class CrudRepository<T extends Document> {
     }
 
     async getById(id: string): Promise<T | null> {
-        const doc = await this.collection.findOne({ _id: id } as Filter<T>);
+        const doc = await this.collection.findOne({ _id: id } as Filter<T>, {projection: this.projection});
         return doc as T | null;
     }
 
@@ -37,7 +40,7 @@ export class CrudRepository<T extends Document> {
             ? { [options.orderBy]: options.orderDirection === 1 ? 1 : -1 }
             : {};
 
-        const query = this.collection.find({});
+        const query = this.collection.find({}, {projection: this.projection});
         if (Object.keys(sort).length > 0) {
             query.sort(sort);
         }
@@ -65,11 +68,11 @@ export class CrudRepository<T extends Document> {
         // Build the $or query dynamically based on searchFields
         const query: any = {
             $or: this.searchFields.map(field => ({
-                    [field]: { $regex: search, $options: 'i' }
-                })),
+                [field]: { $regex: search, $options: 'i' }
+            })),
         };
 
-        const mongoQuery = this.collection.find(query);
+        const mongoQuery = this.collection.find(query, {projection: this.projection});
         if (Object.keys(sort).length > 0) {
             mongoQuery.sort(sort);
         }

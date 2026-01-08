@@ -1,4 +1,4 @@
-import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import type { FastifyReply, FastifyRequest } from "fastify";
 import type { BaseEntity } from "sagace-common/base/BaseEntity";
 import { PaginationOptions } from "sagace-common/base/paginated";
 import type { CrudRepository } from "./CrudRepository";
@@ -14,15 +14,6 @@ export class CrudController<T extends BaseEntity> {
         private readonly table: CrudRepository<T>
     ) {}
 
-    registerRoutes(fastify: FastifyInstance) {
-        fastify.get("/", this.getAll.bind(this));
-        fastify.get("/search", this.search.bind(this));
-        fastify.get("/:id", this.getById.bind(this));
-        fastify.post("/", this.create.bind(this));
-        fastify.put("/:id", this.update.bind(this));
-        fastify.delete("/:id", this.remove.bind(this));
-    }
-    
     // GET /
     async getAll(request: FastifyRequest) {
         const {page, limit, orderBy, orderDirection} = request.query as any;
@@ -31,9 +22,9 @@ export class CrudController<T extends BaseEntity> {
 
     // GET /search
     async search(request: FastifyRequest) {
-        const { search, ...rest } = request.query as any;
+        const { search, ...options } = request.query as any;
         const sanitized = sanitizeSearch(search);
-        return this.table.search(sanitized, rest);
+        return this.table.search(sanitized, new PaginationOptions(Number(options.page), Number(options.limit), options.orderBy, options.orderDirection));
     }
 
     // GET /:id

@@ -1,4 +1,4 @@
-import { Paginated, PaginationOptions } from "@/lib/base/paginated";
+import { Paginated, PaginationOptions } from "sagace-common/base/paginated";
 import type { BaseEntity, IApiCrud } from "@/lib/base/ApiCrud";
 
 function makeid(length: number) {

@@ -1,5 +1,5 @@
 import { ref, type Ref } from 'vue';
-import Deferred from '@/lib/base/deferred';
+import Deferred from 'sagace-common/base/deferred';
 
 export function useDeferredModal(dialogRef?: Ref<HTMLDialogElement | null>) {
     const internalDialogRef = dialogRef || ref<HTMLDialogElement | null>(null);

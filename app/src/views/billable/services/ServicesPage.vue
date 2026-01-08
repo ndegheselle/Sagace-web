@@ -4,6 +4,7 @@ import { Service, api } from '@/lib/api/billables/services';
 import { useTemplateRef, ref } from 'vue';
 import ServiceModal from './ServiceModal.vue';
 import TablePaginatedSearch from '@/components/data/TablePaginatedSearch.vue';
+import { formatDate } from '@/lib/base/DateUtils';
 
 const confirmation = useConfirmation();
 const modalRef = useTemplateRef('modal');
@@ -23,7 +24,7 @@ async function remove(service: Service) {
         return;
     }
 
-    await api.delete(service.id);
+    await api.delete(service._id);
     tableRef.value?.refresh();
 }
 
@@ -89,7 +90,7 @@ async function refresh(search: string, pagination: { page: number, limit: number
                     </span>
                 </td>
                 <td class="text-right">
-                    {{ service.createdAt.toLocaleDateString() }}
+                    {{ formatDate(service.createdAt) }}
                 </td>
                 <td class="text-right">
                     <details class="dropdown dropdown-end">

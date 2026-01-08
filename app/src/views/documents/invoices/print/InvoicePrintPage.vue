@@ -103,7 +103,7 @@ const dueDate = computed(() =>
                     </thead>
 
                     <tbody>
-                        <tr v-for="line in invoice?.lines" :key="line.item.id">
+                        <tr v-for="line in invoice?.lines" :key="line.item._id">
                             <td class="border-base-300">
                                 <div class="font-medium">
                                     {{ line.item.name }}

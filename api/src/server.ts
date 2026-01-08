@@ -27,7 +27,8 @@ app.register(AutoLoad, {
   options: {
     prefix: '/api',
   },
-  dirNameRoutePrefix: true
+  dirNameRoutePrefix: true,
+  maxDepth: 4,
 });
 
 app.listen({

@@ -1,8 +1,9 @@
-<script setup lang="ts" generic="T extends { id: string | number }">
+<script setup lang="ts" generic="T extends BaseEntity">
 import { reactive, onMounted } from 'vue';
-import type { PaginationOptions } from '@/lib/base/paginated';
+import type { PaginationOptions } from 'sagace-common/base/paginated';
 import Pagination from '@/components/Pagination.vue';
-import { debounce } from '@/lib/base/debounce';
+import { debounce } from 'sagace-common/base/debounce';
+import type { BaseEntity } from 'sagace-common/base/BaseEntity';
 
 let search = "";
 const pagination = reactive<PaginationOptions>({
@@ -57,7 +58,7 @@ onMounted(refresh);
 
                 <tbody>
                     <template v-if="items.length">
-                        <tr v-for="item in items" :key="item.id">
+                        <tr v-for="item in items" :key="item._id">
                             <slot name="row" :item="(item as T)" />
                         </tr>
                     </template>

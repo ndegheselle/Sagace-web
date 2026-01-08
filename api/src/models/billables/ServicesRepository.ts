@@ -1,7 +1,8 @@
-import { ApiCrud } from "@/lib/base/api/ApiCrud";
-import { type BillableItem, VatRateType } from "./BillableItem.ts";
+import { database } from '@/database';
+import type { Db } from 'mongodb';
+import { CrudRepository } from '@/base/CrudRepository';
 import type { BaseEntity } from "sagace-common/base/BaseEntity.ts";
-import settings from "@/lib/api/settings";
+import { type BillableItem, VatRateType } from './BillableItem';
 
 export class Service implements BillableItem, BaseEntity  {
     _id: string = '';
@@ -22,4 +23,10 @@ export class Service implements BillableItem, BaseEntity  {
     }
 }
 
-export const api = new ApiCrud(Service, settings.apiUrl + '/billables/services');
+export class ServicesRepository extends CrudRepository<Service> {
+    constructor(db: Db) {
+        super(db.collection<Service>('services'), ['name', 'code']);
+    }
+}
+
+export const servicesRepo = new ServicesRepository(database);

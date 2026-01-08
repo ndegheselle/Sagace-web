@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ListPaginatedSearch from '@/components/data/ListPaginatedSearch.vue';
 import { Client, api } from '@/lib/api/clients';
-import type { PaginationOptions } from '@/lib/base/paginated';
+import type { PaginationOptions } from 'sagace-common/base/paginated';
 import { ref } from 'vue';
 
 const props = defineProps<{
@@ -32,7 +32,7 @@ async function load(search: string, pagination: PaginationOptions) {
   >
     <template #row="{ item: client }">
       <div class="my-auto">
-        <input type="checkbox" class="checkbox" :checked="props.selected?.id === client.id" readonly />
+        <input type="checkbox" class="checkbox" :checked="props.selected?._id === client._id" readonly />
       </div>
       <div class="my-auto">
         <i class="fa-regular fa-user"></i>

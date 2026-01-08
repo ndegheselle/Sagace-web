@@ -1,4 +1,4 @@
-import { Service } from 'sagace-common/models/billables/service';
+import { Service } from '@/models/billables/ServicesRepository';
 
 let serviceCounter = 1;
 

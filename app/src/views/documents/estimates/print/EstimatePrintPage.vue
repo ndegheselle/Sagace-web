@@ -4,6 +4,7 @@ import { ref, watch, nextTick } from 'vue';
 import { Estimate, api } from '@/lib/api/documents/estimates';
 import { useAlert } from '@/composables/popups/alert';
 import { useAuth } from '@/composables/auth';
+import { formatDate } from '@/lib/base/DateUtils';
 
 const { user } = useAuth();
 const route = useRoute();
@@ -41,8 +42,8 @@ function addDays(date: Date | undefined, days: number) {
 
             <h1 class="text-5xl">Devis {{ estimate?.reference }}</h1>
             <div class="opacity-80 mt-1 space-y-1">
-                <div>Date d’émission : {{ estimate?.generatedAt?.toLocaleDateString() }}</div>
-                <div>Date d’échéance : {{ addDays(estimate?.generatedAt, 30).toLocaleDateString() }}</div>
+                <div>Date d’émission : {{ formatDate(estimate?.generatedAt) }}</div>
+                <div>Date d’échéance : {{ formatDate(addDays(estimate?.generatedAt, 30)) }}</div>
             </div>
 
             <div class="grid grid-cols-2 gap-1 mt-4">
@@ -82,7 +83,7 @@ function addDays(date: Date | undefined, days: number) {
                     </thead>
 
                     <tbody>
-                        <tr v-for="line in estimate?.lines" :key="line.item.id">
+                        <tr v-for="line in estimate?.lines" :key="line.item._id">
                             <td class="border-base-300">
                                 <div class="font-medium">
                                     {{ line.item.name }}

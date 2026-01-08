@@ -1,6 +1,6 @@
-import { Client } from "@/lib/api/clients";
-import type { BaseEntity } from "@/lib/base/api/ApiCrud";
-import type { BillableItem } from "@/lib/api/billables/BillableItem";
+import type { BaseEntity } from "sagace-common/base/BaseEntity.ts";
+import { Client } from "../ClientsRepository.ts";
+import type { BillableItem } from "../billables/BillableItem.ts";
 
 export class BillableLine {
     item: BillableItem;
@@ -30,8 +30,8 @@ export class BillableLine {
 }
 
 export abstract class CommercialDocument implements BaseEntity {
-    id: string = '';
-    client: Client | null = null;
+    _id: string = '';
+    clientId: string | null = null;
     lines: BillableLine[] = [];
     notes: string = '';
     createdAt: Date = new Date();
@@ -51,7 +51,7 @@ export abstract class CommercialDocument implements BaseEntity {
 
     addItem(item: BillableItem, quantity: number) {
         const existing = this.lines.find(
-            l => l.item.id === item.id
+            l => l.item._id === item._id
         );
 
         if (existing) {
@@ -65,7 +65,7 @@ export abstract class CommercialDocument implements BaseEntity {
 
     removeItem(itemId: string) {
         this.lines = this.lines.filter(
-            l => l.item.id !== itemId
+            l => l.item._id !== itemId
         );
         this.updatedAt = new Date();
     }

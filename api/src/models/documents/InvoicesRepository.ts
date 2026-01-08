@@ -1,4 +1,7 @@
-import { CommercialDocument } from "@/lib/api/documents";
+import { database } from '@/database';
+import type { Db } from 'mongodb';
+import { CrudRepository } from '@/base/CrudRepository';
+import { CommercialDocument } from './CommercialDocument';
 
 export enum InvoiceStatus {
     Draft,
@@ -26,7 +29,7 @@ export class Invoice extends CommercialDocument {
         if (
             this.issuedAt &&
             this.dueDate &&
-            this.dueDate.getTime() < new Date().getTime()
+            new Date(this.dueDate).getTime() < new Date().getTime()
         ) {
             return InvoiceStatus.Overdue;
         }
@@ -38,3 +41,11 @@ export class Invoice extends CommercialDocument {
         return InvoiceStatus.Draft;
     }
 }
+
+export class InvoicesRepository extends CrudRepository<Invoice> {
+    constructor(db: Db) {
+        super(db.collection<Invoice>('invoices'), ['invoiceNumber']);
+    }
+}
+
+export const invoicesRepo = new InvoicesRepository(database);

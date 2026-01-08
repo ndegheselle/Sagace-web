@@ -1,9 +1,9 @@
 import { CrudController } from '@/base/CrudController';
-import { type Client, clientsRepo } from '@/models/ClientsRepository';
+import { type Invoice, invoicesRepo } from '@/models/documents/InvoicesRepository';
 import type { FastifyInstance, FastifyPluginAsync } from 'fastify';
 
-const clientsRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) => {
-    const crud = new CrudController<Client>(clientsRepo);
+const invoicesRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) => {
+    const crud = new CrudController<Invoice>(invoicesRepo);
     fastify.get("/", crud.getAll.bind(crud));
     fastify.get("/search", crud.search.bind(crud));
     fastify.get("/:id", crud.getById.bind(crud));
@@ -12,4 +12,4 @@ const clientsRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) => {
     fastify.delete("/:id", crud.remove.bind(crud));
 };
 
-export default clientsRoutes;
+export default invoicesRoutes;

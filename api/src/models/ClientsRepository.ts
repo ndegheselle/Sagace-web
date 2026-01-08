@@ -1,7 +1,28 @@
 import { database } from '@/database';
 import type { Db } from 'mongodb';
-import { Client } from 'sagace-common/models/client';
+import type { BaseEntity } from "sagace-common/base/BaseEntity.ts";
 import { CrudRepository } from '../base/CrudRepository';
+
+export class Client implements BaseEntity {
+    _id: string = '';
+    createdAt: Date = new Date();
+    updatedAt: Date | undefined;
+
+    firstName: string = '';
+    lastName: string = '';
+    email: string = '';
+    company: string = '';
+    phone: string = '';
+    address: string = '';
+
+    get fullName(): string {
+        return `${this.firstName} ${this.lastName}`;
+    }
+    
+    get isNew(): boolean {
+        return !this._id;
+    }
+}
 
 export class ClientsRepository extends CrudRepository<Client> {
     constructor(db: Db) {
@@ -9,5 +30,4 @@ export class ClientsRepository extends CrudRepository<Client> {
     }
 }
 
-export type { Client };
 export const clientsRepo = new ClientsRepository(database);

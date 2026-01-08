@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   # MongoDB Service
-  mongodb:
+  database:
     image: mongo:latest
     restart: unless-stopped
     volumes:
@@ -13,7 +13,9 @@ services:
     image: "node:alpine"
     working_dir: /app
     depends_on:
-      - mongodb
+      - database
+    volumes:
+      - ./common:/common
 
   # Vue.js App Service
   front:
@@ -21,3 +23,5 @@ services:
     working_dir: /app
     depends_on:
       - api
+    volumes:
+      - ./common:/common

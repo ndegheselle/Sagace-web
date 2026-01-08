@@ -18,7 +18,7 @@ async function confirm() {
         if (form.isNew)
             await api.create(form);
         else
-            await api.update(form.id, form);
+            await api.update(form._id, form);
 
         modal.confirm();
         alert.success(form.isNew ? 'Article créé avec succès' : 'Article modifié avec succès');

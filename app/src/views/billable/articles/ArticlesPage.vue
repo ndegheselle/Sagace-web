@@ -4,6 +4,7 @@ import { StockArticle, api } from '@/lib/api/billables/articles';
 import { useTemplateRef, ref } from 'vue';
 import ArticleModal from './ArticleModal.vue';
 import TablePaginatedSearch from '@/components/data/TablePaginatedSearch.vue';
+import { formatDate } from '@/lib/base/DateUtils';
 
 const confirmation = useConfirmation();
 const modalRef = useTemplateRef('modal');
@@ -23,7 +24,7 @@ async function remove(article: StockArticle) {
         return;
     }
 
-    await api.delete(article.id);
+    await api.delete(article._id);
     tableRef.value?.refresh();
 }
 
@@ -36,7 +37,6 @@ async function refresh(search: string, pagination: { page: number, limit: number
     const result = await api.search(search, pagination);
     articles.value = result.data || [];
     total.value = result.total || 0;
-    console.log(articles.value)
 }
 </script>
 
@@ -96,7 +96,7 @@ async function refresh(search: string, pagination: { page: number, limit: number
                     </span>
                 </td>
                 <td class="text-right">
-                    {{ article.createdAt.toLocaleDateString() }}
+                    {{ formatDate(article.createdAt) }}
                 </td>
                 <td class="text-right">
                     <details class="dropdown dropdown-end">

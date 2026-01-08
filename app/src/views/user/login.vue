@@ -7,8 +7,8 @@ const router = useRouter();
 const { login } = useAuth();
 
 const credentials = reactive({
-    email: '',
-    password: ''
+    email: 'john.doe@example.com',
+    password: 'password123'
 });
 
 const error = ref('');
@@ -31,7 +31,7 @@ async function onLogin() {
 
 <template>
     <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4 mx-auto mt-2 mb-auto">
-        <legend class="fieldset-legend text-2xl">Login</legend>
+        <legend class="fieldset-legend text-2xl">Connexion</legend>
 
         <label class="label">Email</label>
         <input type="email" class="input" placeholder="Email" :class="{ 'input-error': !!error }"
@@ -48,7 +48,7 @@ async function onLogin() {
 
         <button class="btn btn-primary mt-4" :disabled="isLoading" @click="onLogin">
             <span v-if="isLoading" class="loading loading-spinner loading-sm"></span>
-            Login
+            Connexion
         </button>
     </fieldset>
 </template>

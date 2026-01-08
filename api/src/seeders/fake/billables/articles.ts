@@ -1,5 +1,5 @@
-import { StockArticle } from 'sagace-common/models/billables/article';
-import { VatRateType } from 'sagace-common/models/billables/BillableItem';
+import { StockArticle } from '@/models/billables/ArticlesRepository';
+import { VatRateType } from '@/models/billables/BillableItem';
 
 let articleCounter = 1;
 

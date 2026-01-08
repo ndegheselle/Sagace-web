@@ -1,36 +1,34 @@
-import { FakeApiCrud } from "@/lib/base/api/FakeApiCrud";
-import { Client } from 'sagace-common/models/client';
+import { ApiCrud } from "@/lib/base/api/ApiCrud";
+import type { BaseEntity } from "sagace-common/base/BaseEntity.ts";
+import settings from "@/lib/api/settings";
 
-let clientCounter = 1;
-function createFakeClient(overrides: Partial<Client> = {}): Client {
-    const client = new Client();
-    const now = new Date();
+export class Client implements BaseEntity {
+    _id: string = '';
+    createdAt: Date = new Date();
+    updatedAt: Date | undefined;
 
-    const id = overrides.id ?? `client-${clientCounter++}`;
+    firstName: string = '';
+    lastName: string = '';
+    email: string = '';
+    company: string = '';
+    phone: string = '';
+    address: string = '';
 
-    Object.assign(client, {
-        id,
-        createdAt: overrides.createdAt ?? now,
-        updatedAt: overrides.updatedAt ?? now,
-        firstName: overrides.firstName ?? `First${id}`,
-        lastName: overrides.lastName ?? `Last${id}`,
-        email: overrides.email ?? `${id}@example.com`,
-        company: overrides.company ?? `Company ${id}`,
-        phone: overrides.phone ?? "+1234567890",
-        address: overrides.address ?? `${clientCounter} Main St, City`,
-    });
+    isSelected: boolean = false;
 
-    return client;
+    get fullName(): string {
+        return `${this.firstName} ${this.lastName}`;
+    }
+    
+    get isNew(): boolean {
+        return !this._id;
+    }
+
+    static toJson(json: any): Client {
+        const client = new Client();
+        Object.assign(client, json);
+        return client;
+    }
 }
 
-// Create some fake clients
-export const fakeClients = [
-    createFakeClient({ firstName: "John", lastName: "Doe", email: "john.doe@example.com", company: "Doe Inc" }),
-    createFakeClient({ firstName: "Jane", lastName: "Smith", email: "jane.smith@example.com", company: "Smith Corp" }),
-    createFakeClient({ firstName: "Alice", lastName: "Johnson", email: "alice.johnson@example.com", company: "Johnson Ltd" }),
-    createFakeClient({ firstName: "Bob", lastName: "Brown", email: "bob.brown@example.com", company: "Brown & Co" }),
-    createFakeClient({ firstName: "Charlie", lastName: "Davis", email: "charlie.davis@example.com", company: "Davis Tech" }),
-];
-
-// Initialize the API with fake clients
-export const api = new FakeApiCrud<Client>(fakeClients, ['fullName']);
+export const api = new ApiCrud(Client, settings.apiUrl + '/clients');

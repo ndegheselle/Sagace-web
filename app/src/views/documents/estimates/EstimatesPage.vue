@@ -4,8 +4,9 @@ import { api, Estimate } from '@/lib/api/documents/estimates';
 import { useTemplateRef, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import EstimateStatusBadge from '@/views/documents/estimates/EstimateStatusBadge.vue';
-import { PaginationOptions } from '@/lib/base/paginated';
+import { PaginationOptions } from 'sagace-common/base/paginated';
 import TablePaginatedSearch from '@/components/data/TablePaginatedSearch.vue';
+import { formatDate } from '@/lib/base/DateUtils';
 
 const confirmation = useConfirmation();
 const router = useRouter();
@@ -25,7 +26,7 @@ async function remove(estimate: Estimate) {
         return;
     }
 
-    await api.delete(estimate.id);
+    await api.delete(estimate._id);
     tableRef.value?.refresh();
 }
 
@@ -76,7 +77,7 @@ async function refresh(search: string, pagination: PaginationOptions) {
                 <td class="text-right">
                     <EstimateStatusBadge :status="estimate.status" />
                 </td>
-                <td class="text-right">{{ estimate.createdAt.toLocaleDateString() }}</td>
+                <td class="text-right">{{ formatDate(estimate.createdAt) }}</td>
                 <td class="text-right">
                     <details class="dropdown dropdown-end">
                         <summary class="btn btn-circle btn-sm">
@@ -84,7 +85,7 @@ async function refresh(search: string, pagination: PaginationOptions) {
                         </summary>
                         <ul class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
                             <li>
-                                <RouterLink :to="`/documents/estimates/${estimate.id}/items`"><i
+                                <RouterLink :to="`/documents/estimates/${estimate._id}/items`"><i
                                         class="fa-solid fa-pen"></i> Modifier</RouterLink>
                             </li>
                             <li><a class="text-error" href="#" @click.prevent="remove(estimate)"><i

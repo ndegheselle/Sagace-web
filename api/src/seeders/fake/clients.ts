@@ -1,4 +1,4 @@
-import { Client } from 'sagace-common/models/client';
+import { Client } from '@/models/ClientsRepository';
 
 let clientCounter = 1;
 function createFakeClient(overrides: Partial<Client> = {}): Client {
