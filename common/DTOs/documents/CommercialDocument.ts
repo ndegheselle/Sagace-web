@@ -1,5 +1,6 @@
 import type { BaseEntity } from '@/base/BaseEntity';
 import type { BillableItem } from '@/DTOs/billables/BillableItem';
+import { Type } from 'class-transformer';
 
 export class BillableLine {
     item: BillableItem;
@@ -31,6 +32,8 @@ export class BillableLine {
 export abstract class CommercialDocument implements BaseEntity {
     _id: string = '';
     clientId?: string;
+
+    @Type(() => BillableLine)
     lines: BillableLine[] = [];
     notes: string = '';
     createdAt: Date = new Date();

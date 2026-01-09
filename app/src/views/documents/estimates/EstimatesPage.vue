@@ -1,12 +1,12 @@
 <script setup lang="ts">
+import TablePaginatedSearch from '@/components/data/TablePaginatedSearch.vue';
 import { useConfirmation } from '@/composables/popups/confirmation';
 import { api, Estimate } from '@/lib/api/documents/estimates';
-import { useTemplateRef, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { formatDate } from '@/lib/base/DateUtils';
 import EstimateStatusBadge from '@/views/documents/estimates/EstimateStatusBadge.vue';
 import { PaginationOptions } from 'sagace-common/base/paginated';
-import TablePaginatedSearch from '@/components/data/TablePaginatedSearch.vue';
-import { formatDate } from '@/lib/base/DateUtils';
+import { ref, useTemplateRef } from 'vue';
+import { useRouter } from 'vue-router';
 
 const confirmation = useConfirmation();
 const router = useRouter();
@@ -37,6 +37,7 @@ async function create() {
 
 async function refresh(search: string, pagination: PaginationOptions) {
     const result = await api.search(search, pagination);
+    console.log(result);
     estimates.value = result.data || [];
     total.value = result.total || 0;
 }
