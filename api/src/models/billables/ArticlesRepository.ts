@@ -1,27 +1,9 @@
+import { CrudRepository } from '@/base/CrudRepository';
 import { database } from '@/database';
 import type { Db } from 'mongodb';
-import { CrudRepository } from '@/base/CrudRepository';
-import type { BaseEntity } from "sagace-common/base/BaseEntity.ts";
-import { type BillableItem, VatRateType } from './BillableItem';
+import { StockArticleDTO } from 'sagace-common/DTOs/billables/article';
 
-export class StockArticle implements BillableItem, BaseEntity {
-    _id: string = '';
-    createdAt: Date = new Date();
-    updatedAt: Date | undefined = undefined;
-
-    name: string = '';
-    sku: string = '';
-    description?: string = '';
-    unitPrice: number = 0;
-    vatRateType: VatRateType = VatRateType.STANDARD;
-
-    quantity: number = 0;
-
-    isSelected: boolean = false;
-
-    get isNew(): boolean {
-        return !this._id;
-    }
+export class StockArticle extends StockArticleDTO {
 }
 
 export class ArticlesRepository extends CrudRepository<StockArticle> {

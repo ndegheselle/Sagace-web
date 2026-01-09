@@ -1,20 +1,9 @@
+import { CrudRepository } from '@/base/CrudRepository';
 import { database } from '@/database';
 import type { Db } from 'mongodb';
-import { CrudRepository } from '@/base/CrudRepository';
-import { CommercialDocument } from './CommercialDocument';
+import { EstimateDTO } from 'sagace-common/DTOs/documents/estimate';
 
-export enum EstimateStatus {
-    Template,
-    Draft,
-    Sent,
-    Accepted,
-    Refused
-}
-
-export class Estimate extends CommercialDocument {
-    reference: string = '';
-    generatedAt?: Date;
-    status: EstimateStatus = EstimateStatus.Draft;
+export class Estimate extends EstimateDTO {
 }
 
 export class EstimatesRepository extends CrudRepository<Estimate> {

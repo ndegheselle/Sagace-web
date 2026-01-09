@@ -3,8 +3,17 @@
         "noEmit": true, // Optional - see note below
         "target": "esnext",
         "module": "nodenext",
+        "types": [
+            "node"
+        ],
         "rewriteRelativeImportExtensions": true,
         "erasableSyntaxOnly": false,
-        "verbatimModuleSyntax": true
+        "verbatimModuleSyntax": true,
+        "baseUrl": "./",
+        "paths": {
+            "@/*": [
+                "*"
+            ],
+        }
     }
 }

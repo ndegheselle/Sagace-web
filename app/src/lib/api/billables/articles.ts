@@ -1,26 +1,9 @@
-import { ApiCrud } from "@/lib/base/api/ApiCrud";
-import { type BillableItem, VatRateType } from "./BillableItem.ts";
-import type { BaseEntity } from "sagace-common/base/BaseEntity.ts";
 import settings from "@/lib/api/settings";
+import { ApiCrud } from "@/lib/base/api/ApiCrud";
+import { StockArticleDTO } from "sagace-common/DTOs/billables/article";
 
-export class StockArticle implements BillableItem, BaseEntity {
-    _id: string = '';
-    createdAt: Date = new Date();
-    updatedAt: Date | undefined = undefined;
-
-    name: string = '';
-    sku: string = '';
-    description?: string = '';
-    unitPrice: number = 0;
-    vatRateType: VatRateType = VatRateType.STANDARD;
-
-    quantity: number = 0;
-
+export class StockArticle extends StockArticleDTO {
     isSelected: boolean = false;
-
-    get isNew(): boolean {
-        return !this._id;
-    }
 }
 
 export const api = new ApiCrud(StockArticle, settings.apiUrl + '/billables/articles');

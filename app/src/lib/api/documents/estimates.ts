@@ -1,19 +1,9 @@
-import { ApiCrud } from "@/lib/base/api/ApiCrud";
-import { CommercialDocument } from "./CommercialDocument.ts";
 import settings from "@/lib/api/settings";
+import { ApiCrud } from "@/lib/base/api/ApiCrud";
+import { EstimateDTO, EstimateStatus } from "sagace-common/DTOs/documents/estimate";
 
-export enum EstimateStatus {
-    Template,
-    Draft,
-    Sent,
-    Accepted,
-    Refused
+export class Estimate extends EstimateDTO {
 }
 
-export class Estimate extends CommercialDocument {
-    reference: string = '';
-    generatedAt?: Date;
-    status: EstimateStatus = EstimateStatus.Draft;
-}
-
+export { EstimateStatus };
 export const api = new ApiCrud(Estimate, settings.apiUrl + '/documents/estimates');

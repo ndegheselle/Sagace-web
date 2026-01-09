@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { EstimateStatus, Estimate } from "@/lib/api/documents/estimates";
+import { api, Estimate, EstimateStatus } from "@/lib/api/documents/estimates";
 import EstimateStatusBadge from "@/views/documents/estimates/EstimateStatusBadge.vue";
-import { api } from "@/lib/api/documents/estimates";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -11,22 +10,22 @@ function print() {
         return;
 
     props.estimate.status = EstimateStatus.Sent;
-    window.open(`/documents/estimates/${props.estimate.id}/print`, '_blank');
-    api.update(props.estimate.id, props.estimate);
+    window.open(`/documents/estimates/${props.estimate._id}/print`, '_blank');
+    api.update(props.estimate._id, props.estimate);
 }
 
 function reject() {
     if (!props.estimate)
         return;
     props.estimate.status = EstimateStatus.Refused;
-    api.update(props.estimate.id, props.estimate);
+    api.update(props.estimate._id, props.estimate);
 }
 
 async function toInvoice() {
     if (!props.estimate)
         return;
     props.estimate.status = EstimateStatus.Accepted;
-    const invoiceId = await api.toInvoice(props.estimate.id);
+    const invoiceId = await api.toInvoice(props.estimate._id);
     router.push(`/documents/invoices/${invoiceId}/print`);
 
 }

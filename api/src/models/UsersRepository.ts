@@ -1,22 +1,10 @@
-import type { BaseEntity } from "sagace-common/base/BaseEntity.ts";
-import type { Db } from 'mongodb';
 import { CrudRepository } from '@/base/CrudRepository';
 import { database } from '@/database';
+import type { Db } from 'mongodb';
+import { UserDTO } from 'sagace-common/DTOs/user';
 
-export class Company {
-    name: string = '';
-    email: string = '';
-    adress: string = '';
-    SIRET: string = '';
-    phone: string = '';
-}
-
-export class User implements BaseEntity {
-    _id: string = '';
-    email: string = '';
-    name: string = '';
+export class User extends UserDTO{
     password: string = '';
-    company: Company = new Company();
 }
 
 export class UsersRepository extends CrudRepository<User> {

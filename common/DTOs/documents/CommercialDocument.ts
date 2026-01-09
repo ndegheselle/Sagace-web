@@ -1,6 +1,5 @@
-import type { BaseEntity } from "sagace-common/base/BaseEntity.ts";
-import { Client } from "../ClientsRepository.ts";
-import type { BillableItem } from "../billables/BillableItem.ts";
+import type { BaseEntity } from '@/base/BaseEntity';
+import type { BillableItem } from '@/DTOs/billables/BillableItem';
 
 export class BillableLine {
     item: BillableItem;
@@ -31,7 +30,7 @@ export class BillableLine {
 
 export abstract class CommercialDocument implements BaseEntity {
     _id: string = '';
-    clientId: string | null = null;
+    clientId?: string;
     lines: BillableLine[] = [];
     notes: string = '';
     createdAt: Date = new Date();
