@@ -1,4 +1,3 @@
-import { plainToInstance, type ClassConstructor } from 'class-transformer';
 import type { BaseEntity } from "sagace-common/base/BaseEntity";
 import { Paginated, PaginationOptions } from "sagace-common/base/paginated";
 
@@ -14,9 +13,9 @@ export interface IApiCrud<T extends BaseEntity> {
 
 export class ApiCrud<T extends BaseEntity> implements IApiCrud<T> {
     constructor(
-        private readonly type: ClassConstructor<T>,
-        private readonly baseUrl: string,
-        private readonly headers: HeadersInit = {
+        private readonly type: new (data: any) => T,
+        protected readonly baseUrl: string,
+        protected readonly headers: HeadersInit = {
             "Content-Type": "application/json",
         }
     ) {}
@@ -44,7 +43,7 @@ export class ApiCrud<T extends BaseEntity> implements IApiCrud<T> {
         if (!response.ok)
             throw new Error(`Failed to get entity with id ${id}`);
 
-        return plainToInstance(this.type, await response.json());
+        return new this.type(await response.json());
     }
 
     async getAll(options: PaginationOptions): Promise<Paginated<T>> {
@@ -59,7 +58,7 @@ export class ApiCrud<T extends BaseEntity> implements IApiCrud<T> {
             throw new Error("Failed to fetch entities");
 
         const json = await response.json();
-        return new Paginated<T>(json.data.map((item: any) => plainToInstance(this.type, item)), json.total, options);
+        return new Paginated<T>(json.data.map((item: any) => new this.type(item)), json.total, options);
     }
 
     async search(search: string, options: PaginationOptions): Promise<Paginated<T>> {
@@ -77,7 +76,7 @@ export class ApiCrud<T extends BaseEntity> implements IApiCrud<T> {
             throw new Error("Failed to search entities");
 
         const json = await response.json();
-        return new Paginated<T>(json.data.map((item: any) => plainToInstance(this.type, item)), json.total, options);
+        return new Paginated<T>(json.data.map((item: any) => new this.type(item)), json.total, options);
     }
 
     async create(data: T): Promise<string> {

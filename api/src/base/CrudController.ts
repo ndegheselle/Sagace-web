@@ -30,8 +30,6 @@ export class CrudController<T extends BaseEntity> {
     // GET /:id
     async getById(request: FastifyRequest, reply: FastifyReply) {
         const { id } = request.params as { id: string };
-        console.log("Getting by ID", id);
-
         const entity = await this.table.getById(id);
 
         if (!entity) {

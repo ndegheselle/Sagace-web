@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import './style.css';
 
 import { createApp } from 'vue';

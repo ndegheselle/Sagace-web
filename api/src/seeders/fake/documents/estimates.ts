@@ -22,7 +22,7 @@ function createFakeEstimate(overrides: Partial<Estimate> = {}): Estimate {
     const now = new Date();
 
     const _id = overrides._id ?? `estimate-${estimateCounter++}`;
-    const client = overrides.clientId ?? fakeClients[estimateCounter % fakeClients.length]._id;
+    const clientId = overrides.clientId ?? fakeClients[estimateCounter % fakeClients.length]._id;
     const reference = overrides.reference ?? createRandomRef();
     const notes = overrides.notes ?? `Notes for ${reference}`;
     const status = overrides.status ?? EstimateStatus.Draft;
@@ -30,7 +30,7 @@ function createFakeEstimate(overrides: Partial<Estimate> = {}): Estimate {
     Object.assign(estimate, {
         _id,
         reference,
-        client,
+        clientId,
         notes,
         status,
         createdAt: overrides.createdAt ?? now,

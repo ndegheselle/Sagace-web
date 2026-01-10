@@ -17,6 +17,7 @@ const app = fastify({ logger: true });
 app.register(cookie);
 app.register(cors, {
   origin: process.env.CORS_ORIGIN,
+  methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
   credentials: true,
 });
 app.register(jwt);

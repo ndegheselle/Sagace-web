@@ -37,7 +37,6 @@ async function create() {
 
 async function refresh(search: string, pagination: PaginationOptions) {
     const result = await api.search(search, pagination);
-    console.log(result);
     estimates.value = result.data || [];
     total.value = result.total || 0;
 }

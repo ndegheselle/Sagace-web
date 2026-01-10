@@ -1,10 +1,11 @@
 import { CrudRepository } from '@/base/CrudRepository';
 import { database } from '@/database';
 import type { Db } from 'mongodb';
-import { EstimateDTO } from 'sagace-common/DTOs/documents/estimate';
+import { EstimateDTO, EstimateStatus } from 'sagace-common/DTOs/documents/estimate';
 
 export class Estimate extends EstimateDTO {
 }
+export { EstimateStatus}
 
 export class EstimatesRepository extends CrudRepository<Estimate> {
     constructor(db: Db) {

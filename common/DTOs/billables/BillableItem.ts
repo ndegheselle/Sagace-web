@@ -6,8 +6,14 @@ export enum VatRateType {
   EXEMPT = 0,           // 0% (exonéré)
 }
 
+export enum BillableItemType {
+    ARTICLE = 'article',
+    SERVICE = 'service',
+}
+
 export interface BillableItem {
     _id: string;
+    type: BillableItemType;
     name: string;
     description?: string;
     unitPrice: number;

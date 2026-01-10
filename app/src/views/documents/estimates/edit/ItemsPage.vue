@@ -5,6 +5,7 @@ import ServiceSelectModal from "@/views/billable/services/ServiceSelectModal.vue
 import { useTemplateRef } from "vue";
 import { api as estimateApi } from '@/lib/api/documents/estimates';
 import { useRouter } from "vue-router";
+import { Client } from "@/lib/api/clients";
 
 const router = useRouter();
 const modalArticleRef = useTemplateRef('articleModal');
@@ -33,20 +34,21 @@ function previous() {
 
 function next() {
     save();
-    if (props.estimate?.client)
-        router.push(`/documents/estimates/${props.estimate?.id}/invoice`);
+    if (props.client)
+        router.push(`/documents/estimates/${props.estimate?._id}/invoice`);
     else
-        router.push(`/documents/estimates/${props.estimate?.id}/client`);
+        router.push(`/documents/estimates/${props.estimate?._id}/client`);
 }
 
 function save() {
     if (!props.estimate)
         return;
-    estimateApi.update(props.estimate.id, props.estimate);
+    estimateApi.update(props.estimate._id, props.estimate);
 }
 
 const props = defineProps({
-    estimate: Estimate
+    estimate: Estimate,
+    client: Client
 });
 </script>
 
@@ -57,9 +59,9 @@ const props = defineProps({
                 <span><i class="fa-solid fa-file-invoice"></i> Devis</span>
             </li>
             <li class="step">
-                <div v-if="props.estimate?.client" class="indicator">
+                <div v-if="props.client" class="indicator">
                     <span class="indicator-item text-success"><i class="fa-solid fa-check"></i></span>
-                    <span><i class="fa-solid fa-user"></i> {{ props.estimate.client.fullName }}</span>
+                    <span><i class="fa-solid fa-user"></i> {{ props.client.fullName }}</span>
                 </div>
                 <div v-else>
                     <span><i class="fa-solid fa-user"></i> Client</span>
@@ -92,7 +94,7 @@ const props = defineProps({
                     </thead>
 
                     <tbody>
-                        <tr v-for="(line, index) in props.estimate?.lines" :key="line.item.id">
+                        <tr v-for="(line, index) in props.estimate?.lines" :key="line.item._id">
                             <td>
                                 <div class="font-medium">
                                     {{ line.item.name }}
@@ -128,25 +130,23 @@ const props = defineProps({
                         <tr>
                             <td colspan="5" class="p-0">
                                 <div class="flex bg-base-200 p-2">
-                                    <details class="dropdown dropdown-center m-auto">
-                                        <summary class="btn btn-soft btn-xs m-1"><i class="fa-solid fa-plus"></i>Ajouter
-                                            une
-                                            ligne</summary>
-                                        <ul
-                                            class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                                            <li><a @click="addArticle"><i class="fa-solid fa-box"></i>Ajouter un
-                                                    article</a>
-                                            </li>
-                                            <li><a @click="addService"><i
-                                                        class="fa-solid fa-screwdriver-wrench"></i>Ajouter
-                                                    un service</a></li>
-                                            <div class="divider m-0 mx-4" />
-                                            <li><a @click="addService"><i class="fa-solid fa-file-invoice"></i>Copier un
-                                                    autre devis</a></li>
-                                        </ul>
-                                    </details>
+                                    <button class="btn btn-soft btn-xs mx-auto my-1" popovertarget="add-line-popover"
+                                        style="anchor-name:--anchor-add-line"><i class="fa-solid fa-plus"></i>Ajouter
+                                        une
+                                        ligne</button>
+                                    <ul id="add-line-popover"
+                                        class="dropdown menu bg-base-100 rounded-box w-52 p-2 shadow-sm" popover
+                                        style="position-anchor:--anchor-add-line">
+                                        <li><a @click="addArticle"><i class="fa-solid fa-box"></i>Ajouter un
+                                                article</a>
+                                        </li>
+                                        <li><a @click="addService"><i class="fa-solid fa-screwdriver-wrench"></i>Ajouter
+                                                un service</a></li>
+                                        <div class="divider m-0 mx-4" />
+                                        <li class="menu-disabled"><a><i class="fa-solid fa-file-invoice"></i>Copier un
+                                                autre devis</a></li>
+                                    </ul>
                                 </div>
-
                             </td>
                         </tr>
                     </tbody>

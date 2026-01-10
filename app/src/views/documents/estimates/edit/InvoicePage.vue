@@ -2,6 +2,7 @@
 import { api, Estimate, EstimateStatus } from "@/lib/api/documents/estimates";
 import EstimateStatusBadge from "@/views/documents/estimates/EstimateStatusBadge.vue";
 import { useRouter } from "vue-router";
+import { Client } from "@/lib/api/clients";
 
 const router = useRouter();
 
@@ -31,7 +32,8 @@ async function toInvoice() {
 }
 
 const props = defineProps({
-    estimate: Estimate
+    estimate: Estimate,
+    client: Client
 });
 </script>
 
@@ -39,14 +41,14 @@ const props = defineProps({
     <div class="container mx-auto flex flex-col my-2">
         <ul class="steps mt-4">
             <li class="step step-primary">
-                <RouterLink :to="{ path: `/documents/estimates/${props.estimate?.id}/items` }"><i
+                <RouterLink :to="{ path: `/documents/estimates/${props.estimate?._id}/items` }"><i
                         class="fa-solid fa-file-invoice"></i> Devis</RouterLink>
             </li>
             <li class="step step-primary">
-                <RouterLink :to="{ path: `/documents/estimates/${props.estimate?.id}/client` }">
-                    <div v-if="props.estimate?.client" class="indicator">
+                <RouterLink :to="{ path: `/documents/estimates/${props.estimate?._id}/client` }">
+                    <div v-if="props.client" class="indicator">
                         <span class="indicator-item text-success"><i class="fa-solid fa-check"></i></span>
-                        <span><i class="fa-solid fa-user"></i> {{ props.estimate.client.fullName }}</span>
+                        <span><i class="fa-solid fa-user"></i> {{ props.client.fullName }}</span>
                     </div>
                     <span v-else><i class="fa-solid fa-user"></i> Client</span>
 
@@ -81,7 +83,7 @@ const props = defineProps({
 
 
         <div class="w-full flex mt-1">
-            <RouterLink :to="{ path: `/documents/estimates/${props.estimate?.id}/client` }" class="btn"><i
+            <RouterLink :to="{ path: `/documents/estimates/${props.estimate?._id}/client` }" class="btn"><i
                     class="fa-solid fa-arrow-left"></i> Précédent</RouterLink>
         </div>
     </div>

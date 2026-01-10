@@ -9,14 +9,25 @@ export enum InvoiceStatus {
 }
 
 export class InvoiceDTO extends CommercialDocument {
-    invoiceNumber: string = '';
-    dueDate: Date = new Date();
+    invoiceNumber: string;
+    dueDate: Date;
 
-    issuedAt?: Date = new Date();
+    issuedAt?: Date;
     paidAt?: Date;
     paymentMethod?: string;
 
     estimateId?: string;
+
+    constructor(data: any = {}) {
+        super(data); // Call the parent class constructor
+
+        this.invoiceNumber = data.invoiceNumber || '';
+        this.dueDate = data.dueDate || new Date();
+        this.issuedAt = data.issuedAt || new Date();
+        this.paidAt = data.paidAt;
+        this.paymentMethod = data.paymentMethod;
+        this.estimateId = data.estimateId;
+    }
 
     get status(): InvoiceStatus {
         if (this.paidAt) {

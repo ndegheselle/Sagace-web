@@ -1,4 +1,4 @@
-import type { BaseEntity } from '@/base/BaseEntity';
+import type { BaseEntity } from '../base/BaseEntity.ts';
 
 export class CompanyDTO {
     name: string = '';
@@ -6,6 +6,14 @@ export class CompanyDTO {
     adress: string = '';
     SIRET: string = '';
     phone: string = '';
+
+    constructor(data: any = {}) {
+        this.name = data.name || this.name;
+        this.email = data.email || this.email;
+        this.adress = data.adress || this.adress;
+        this.SIRET = data.SIRET || this.SIRET;
+        this.phone = data.phone || this.phone;
+    }
 }
 
 export class UserDTO implements BaseEntity {
@@ -13,4 +21,11 @@ export class UserDTO implements BaseEntity {
     email: string = '';
     name: string = '';
     company: CompanyDTO = new CompanyDTO();
+
+    constructor(data: any = {}) {
+        this._id = data._id || this._id;
+        this.email = data.email || this.email;
+        this.name = data.name || this.name;
+        this.company = new CompanyDTO(data.company);
+    }
 }

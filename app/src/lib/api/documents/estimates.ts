@@ -5,5 +5,23 @@ import { EstimateDTO, EstimateStatus } from "sagace-common/DTOs/documents/estima
 export class Estimate extends EstimateDTO {
 }
 
+class EstimateApi extends ApiCrud<Estimate> {
+    constructor() {
+        super(Estimate, settings.apiUrl + '/documents/estimates');
+    }
+
+    async toInvoice(estimateId: string): Promise<string> {
+        const response = await fetch(`${this.baseUrl}/${estimateId}/to-invoice`, {
+            method: "POST",
+            headers: this.headers,
+        });
+
+        if (!response.ok)
+            throw new Error(`Failed to convert estimate with id ${estimateId} to invoice`);
+        const json = await response.json();
+        return json.id;
+    }
+}
+
 export { EstimateStatus };
-export const api = new ApiCrud(Estimate, settings.apiUrl + '/documents/estimates');
+export const api = new EstimateApi();

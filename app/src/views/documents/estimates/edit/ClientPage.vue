@@ -12,20 +12,20 @@ const modalRef = useTemplateRef('modal');
 
 function previous() {
     save();
-    router.push(`/documents/estimates/${props.estimate?.id}/items`);
+    router.push(`/documents/estimates/${props.estimate?._id}/items`);
 }
 
 function next() {
     save();
-    router.push(`/documents/estimates/${props.estimate?.id}/invoice`);
+    router.push(`/documents/estimates/${props.estimate?._id}/invoice`);
 }
 
 function save() {
     if (!props.estimate)
         return;
 
-    props.estimate.client = selectedClient.value;
-    estimateApi.update(props.estimate.id, props.estimate);
+    props.estimate.clientId = selectedClient.value?._id;
+    estimateApi.update(props.estimate._id, props.estimate);
 }
 
 async function create() {
@@ -36,16 +36,17 @@ async function create() {
 }
 
 const props = defineProps({
-    estimate: Estimate
+    estimate: Estimate,
+    client: Client
 });
-const selectedClient = ref<Client | null>(props.estimate?.client ?? null);
+const selectedClient = ref<Client | null>(props.client ?? null);
 </script>
 
 <template>
     <div class="container mx-auto flex flex-col my-2">
         <ul class="steps mt-4">
             <li class="step step-primary">
-                <RouterLink :to="{ path: `/documents/estimates/${props.estimate?.id}/items` }"><i
+                <RouterLink :to="{ path: `/documents/estimates/${props.estimate?._id}/items` }"><i
                         class="fa-solid fa-file-invoice"></i> Devis</RouterLink>
             </li>
             <li class="step step-primary">

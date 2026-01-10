@@ -1,17 +1,30 @@
-import type { BaseEntity } from '@/base/BaseEntity';
-import { type BillableItem, VatRateType } from "./BillableItem.ts";
+import type { BaseEntity } from '../../base/BaseEntity.ts';
+import { type BillableItem, BillableItemType, VatRateType } from "./BillableItem.ts";
 
-export class ServiceDTO implements BillableItem, BaseEntity  {
-    _id: string = '';
-    createdAt: Date = new Date();
-    updatedAt: Date | undefined = undefined;
+export class ServiceDTO implements BillableItem, BaseEntity {
+    _id: string;
+    type: BillableItemType = BillableItemType.SERVICE;
+    createdAt: Date;
+    updatedAt: Date | undefined;
 
-    name: string = '';
-    code: string = '';
-    description?: string = '';
-    unitPrice: number = 0;
-    vatRateType: VatRateType = VatRateType.STANDARD;
-    durationHours?: number = 0; // optional duration info
+    name: string;
+    code: string;
+    description?: string;
+    unitPrice: number;
+    vatRateType: VatRateType;
+    durationHours?: number;
+
+    constructor(data: any = {}) {
+        this._id = data._id || '';
+        this.createdAt = data.createdAt || new Date();
+        this.updatedAt = data.updatedAt;
+        this.name = data.name || '';
+        this.code = data.code || '';
+        this.description = data.description;
+        this.unitPrice = data.unitPrice || 0;
+        this.vatRateType = data.vatRateType || VatRateType.STANDARD;
+        this.durationHours = data.durationHours;
+    }
 
     get isNew(): boolean {
         return !this._id;
