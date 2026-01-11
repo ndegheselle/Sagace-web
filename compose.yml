@@ -15,6 +15,8 @@ services:
     depends_on:
       - database
     volumes:
+      - ./api:/app
+      - /app/node_modules
       - ./common:/common
 
   # Vue.js App Service
@@ -24,4 +26,5 @@ services:
     depends_on:
       - api
     volumes:
+      - ./app:/app
       - ./common:/common

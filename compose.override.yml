@@ -7,9 +7,6 @@ services:
 
   # Fastify API Service
   api:
-    volumes:
-      - ./api:/app
-      - /app/node_modules
     environment:
       - PORT=3000
       - CHOKIDAR_USEPOLLING=true
@@ -19,8 +16,6 @@ services:
 
   # Vue.js App Service
   front:
-    volumes:
-      - ./app:/app
     environment:
       - PORT=5173
     ports:
