@@ -1,3 +1,15 @@
+```bash
+# Development
+docker compose up
 ```
-docker compose -f compose.yml -f compose.prod.yml up -d
+
+```bash
+# Production setup
+cd /opt
+git clone https://github.com/ndegheselle/Sagace-web.git
+
+# Production
+git pull
+docker compose -f compose.prod.yml build
+docker compose -f compose.prod.yml up -d
 ```
