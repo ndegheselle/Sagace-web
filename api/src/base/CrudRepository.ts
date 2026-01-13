@@ -1,11 +1,46 @@
-import { Collection, type Document, type Filter, type SortDirection as MongoSortDirection } from 'mongodb';
+import { Collection, type Document, type Filter, type Sort } from 'mongodb';
 import { Paginated, PaginationOptions } from 'sagace-common/base/paginated';
+
+export interface JoinConfig {
+    from: string;              // foreign collection
+    localField: string;        // field in current collection
+    foreignField: string;      // field in foreign collection
+    as: string;                // output field
+    unwind?: boolean;          // optional $unwind
+    projection?: Record<string, 0 | 1>; // optional projection for joined docs
+}
 
 export class CrudRepository<T extends Document> {
     constructor(
-        protected collection: Collection<T>, 
-        protected searchFields: string[], 
-        protected projection: Record<string, 0 | 1>| undefined = undefined,) { }
+        protected collection: Collection<T>,
+        protected searchFields: string[],
+        protected projection: Record<string, 0 | 1> | undefined = undefined,
+        protected joins: JoinConfig[] = []) { }
+
+    protected buildJoinPipeline(): any[] {
+        return this.joins.flatMap(join => {
+            const stages: any[] = [
+                {
+                    $lookup: {
+                        from: join.from,
+                        localField: join.localField,
+                        foreignField: join.foreignField,
+                        as: join.as
+                    }
+                }
+            ];
+
+            if (join.unwind) {
+                stages.push({ $unwind: { path: `$${join.as}`, preserveNullAndEmptyArrays: true } });
+            }
+
+            if (join.projection) {
+                stages.push({ $project: join.projection });
+            }
+
+            return stages;
+        });
+    }
 
     async create(data: T): Promise<string> {
         const result = await this.collection.insertOne(data as any);
@@ -28,63 +63,112 @@ export class CrudRepository<T extends Document> {
     }
 
     async getById(id: string): Promise<T | null> {
-        const doc = await this.collection.findOne({ _id: id } as Filter<T>, {projection: this.projection});
-        return doc as T | null;
+        if (this.joins.length === 0) {
+            return await this.collection.findOne(
+                { _id: id } as Filter<T>,
+                { projection: this.projection }
+            ) as T | null;
+        }
+
+        const pipeline = [
+            { $match: { _id: id } },
+            ...this.buildJoinPipeline(),
+            ...(this.projection ? [{ $project: this.projection }] : [])
+        ];
+
+        const result = await this.collection.aggregate(pipeline).toArray();
+        return (result[0] as T) ?? null;
     }
 
     async getAll(options: PaginationOptions): Promise<Paginated<T>> {
-        const skip = options.page < 0 || options.limit < 0 ? 0 : (options.page - 1) * options.limit;
-        const take = options.page < 0 || options.limit < 0 ? 0 : options.limit;
+        const skip = options.page <= 0 ? 0 : (options.page - 1) * options.limit;
+        const limit = options.limit;
 
-        const sort: Record<string, MongoSortDirection> = options.orderBy
-            ? { [options.orderBy]: options.orderDirection === 1 ? 1 : -1 }
-            : {};
+        const sortStage = options.orderBy
+            ? [{ $sort: { [options.orderBy]: options.orderDirection === 1 ? 1 : -1 } }]
+            : [];
 
-        const query = this.collection.find({}, {projection: this.projection});
-        if (Object.keys(sort).length > 0) {
-            query.sort(sort);
+        if (this.joins.length === 0) {
+            // fallback to normal find (fast path)
+            const data = await this.collection
+                .find({}, { projection: this.projection })
+                .skip(skip)
+                .limit(limit)
+                .toArray();
+
+            const total = await this.collection.countDocuments();
+            return new Paginated(data as T[], total, options);
         }
 
-        const [data, total] = await Promise.all([
-            take > 0 ? query.skip(skip).limit(take).toArray() : query.toArray(),
-            this.collection.countDocuments(),
+        // aggregation path
+        const pipeline = [
+            ...this.buildJoinPipeline(),
+            ...sortStage,
+            { $skip: skip },
+            { $limit: limit }
+        ];
+
+        const [data, count] = await Promise.all([
+            this.collection.aggregate(pipeline).toArray(),
+            this.collection.countDocuments()
         ]);
 
-        return new Paginated<T>(
-            data as T[],
-            total,
-            options
-        );
+        return new Paginated(data as T[], count, options);
     }
 
     async search(search: string, options: PaginationOptions): Promise<Paginated<T>> {
-        const skip = options.page < 0 || options.limit < 0 ? 0 : (options.page - 1) * options.limit;
-        const take = options.page < 0 || options.limit < 0 ? 0 : options.limit;
+        const skip = options.page <= 0 ? 0 : (options.page - 1) * options.limit;
+        const limit = options.limit;
 
-        const sort: Record<string, MongoSortDirection> = options.orderBy
-            ? { [options.orderBy]: options.orderDirection === 1 ? 1 : -1 }
-            : {};
+        const sortStage = options.orderBy
+            ? [{ $sort: { [options.orderBy]: options.orderDirection === 1 ? 1 : -1 } }]
+            : [];
 
-        // Build the $or query dynamically based on searchFields
-        const query: any = {
-            $or: this.searchFields.map(field => ({
-                [field]: { $regex: search, $options: 'i' }
-            })),
+        const matchStage = {
+            $match: {
+                $or: this.searchFields.map(field => ({
+                    [field]: { $regex: search, $options: 'i' }
+                }))
+            }
         };
 
-        const mongoQuery = this.collection.find(query, {projection: this.projection});
-        if (Object.keys(sort).length > 0) {
-            mongoQuery.sort(sort);
+        if (this.joins.length === 0) {
+            const [data, total] = await Promise.all([
+                this.collection
+                    .find(matchStage.$match as Filter<T>, { projection: this.projection })
+                    .sort(sortStage[0]?.$sort as Sort ?? {})
+                    .skip(skip)
+                    .limit(limit)
+                    .toArray(),
+                this.collection.countDocuments(matchStage.$match as Filter<T>)
+            ]);
+
+            return new Paginated<T>(data as T[], total, options);
         }
 
-        const [data, total] = await Promise.all([
-            take > 0 ? mongoQuery.skip(skip).limit(take).toArray() : mongoQuery.toArray(),
-            this.collection.countDocuments(query),
+        const pipeline = [
+            matchStage,
+            ...this.buildJoinPipeline(),
+            ...sortStage,
+            { $skip: skip },
+            { $limit: limit },
+            ...(this.projection ? [{ $project: this.projection }] : [])
+        ];
+
+        const countPipeline = [
+            matchStage,
+            ...this.buildJoinPipeline(),
+            { $count: 'total' }
+        ];
+
+        const [data, count] = await Promise.all([
+            this.collection.aggregate(pipeline).toArray(),
+            this.collection.aggregate(countPipeline).toArray()
         ]);
 
         return new Paginated<T>(
             data as T[],
-            total,
+            count[0]?.total ?? 0,
             options
         );
     }

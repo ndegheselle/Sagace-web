@@ -1,4 +1,4 @@
-import { CommercialDocument } from "./CommercialDocument.ts";
+import { CommercialDocument } from "./CommercialDocument";
 
 export enum InvoiceStatus {
     Draft,

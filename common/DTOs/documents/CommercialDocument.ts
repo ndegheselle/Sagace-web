@@ -1,7 +1,8 @@
-import type { BaseEntity } from '../../base/BaseEntity.ts';
-import { StockArticleDTO } from '../billables/article.ts';
-import { BillableItemType, type BillableItem } from '../billables/BillableItem.ts';
-import { ServiceDTO } from '../billables/service.ts';
+import type { BaseEntity } from '../../base/BaseEntity';
+import { StockArticleDTO } from '../billables/article';
+import { BillableItemType, type BillableItem } from '../billables/BillableItem';
+import { ServiceDTO } from '../billables/service';
+import { ClientDTO } from '../client';
 
 export class BillableLine {
     item: BillableItem;
@@ -33,6 +34,7 @@ export class BillableLine {
 export abstract class CommercialDocument implements BaseEntity {
     _id: string = '';
     clientId?: string;
+    client?: ClientDTO;
 
     lines: BillableLine[] = [];
     notes: string = '';
@@ -42,7 +44,8 @@ export abstract class CommercialDocument implements BaseEntity {
     constructor(data: any = {}) {
         this._id = data._id || '';
         this.clientId = data.clientId;
-        this.lines = data.lines?.map(line => new BillableLine(line.item, line.quantity)) || [];
+        this.client = data.client || new ClientDTO(data.client);
+        this.lines = data.lines?.map((line: any) => new BillableLine(line.item, line.quantity)) || [];
         this.notes = data.notes || '';
         this.createdAt = data.createdAt || new Date();
         this.updatedAt = data.updatedAt || new Date();

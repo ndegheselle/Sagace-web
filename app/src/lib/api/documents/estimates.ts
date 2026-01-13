@@ -1,8 +1,15 @@
+import { Client } from "@/lib/api/clients";
 import settings from "@/lib/api/settings";
 import { ApiCrud } from "@/lib/base/api/ApiCrud";
 import { EstimateDTO, EstimateStatus } from "sagace-common/DTOs/documents/estimate";
 
 export class Estimate extends EstimateDTO {
+    client?: Client;
+
+    constructor(data: any = {}) {
+        super(data);
+        this.client = new Client(data.client); 
+    }
 }
 
 class EstimateApi extends ApiCrud<Estimate> {

@@ -1,16 +1,18 @@
 <script setup lang="ts">
-import { useRoute, useRouter } from 'vue-router';
-import { ref, watch, nextTick } from 'vue';
-import { Estimate, api } from '@/lib/api/documents/estimates';
-import { useAlert } from '@/composables/popups/alert';
 import { useAuth } from '@/composables/auth';
+import { useAlert } from '@/composables/popups/alert';
+import { Client, api as clientApi } from '@/lib/api/clients';
+import { Estimate, api } from '@/lib/api/documents/estimates';
 import { formatDate } from '@/lib/base/DateUtils';
+import { nextTick, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 const { user } = useAuth();
 const route = useRoute();
 const router = useRouter();
 const alert = useAlert();
 const estimate = ref<Estimate>();
+const client = ref<Client>();
 
 watch(() => route.params.id, async (id) => {
     let estimateApi: Estimate | null = null;
@@ -25,6 +27,12 @@ watch(() => route.params.id, async (id) => {
     }
 
     estimate.value = estimateApi;
+    if (estimateApi.clientId) {
+        const clientApiData = await clientApi.getById(estimateApi.clientId);
+        if (clientApiData) {
+            client.value = clientApiData;
+        }
+    }
 
     await nextTick();
     window.print();
@@ -56,10 +64,10 @@ function addDays(date: Date | undefined, days: number) {
                 </div>
                 <div class="rounded-box border border-base-300 py-2 px-4 text-right">
                     <div class="font-bold uppercase">A l'attention de</div>
-                    <div>{{ estimate?.client?.fullName }}</div>
-                    <div>{{ estimate?.client?.address }}</div>
-                    <div class="mt-2">{{ estimate?.client?.phone }}</div>
-                    <div>{{ estimate?.client?.email }}</div>
+                    <div>{{ client?.fullName }}</div>
+                    <div>{{ client?.address }}</div>
+                    <div class="mt-2">{{ client?.phone }}</div>
+                    <div>{{ client?.email }}</div>
                 </div>
             </div>
 

@@ -1,4 +1,4 @@
-import type { BaseEntity } from '../base/BaseEntity.ts';
+import type { BaseEntity } from '../base/BaseEntity';
 
 export class ClientDTO implements BaseEntity {
     _id: string;

@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import ClientSelection from '@/views/clients/ClientSelection.vue';
-import { Estimate } from "@/lib/api/documents/estimates";
-import { useRouter } from "vue-router";
-import { ref, useTemplateRef } from 'vue';
 import { Client } from '@/lib/api/clients';
-import { api as estimateApi } from '@/lib/api/documents/estimates';
+import { Estimate, api as estimateApi } from "@/lib/api/documents/estimates";
 import ClientModal from '@/views/clients/ClientModal.vue';
+import ClientSelection from '@/views/clients/ClientSelection.vue';
+import { ref, useTemplateRef } from 'vue';
+import { useRouter } from "vue-router";
 
 const router = useRouter();
 const modalRef = useTemplateRef('modal');
@@ -36,10 +35,9 @@ async function create() {
 }
 
 const props = defineProps({
-    estimate: Estimate,
-    client: Client
+    estimate: Estimate
 });
-const selectedClient = ref<Client | null>(props.client ?? null);
+const selectedClient = ref<Client | null>(props.estimate?.client || null);
 </script>
 
 <template>

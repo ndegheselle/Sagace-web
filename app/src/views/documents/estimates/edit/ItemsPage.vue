@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { Estimate } from "@/lib/api/documents/estimates";
+import { Estimate, api as estimateApi } from "@/lib/api/documents/estimates";
 import ArticleSelectModal from "@/views/billable/articles/ArticleSelectModal.vue";
 import ServiceSelectModal from "@/views/billable/services/ServiceSelectModal.vue";
 import { useTemplateRef } from "vue";
-import { api as estimateApi } from '@/lib/api/documents/estimates';
 import { useRouter } from "vue-router";
-import { Client } from "@/lib/api/clients";
 
 const router = useRouter();
 const modalArticleRef = useTemplateRef('articleModal');
@@ -34,7 +32,7 @@ function previous() {
 
 function next() {
     save();
-    if (props.client)
+    if (props.estimate?.client)
         router.push(`/documents/estimates/${props.estimate?._id}/invoice`);
     else
         router.push(`/documents/estimates/${props.estimate?._id}/client`);
@@ -47,8 +45,7 @@ function save() {
 }
 
 const props = defineProps({
-    estimate: Estimate,
-    client: Client
+    estimate: Estimate
 });
 </script>
 
@@ -59,9 +56,9 @@ const props = defineProps({
                 <span><i class="fa-solid fa-file-invoice"></i> Devis</span>
             </li>
             <li class="step">
-                <div v-if="props.client" class="indicator">
+                <div v-if="props.estimate?.client" class="indicator">
                     <span class="indicator-item text-success"><i class="fa-solid fa-check"></i></span>
-                    <span><i class="fa-solid fa-user"></i> {{ props.client.fullName }}</span>
+                    <span><i class="fa-solid fa-user"></i> {{ props.estimate?.client.fullName }}</span>
                 </div>
                 <div v-else>
                     <span><i class="fa-solid fa-user"></i> Client</span>

@@ -68,7 +68,7 @@ async function refresh(search: string, pagination: PaginationOptions) {
             <template #row="{ item: estimate }">
                 <td>{{ estimate.reference }}</td>
                 <td>
-                    {{ estimate.client?.firstName }} {{ estimate.client?.lastName || '' }}
+                    {{ estimate.client?.fullName }}
                 </td>
                 <td class="text-right">
                     {{ estimate.lines.length }}

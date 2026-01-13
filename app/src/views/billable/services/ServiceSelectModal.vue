@@ -52,7 +52,7 @@ defineExpose({
             <input
               type="checkbox"
               class="checkbox"
-              :checked="selected?.id === service.id"
+              :checked="selected?._id === service._id"
               readonly
             />
           </div>

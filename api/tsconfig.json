@@ -14,10 +14,8 @@
         "skipLibCheck": true,
         /* Bundler mode */
         "moduleResolution": "bundler",
-        "allowImportingTsExtensions": true,
         "verbatimModuleSyntax": true,
         "moduleDetection": "force",
-        "noEmit": true,
         /* Linting */
         "strict": true,
         "noUnusedLocals": true,
@@ -25,6 +23,8 @@
         "erasableSyntaxOnly": false,
         "noFallthroughCasesInSwitch": true,
         "noUncheckedSideEffectImports": true,
+        "rootDir": "src",
+        "outDir": "dist",
         "baseUrl": "./",
         "paths": {
             "@/*": [

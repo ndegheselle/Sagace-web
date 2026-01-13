@@ -1,8 +1,8 @@
 import { CrudRepository } from '@/base/CrudRepository';
 import { database } from '@/database';
+import { Estimate } from '@/models/documents/EstimatesRepository';
 import type { Db } from 'mongodb';
 import { InvoiceDTO, InvoiceStatus } from 'sagace-common/DTOs/documents/invoice';
-import { Estimate } from '@/models/documents/EstimatesRepository';
 
 export class Invoice extends InvoiceDTO {
 }
@@ -10,7 +10,15 @@ export { InvoiceStatus };
 
 export class InvoicesRepository extends CrudRepository<Invoice> {
     constructor(db: Db) {
-        super(db.collection<Invoice>('invoices'), ['invoiceNumber']);
+        super(db.collection<Invoice>('invoices'), ['invoiceNumber'], undefined, [
+            {
+                from: 'clients',
+                localField: 'clientId',
+                foreignField: '_id',
+                as: 'client',
+                unwind: true
+            }
+        ]);
     }
 
     async fromEstimate(estimate: Estimate): Promise<string> {

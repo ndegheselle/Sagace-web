@@ -9,16 +9,17 @@ import ClientsPage from './views/clients/ClientsPage.vue';
 
 import EstimatesPage from './views/documents/estimates/EstimatesPage.vue';
 
-import LayoutEdit from './views/documents/estimates/edit/LayoutEdit.vue';
+import EstimatePrintPage from '@/views/documents/estimates/print/EstimatePrintPage.vue';
 import EstimateClientPage from './views/documents/estimates/edit/ClientPage.vue';
 import EstimateInvoicePage from './views/documents/estimates/edit/InvoicePage.vue';
 import EstimateItemsPage from './views/documents/estimates/edit/ItemsPage.vue';
-import EstimatePrintPage from '@/views/documents/estimates/print/EstimatePrintPage.vue';
+import LayoutEdit from './views/documents/estimates/edit/LayoutEdit.vue';
 
+import type { RouteRecordRaw } from 'vue-router';
 import InvoicesPage from './views/documents/invoices/InvoicesPage.vue';
 import InvoicePrintPage from './views/documents/invoices/print/InvoicePrintPage.vue';
 
-export default [
+const routes: RouteRecordRaw[] = [
     {
         path: '/documents/estimates/:id/print',
         component: EstimatePrintPage,
@@ -28,6 +29,7 @@ export default [
         component: InvoicePrintPage,
     },
     {
+        path: '',
         component: Default,
         children: [
             {
@@ -70,3 +72,5 @@ export default [
         ]
     }
 ];
+
+export default routes;

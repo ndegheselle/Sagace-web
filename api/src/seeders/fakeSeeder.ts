@@ -14,7 +14,6 @@ import { fakeEstimates } from '@/seeders/fake/documents/estimates';
 import { fakeInvoices } from '@/seeders/fake/documents/invoices';
 import { fakeUser } from '@/seeders/fake/users';
 
-
 async function seed() : Promise<void> {
     const clientsCollection = database.collection<Client>('clients');
     const articlesCollection = database.collection<StockArticle>('articles');

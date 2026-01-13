@@ -1,5 +1,5 @@
-import type { BaseEntity } from '../../base/BaseEntity.ts';
-import { type BillableItem, BillableItemType, VatRateType } from "./BillableItem.ts";
+import type { BaseEntity } from '../../base/BaseEntity';
+import { type BillableItem, BillableItemType, VatRateType } from "./BillableItem";
 
 export class StockArticleDTO implements BillableItem, BaseEntity {
     _id: string;

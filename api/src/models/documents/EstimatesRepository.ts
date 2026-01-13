@@ -5,11 +5,19 @@ import { EstimateDTO, EstimateStatus } from 'sagace-common/DTOs/documents/estima
 
 export class Estimate extends EstimateDTO {
 }
-export { EstimateStatus}
+export { EstimateStatus };
 
 export class EstimatesRepository extends CrudRepository<Estimate> {
     constructor(db: Db) {
-        super(db.collection<Estimate>('estimates'), ['reference']);
+        super(db.collection<Estimate>('estimates'), ['reference'], undefined, [
+            {
+                from: 'clients',
+                localField: 'clientId',
+                foreignField: '_id',
+                as: 'client',
+                unwind: true
+            }
+        ]);
     }
 }
 

@@ -17,14 +17,14 @@ export class CrudController<T extends BaseEntity> {
     // GET /
     async getAll(request: FastifyRequest) {
         const {page, limit, orderBy, orderDirection} = request.query as any;
-        return this.table.getAll(new PaginationOptions(Number(page), Number(limit), orderBy, orderDirection));
+        return this.table.getAll(new PaginationOptions(Number(page ?? 0), Number(limit ?? 10), orderBy, orderDirection));
     }
 
     // GET /search
     async search(request: FastifyRequest) {
         const { search, ...options } = request.query as any;
         const sanitized = sanitizeSearch(search);
-        return this.table.search(sanitized, new PaginationOptions(Number(options.page), Number(options.limit), options.orderBy, options.orderDirection));
+        return this.table.search(sanitized, new PaginationOptions(Number(options.page ?? 0), Number(options.limit ?? 10), options.orderBy, options.orderDirection));
     }
 
     // GET /:id
