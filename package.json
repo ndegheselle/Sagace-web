@@ -1,0 +1,11 @@
+{
+  "name": "sagace",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:api": "npm run dev -w @sagace/api",
+    "dev:front": "npm run dev -w @sagace/front"
+  }
+}

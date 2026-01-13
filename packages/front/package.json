@@ -1,5 +1,5 @@
 {
-  "name": "app",
+  "name": "@sagace/front",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -12,7 +12,7 @@
     "@fortawesome/fontawesome-free": "^7.1.0",
     "@tailwindcss/vite": "^4.1.18",
     "daisyui": "^5.5.14",
-    "sagace-common": "file:../common",
+    "@sagace/common": "*",
     "tailwindcss": "^4.1.18",
     "vue": "^3.5.24",
     "vue-router": "^4.6.3",
