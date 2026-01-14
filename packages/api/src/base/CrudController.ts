@@ -1,6 +1,6 @@
 import type { FastifyReply, FastifyRequest } from "fastify";
-import type { BaseEntity } from "sagace-common/base/BaseEntity";
-import { PaginationOptions } from "sagace-common/base/paginated";
+import type { BaseEntity } from "@sagace/common/base/BaseEntity";
+import { PaginationOptions } from "@sagace/common/base/paginated";
 import type { CrudRepository } from "./CrudRepository";
 
 function sanitizeSearch(search?: string): string {

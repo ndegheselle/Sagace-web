@@ -1,9 +1,9 @@
 <script setup lang="ts" generic="T extends BaseEntity">
 import { reactive, ref, watch, onMounted } from 'vue';
-import type { PaginationOptions } from 'sagace-common/base/paginated';
+import type { PaginationOptions } from '@sagace/common/base/paginated';
 import Pagination from '@/components/Pagination.vue';
-import { debounce } from 'sagace-common/base/debounce';
-import type { BaseEntity } from 'sagace-common/base/BaseEntity';
+import { debounce } from '@sagace/common/base/debounce';
+import type { BaseEntity } from '@sagace/common/base/BaseEntity';
 
 const props = defineProps<{
     selected: T | null;

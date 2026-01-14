@@ -2,7 +2,7 @@
 import ListPaginatedSearch from '@/components/data/ListPaginatedSearch.vue';
 import { useDeferredModal } from '@/composables/popups/modal';
 import { StockArticle, api } from '@/lib/api/billables/articles';
-import type { PaginationOptions } from 'sagace-common/base/paginated';
+import type { PaginationOptions } from '@sagace/common/base/paginated';
 import { ref, useTemplateRef } from 'vue';
 
 const dialog = useTemplateRef<HTMLDialogElement>('dialog');

@@ -1,7 +1,7 @@
 import { CrudRepository } from '@/base/CrudRepository';
 import { database } from '@/database';
 import type { Db } from 'mongodb';
-import { UserDTO, CompanyDTO } from 'sagace-common/DTOs/user';
+import { UserDTO, CompanyDTO } from '@sagace/common/DTOs/user';
 
 export class User extends UserDTO{
     password: string = '';

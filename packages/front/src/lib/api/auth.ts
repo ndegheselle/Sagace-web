@@ -1,5 +1,5 @@
 import settings from "@/lib/api/settings";
-import { UserDTO } from "sagace-common/DTOs/user";
+import { UserDTO } from "@sagace/common/DTOs/user";
 
 export class User extends UserDTO {
 }

@@ -8,7 +8,7 @@ import { useRouter } from 'vue-router';
 import { formatDate } from '@/lib/base/DateUtils';
 
 import TablePaginatedSearch from '@/components/data/TablePaginatedSearch.vue';
-import type { PaginationOptions } from 'sagace-common/base/paginated';
+import type { PaginationOptions } from '@sagace/common/base/paginated';
 
 const confirmation = useConfirmation();
 const router = useRouter();

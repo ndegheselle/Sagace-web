@@ -1,6 +1,6 @@
 import { database } from '@/database';
 import type { Db } from 'mongodb';
-import { ClientDTO } from 'sagace-common/DTOs/client';
+import { ClientDTO } from '@sagace/common/DTOs/client';
 import { CrudRepository } from '../base/CrudRepository';
 
 export class Client extends ClientDTO {
