@@ -1,7 +1,7 @@
-import { CrudController } from '@/base/CrudController';
-import { type Estimate, estimatesRepo } from '@/models/documents/EstimatesRepository';
+import { CrudController } from '@/base/CrudController.js';
+import { type Estimate, estimatesRepo } from '@/models/documents/EstimatesRepository.js';
 import type { FastifyInstance, FastifyPluginAsync } from 'fastify';
-import { invoicesRepo } from '@/models/documents/InvoicesRepository';
+import { invoicesRepo } from '@/models/documents/InvoicesRepository.js';
 
 const estimatesRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) => {
     const crud = new CrudController<Estimate>(estimatesRepo);

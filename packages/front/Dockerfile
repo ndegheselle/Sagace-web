@@ -14,11 +14,13 @@ COPY packages/front packages/front
 RUN npm run build --workspace=packages/front
 
 # Minimal runtime container
-FROM node:alpine
+FROM nginx:alpine
 
-WORKDIR /front
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
+COPY nginx/conf.d /etc/nginx/conf.d
 
-# Copy built assets only
-COPY --from=build /repo/packages/front/dist /front
+# Copy built frontend into nginx
+COPY --from=build /repo/packages/front/dist /usr/share/nginx/html
 
-CMD ["node", "-e", "console.log('Front assets ready')"]
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

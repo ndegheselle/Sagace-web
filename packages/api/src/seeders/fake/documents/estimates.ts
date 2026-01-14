@@ -1,7 +1,7 @@
-import { fakeArticles } from '@/seeders/fake/billables/articles';
-import { fakeServices } from '@/seeders/fake/billables/services';
-import { fakeClients } from '@/seeders/fake/clients';
-import { Estimate, EstimateStatus } from '@/models/documents/EstimatesRepository';
+import { fakeArticles } from '@/seeders/fake/billables/articles.js';
+import { fakeServices } from '@/seeders/fake/billables/services.js';
+import { fakeClients } from '@/seeders/fake/clients.js';
+import { Estimate, EstimateStatus } from '@/models/documents/EstimatesRepository.js';
 
 let estimateCounter = 1;
 

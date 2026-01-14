@@ -1,4 +1,4 @@
-import { Service } from '@/models/billables/ServicesRepository';
+import { Service } from '@/models/billables/ServicesRepository.js';
 
 let serviceCounter = 1;
 

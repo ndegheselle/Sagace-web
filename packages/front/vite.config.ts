@@ -11,7 +11,7 @@ export default defineConfig({
     ],
     server: {
         host: true,
-        port: Number(process.env.VITE_APP_PORT),
+        port: Number(process.env.PORT),
         watch: {
             usePolling: true
         }

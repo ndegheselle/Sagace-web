@@ -1,18 +1,18 @@
-import { database } from "@/database";
+import { database } from "@/database.js";
 
-import type { StockArticle } from "@/models/billables/ArticlesRepository";
-import type { Service } from "@/models/billables/ServicesRepository";
-import type { Client } from "@/models/ClientsRepository";
-import type { Estimate } from "@/models/documents/EstimatesRepository";
-import type { Invoice } from "@/models/documents/InvoicesRepository";
-import type { User } from "@/models/UsersRepository";
+import type { StockArticle } from "@/models/billables/ArticlesRepository.js";
+import type { Service } from "@/models/billables/ServicesRepository.js";
+import type { Client } from "@/models/ClientsRepository.js";
+import type { Estimate } from "@/models/documents/EstimatesRepository.js";
+import type { Invoice } from "@/models/documents/InvoicesRepository.js";
+import type { User } from "@/models/UsersRepository.js";
 
-import { fakeArticles } from '@/seeders/fake/billables/articles';
-import { fakeServices } from '@/seeders/fake/billables/services';
-import { fakeClients } from '@/seeders/fake/clients';
-import { fakeEstimates } from '@/seeders/fake/documents/estimates';
-import { fakeInvoices } from '@/seeders/fake/documents/invoices';
-import { fakeUser } from '@/seeders/fake/users';
+import { fakeArticles } from '@/seeders/fake/billables/articles.js';
+import { fakeServices } from '@/seeders/fake/billables/services.js';
+import { fakeClients } from '@/seeders/fake/clients.js';
+import { fakeEstimates } from '@/seeders/fake/documents/estimates.js';
+import { fakeInvoices } from '@/seeders/fake/documents/invoices.js';
+import { fakeUser } from '@/seeders/fake/users.js';
 
 async function seed() : Promise<void> {
     const clientsCollection = database.collection<Client>('clients');

@@ -1,5 +1,5 @@
-import type { BaseEntity } from '../../base/BaseEntity';
-import { type BillableItem, BillableItemType, VatRateType } from "./BillableItem";
+import type { BaseEntity } from '../../base/BaseEntity.js';
+import { type BillableItem, BillableItemType, VatRateType } from "./BillableItem.js";
 
 export class StockArticleDTO implements BillableItem, BaseEntity {
     _id: string;

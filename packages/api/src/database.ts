@@ -8,7 +8,7 @@ if (!uri) {
 const client = new MongoClient(uri);
 
 // Connect to the MongoDB server once when the module is imported
-async function connect() {
+export async function connect() {
     try {
         await client.connect();
         console.log("Connected successfully to MongoDB server");
@@ -18,6 +18,4 @@ async function connect() {
     }
 }
 
-// Call connect() immediately to establish the connection
-await connect().catch(console.error);
 export const database = client.db();

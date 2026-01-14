@@ -5,10 +5,10 @@
             "ES2020"
         ],
         "useDefineForClassFields": false,
-        "moduleResolution": "bundler",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
         "verbatimModuleSyntax": true,
         "moduleDetection": "force",
-        "module": "ESNext",
         "types": [
             "node"
         ],

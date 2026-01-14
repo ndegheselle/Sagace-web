@@ -1,18 +1,5 @@
-import type { BaseEntity } from '../base/BaseEntity.js';
-
-export class ClientDTO implements BaseEntity {
-    _id: string;
-    createdAt: Date;
-    updatedAt: Date | undefined;
-
-    firstName: string;
-    lastName: string;
-    email: string;
-    company: string;
-    phone: string;
-    address: string;
-
-    constructor(data: any = {}) {
+export class ClientDTO {
+    constructor(data = {}) {
         this._id = data._id || '';
         this.createdAt = data.createdAt || new Date();
         this.updatedAt = data.updatedAt;
@@ -23,12 +10,10 @@ export class ClientDTO implements BaseEntity {
         this.phone = data.phone || '';
         this.address = data.address || '';
     }
-
-    get fullName(): string {
+    get fullName() {
         return `${this.firstName} ${this.lastName}`;
     }
-
-    get isNew(): boolean {
+    get isNew() {
         return !this._id;
     }
 }

@@ -1,13 +1,10 @@
-import type { BaseEntity } from '../base/BaseEntity.js';
-
 export class CompanyDTO {
-    name: string = '';
-    email: string = '';
-    adress: string = '';
-    SIRET: string = '';
-    phone: string = '';
-
-    constructor(data: any = {}) {
+    constructor(data = {}) {
+        this.name = '';
+        this.email = '';
+        this.adress = '';
+        this.SIRET = '';
+        this.phone = '';
         this.name = data.name || this.name;
         this.email = data.email || this.email;
         this.adress = data.adress || this.adress;
@@ -15,14 +12,12 @@ export class CompanyDTO {
         this.phone = data.phone || this.phone;
     }
 }
-
-export class UserDTO implements BaseEntity {
-    _id: string = '';
-    email: string = '';
-    name: string = '';
-    company: CompanyDTO = new CompanyDTO();
-
-    constructor(data: any = {}) {
+export class UserDTO {
+    constructor(data = {}) {
+        this._id = '';
+        this.email = '';
+        this.name = '';
+        this.company = new CompanyDTO();
         this._id = data._id || this._id;
         this.email = data.email || this.email;
         this.name = data.name || this.name;

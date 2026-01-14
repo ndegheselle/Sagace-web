@@ -1,4 +1,4 @@
-import { Client } from '@/models/ClientsRepository';
+import { Client } from '@/models/ClientsRepository.js';
 
 let clientCounter = 1;
 function createFakeClient(overrides: Partial<Client> = {}): Client {

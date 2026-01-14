@@ -12,6 +12,8 @@ services:
   api:
     image: node:alpine
     working_dir: /repo
+    env_file:
+      - ./packages/api/.env
     environment:
       - PORT=3000
       - CHOKIDAR_USEPOLLING=true

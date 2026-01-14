@@ -2,7 +2,7 @@
 import { reactive, ref, watch, onMounted } from 'vue';
 import type { PaginationOptions } from '@sagace/common/base/paginated';
 import Pagination from '@/components/Pagination.vue';
-import { debounce } from '@sagace/common/base/debounce';
+import { debounce } from '@/lib/base/debounce';
 import type { BaseEntity } from '@sagace/common/base/BaseEntity';
 
 const props = defineProps<{

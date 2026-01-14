@@ -1,5 +1,5 @@
-import { StockArticle } from '@/models/billables/ArticlesRepository';
-import { VatRateType } from '@sagace/common/DTOs/billables/BillableItem';
+import { StockArticle } from '@/models/billables/ArticlesRepository.js';
+import { VatRateType } from '@sagace/common/DTOs/billables/BillableItem.js';
 
 let articleCounter = 1;
 

@@ -1,7 +1,7 @@
-import { CrudRepository } from '@/base/CrudRepository';
-import { database } from '@/database';
+import { CrudRepository } from '@/base/CrudRepository.js';
+import { database } from '@/database.js';
 import type { Db } from 'mongodb';
-import { StockArticleDTO } from '@sagace/common/DTOs/billables/article';
+import { StockArticleDTO } from '@sagace/common/DTOs/billables/article.js';
 
 export class StockArticle extends StockArticleDTO {
 }

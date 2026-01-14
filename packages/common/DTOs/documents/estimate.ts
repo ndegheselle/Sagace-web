@@ -1,4 +1,4 @@
-import { CommercialDocument } from "./CommercialDocument";
+import { CommercialDocument } from "./CommercialDocument.js";
 
 export enum EstimateStatus {
     Template,

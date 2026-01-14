@@ -1,5 +1,5 @@
 import type { FastifyInstance, FastifyPluginAsync, FastifyReply, FastifyRequest } from 'fastify';
-import { usersRepo } from '@/models/UsersRepository';
+import { usersRepo } from '@/models/UsersRepository.js';
 import bcrypt from 'bcrypt';
 
 const authRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) => {
