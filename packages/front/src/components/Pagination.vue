@@ -61,9 +61,8 @@ watch([page, capacity], () => {
             </button>
         </div>
 
-
-        <span class="ms-auto opacity-50 text-sm my-auto">{{ firstElement }} - {{ lastElement }} de {{ total }}</span>
-        <select v-model="capacity" class="select w-18 select-sm ms-2">
+        <span class="ms-auto opacity-50 text-sm my-auto hidden md:inline">{{ firstElement }} - {{ lastElement }} de {{ total }}</span>
+        <select v-model="capacity" class="select w-18 select-sm ms-auto md:ms-2">
             <option v-for="option in capacityOptions" :key="option" :value="option">
                 {{ option }}
             </option>

@@ -83,7 +83,7 @@ const props = defineProps({
                     <thead>
                         <tr>
                             <th>Désignation</th>
-                            <th class="text-right">Prix unitaire HT</th>
+                            <th class="text-right">PU HT</th>
                             <th class="text-right">Qte</th>
                             <th class="text-right">Total HT</th>
                             <th></th>
