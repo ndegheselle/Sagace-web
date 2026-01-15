@@ -18,7 +18,7 @@ export class ApiCrud<T extends BaseEntity> implements IApiCrud<T> {
         protected readonly headers: HeadersInit = {
             "Content-Type": "application/json",
         }
-    ) {}
+    ) {console.log(baseUrl)}
 
     private buildQuery(params: Record<string, any>): string {
         const query = new URLSearchParams();

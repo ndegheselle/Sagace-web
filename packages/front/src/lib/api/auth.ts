@@ -1,4 +1,3 @@
-import settings from "@/lib/api/settings";
 import { UserDTO } from "@sagace/common/DTOs/user";
 
 export class User extends UserDTO {
@@ -6,7 +5,7 @@ export class User extends UserDTO {
 
 async function login(email: string, password: string): Promise<User | null>
 {
-    const response = await fetch(settings.apiUrl +'/auth/login', {
+    const response = await fetch(import.meta.env.VITE_API_URL +'/auth/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

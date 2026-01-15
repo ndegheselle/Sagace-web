@@ -15,6 +15,13 @@ const totalPages = computed(() =>
     Math.max(1, Math.ceil(total.value / capacity.value))
 );
 
+const firstElement = computed(() => {
+  return (page.value - 1) * capacity.value + 1;
+});
+const lastElement = computed(() => {
+  return Math.min(page.value * capacity.value, total.value);
+});
+
 watch(capacity, () => {
     if (page.value > totalPages.value) {
         page.value = totalPages.value;
@@ -53,7 +60,10 @@ watch([page, capacity], () => {
                 <i class="fa-solid fa-forward-step"></i>
             </button>
         </div>
-        <select v-model="capacity" class="select w-18 ms-auto select-sm">
+
+
+        <span class="ms-auto opacity-50 text-sm my-auto">{{ firstElement }} - {{ lastElement }} de {{ total }}</span>
+        <select v-model="capacity" class="select w-18 select-sm ms-2">
             <option v-for="option in capacityOptions" :key="option" :value="option">
                 {{ option }}
             </option>

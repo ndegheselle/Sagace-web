@@ -1,6 +1,8 @@
 FROM node:alpine AS build
 WORKDIR /repo
 
+ENV VITE_API_URL=http://sagace.lubriciel.ovh/api
+
 # Workspace manifests
 COPY package.json package-lock.json ./
 COPY packages/front/package.json packages/front/package.json

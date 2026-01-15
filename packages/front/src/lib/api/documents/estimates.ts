@@ -1,5 +1,4 @@
 import { Client } from "@/lib/api/clients";
-import settings from "@/lib/api/settings";
 import { ApiCrud } from "@/lib/base/api/ApiCrud";
 import { EstimateDTO, EstimateStatus } from "@sagace/common/DTOs/documents/estimate";
 
@@ -14,7 +13,7 @@ export class Estimate extends EstimateDTO {
 
 class EstimateApi extends ApiCrud<Estimate> {
     constructor() {
-        super(Estimate, settings.apiUrl + '/documents/estimates');
+        super(Estimate, import.meta.env.VITE_API_URL + '/documents/estimates');
     }
 
     async toInvoice(estimateId: string): Promise<string> {
