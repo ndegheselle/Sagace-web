@@ -2,7 +2,7 @@ import cookie from '@fastify/cookie';
 import cors from '@fastify/cors';
 import fastify from 'fastify';
 import jwt from './plugins/jwt.js';
-import routes from './routes/index.js'
+import routes from './routes/index.js';
 
 import { connect } from './database.js';
 

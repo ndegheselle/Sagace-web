@@ -36,6 +36,7 @@ export class ApiCrud<T extends BaseEntity> implements IApiCrud<T> {
         const response = await fetch(`${this.baseUrl}/${id}`, {
             method: "GET",
             headers: this.headers,
+            credentials: "include"
         });
 
         if (response.status === 404)
@@ -51,7 +52,8 @@ export class ApiCrud<T extends BaseEntity> implements IApiCrud<T> {
 
         const response = await fetch(`${this.baseUrl}?${query}`, {
             method: "GET",
-            headers: this.headers, 
+            headers: this.headers,
+            credentials: "include"
         });
 
         if (!response.ok)
@@ -70,6 +72,7 @@ export class ApiCrud<T extends BaseEntity> implements IApiCrud<T> {
         const response = await fetch(`${this.baseUrl}/search?${query}`, {
             method: "GET",
             headers: this.headers,
+            credentials: "include"
         });
 
         if (!response.ok)
@@ -83,6 +86,7 @@ export class ApiCrud<T extends BaseEntity> implements IApiCrud<T> {
         const response = await fetch(this.baseUrl, {
             method: "POST",
             headers: this.headers,
+            credentials: "include",
             body: JSON.stringify(data),
         });
 
@@ -97,6 +101,7 @@ export class ApiCrud<T extends BaseEntity> implements IApiCrud<T> {
         const response = await fetch(`${this.baseUrl}/${id}`, {
             method: "PUT",
             headers: this.headers,
+            credentials: "include",
             body: JSON.stringify(data),
         });
 
@@ -108,6 +113,7 @@ export class ApiCrud<T extends BaseEntity> implements IApiCrud<T> {
         const response = await fetch(`${this.baseUrl}/${id}`, {
             method: "DELETE",
             headers: this.headers,
+            credentials: "include"
         });
 
         if (!response.ok)

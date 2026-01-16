@@ -9,16 +9,20 @@ export default fp(async (fastify: FastifyInstance) => {
 
     fastify.register(jwt, {
         secret,
-    });
-
-    fastify.decorate(
-        'authenticate',
-        async function (request: FastifyRequest, reply: FastifyReply) {
-            try {
-                await request.jwtVerify();
-            } catch (err) {
-                reply.send(err);
-            }
+        cookie: {
+            cookieName: 'token',
+            signed: false
         }
-    );
+    });
 });
+
+export async function authenticate(
+    request: FastifyRequest,
+    reply: FastifyReply
+) {
+    try {
+        await request.jwtVerify();
+    } catch (err) {
+        reply.send(err);
+    }
+}

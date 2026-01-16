@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
 import { useAuth } from '@/composables/auth';
+import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();

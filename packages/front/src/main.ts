@@ -1,5 +1,6 @@
 import './style.css';
 
+import { useAuth } from '@/composables/auth';
 import { createApp } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import App from './App.vue';
@@ -9,6 +10,17 @@ export const router = createRouter({
     history: createWebHistory(),
     routes,
 });
+
+router.beforeEach(async (to, from) => {
+    if (to.path === '/user/login')
+        return;
+
+    const auth = useAuth();
+    if (!auth.isLoggedIn.value && !await auth.refresh())
+    {
+        return { path: '/user/login' };
+    }
+})
 
 createApp(App).use(router).mount('#app');
 

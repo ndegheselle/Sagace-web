@@ -10,6 +10,7 @@ async function login(email: string, password: string): Promise<User | null>
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({
             email: email,
             password: password,
@@ -21,9 +22,34 @@ async function login(email: string, password: string): Promise<User | null>
         throw new Error(errorData.message || 'Login failed');
     }
 
-    return await response.json();
+    return new User(await response.json());
+}
+
+async function logout()
+{
+    await fetch(import.meta.env.VITE_API_URL +'/auth/logout', {
+        method: 'POST',
+        credentials: 'include',
+    });
+}
+
+async function getUser()
+{
+    const response = await fetch(import.meta.env.VITE_API_URL +'/users/current', {
+        method: 'GET',
+        credentials: 'include'
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Login failed');
+    }
+
+    return new User(await response.json());
 }
 
 export const api = {
-    login
+    login,
+    logout,
+    getUser
 };

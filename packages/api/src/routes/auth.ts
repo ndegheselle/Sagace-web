@@ -1,9 +1,10 @@
-import type { FastifyInstance, FastifyPluginAsync, FastifyReply, FastifyRequest } from 'fastify';
 import { usersRepo } from '@/models/UsersRepository.js';
 import bcrypt from 'bcrypt';
+import type { FastifyInstance, FastifyPluginAsync, FastifyReply, FastifyRequest } from 'fastify';
 
 const authRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) => {
     fastify.post('/login', async (request: FastifyRequest, reply: FastifyReply) => {
+
         const { email, password } = request.body as {
             email: string
             password: string
@@ -25,11 +26,29 @@ const authRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) => {
         }
 
         const token = fastify.jwt.sign({
-            id: user._id
-        });
+            id: user._id,
+        }, { expiresIn: '7d' });
 
-        return reply.send({ token });
-    })
+        user.password = '';
+        return reply.setCookie('token', token, {
+            path: '/',
+            httpOnly: true,
+            sameSite: 'lax',
+            maxAge: 60 * 60 * 24 * 7 // 7 days (in seconds)
+        }).code(200).send(user);
+    });
+
+    fastify.post('/logout', async (_request, reply) => {
+        reply
+            .clearCookie('token', {
+                path: '/',
+                sameSite: 'lax',
+                httpOnly: true,
+                secure: false // true in production (HTTPS)
+            })
+            .code(204)
+            .send();
+    });
 };
 
 export default authRoutes;

@@ -20,6 +20,7 @@ class EstimateApi extends ApiCrud<Estimate> {
         const response = await fetch(`${this.baseUrl}/${estimateId}/to-invoice`, {
             method: "POST",
             headers: this.headers,
+            credentials: "include"
         });
 
         if (!response.ok)

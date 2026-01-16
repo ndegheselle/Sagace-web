@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import ConfirmationModal from '@/components/popups/ConfirmationModal.vue';
 import AlertsContainer from '@/components/popups/AlertsContainer.vue';
+import ConfirmationModal from '@/components/popups/ConfirmationModal.vue';
 import { useAuth } from '@/composables/auth';
 
 const { isLoggedIn, user, logout } = useAuth();
