@@ -11,7 +11,7 @@ export const router = createRouter({
     routes,
 });
 
-router.beforeEach(async (to, from) => {
+router.beforeEach(async (to) => {
     if (to.path === '/user/login')
         return;
 
