@@ -9,7 +9,7 @@ const { isLoggedIn, user, logout } = useAuth();
 <template>
     <div class="min-h-screen flex flex-col">
         <nav class="navbar bg-base-300 shadow-sm">
-            <div class="flex-1">
+            <div class="navbar-start">
                 <div class="dropdown">
                     <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
                         <i class="fa-solid fa-bars-staggered"></i>
@@ -45,7 +45,6 @@ const { isLoggedIn, user, logout } = useAuth();
 
                 <RouterLink to="/" class="btn btn-ghost text-xl">Sagace</RouterLink>
             </div>
-
             <div class="navbar-center hidden lg:flex">
                 <ul class="menu menu-horizontal px-1">
                     <li>
@@ -86,6 +85,9 @@ const { isLoggedIn, user, logout } = useAuth();
                     <ul tabindex="-1"
                         class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
                         <li class="menu-title">{{ user?.name }}</li>
+                        <li>
+                            <RouterLink to="/user/edit"><i class="fa-regular fa-address-card"></i> Profil</RouterLink>
+                        </li>
                         <li><a @click="logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
                     </ul>
                 </div>

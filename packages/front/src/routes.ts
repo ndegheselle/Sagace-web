@@ -18,6 +18,7 @@ import LayoutEdit from './views/documents/estimates/edit/LayoutEdit.vue';
 import type { RouteRecordRaw } from 'vue-router';
 import InvoicesPage from './views/documents/invoices/InvoicesPage.vue';
 import InvoicePrintPage from './views/documents/invoices/print/InvoicePrintPage.vue';
+import EditView from './views/user/edit.vue';
 
 const routes: RouteRecordRaw[] = [
     {
@@ -35,6 +36,10 @@ const routes: RouteRecordRaw[] = [
             {
                 path: '/',
                 component: HomeView,
+            },
+            {
+                path: '/user/edit',
+                component: EditView,
             },
             {
                 path: '/user/login',
