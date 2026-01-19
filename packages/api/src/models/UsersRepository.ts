@@ -1,13 +1,13 @@
 import { CrudRepository } from '@/base/CrudRepository.js';
 import { database } from '@/database.js';
+import { CompanyDTO, UserDTO } from '@sagace/common/DTOs/user.js';
 import type { Db } from 'mongodb';
-import { UserDTO, CompanyDTO } from '@sagace/common/DTOs/user.js';
 
 export class User extends UserDTO{
     password: string = '';
 }
 
-export { CompanyDTO as Company}
+export { CompanyDTO as Company };
 
 export class UsersRepository extends CrudRepository<User> {
     constructor(db: Db) {
@@ -16,6 +16,14 @@ export class UsersRepository extends CrudRepository<User> {
 
     async findByEmail(email: string): Promise<User | null> {
         return this.collection.findOne({ email });
+    }
+
+    async updateCompanyLogo(userId: string, logoUrl: string): Promise<void> {
+        await this.collection.updateOne({_id: userId}, { '$set': {"company.logoUrl" : logoUrl}});
+    }
+
+    async updateCompany(userId: string, company: CompanyDTO): Promise<void> {
+        await this.collection.updateOne({_id: userId}, { '$set': {company}});
     }
 }
 export const usersRepo = new UsersRepository(database);

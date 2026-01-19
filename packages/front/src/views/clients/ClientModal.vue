@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, reactive, useTemplateRef } from 'vue';
-import { Client, api } from '@/lib/api/clients';
 import { useAlert } from '@/composables/popups/alert';
 import { useDeferredModal } from '@/composables/popups/modal';
+import { Client, api } from '@/lib/api/clients';
+import { reactive, ref, useTemplateRef } from 'vue';
 
 const dialog = useTemplateRef<HTMLDialogElement>('dialog');
 const modal = useDeferredModal(dialog);
@@ -80,9 +80,9 @@ defineExpose({ client: form, show });
                 <input v-model="form.phone" type="tel" class="input input-bordered w-full"
                     placeholder="+33 03 01 02 03" />
 
-                <!-- Address -->
+                <!-- adress -->
                 <label class="label">Adresse</label>
-                <input v-model="form.address" type="text" class="input input-bordered w-full"
+                <input v-model="form.adress" type="text" class="input input-bordered w-full"
                     placeholder="Adresse" />
 
                 <!-- Error -->

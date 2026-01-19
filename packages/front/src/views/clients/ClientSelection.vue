@@ -39,7 +39,7 @@ async function load(search: string, pagination: PaginationOptions) {
       </div>
       <div class="list-col-grow">
         <div>{{ client.fullName }}</div>
-        <div class="uppercase opacity-60">{{ client.address }}</div>
+        <div class="uppercase opacity-60">{{ client.adress }}</div>
       </div>
       <div class="text-right opacity-60">
         <div>

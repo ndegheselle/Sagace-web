@@ -4,6 +4,7 @@ import ConfirmationModal from '@/components/popups/ConfirmationModal.vue';
 import { useAuth } from '@/composables/auth';
 
 const { isLoggedIn, user, logout } = useAuth();
+const apiUrl = import.meta.env.VITE_API_URL;
 </script>
 
 <template>
@@ -43,7 +44,20 @@ const { isLoggedIn, user, logout } = useAuth();
                     </ul>
                 </div>
 
-                <RouterLink to="/" class="btn btn-ghost text-xl">Sagace</RouterLink>
+                <RouterLink to="/" class="btn btn-ghost text-xl">
+                                        <div class="avatar">
+                        <div v-if="user?.company.logoUrl"
+                             class="w-10 rounded-xl">
+                            <img :src="apiUrl + user?.company.logoUrl" />
+                        </div>
+                        <div v-else
+                             class="w-10 rounded-full flex items-center justify-center border text-2xl">
+                            <i class="fa-solid fa-image"></i>
+                        </div>
+                    </div>
+                    <span>{{ user?.company.name || 'Entreprise' }}</span>
+
+                </RouterLink>
             </div>
             <div class="navbar-center hidden lg:flex">
                 <ul class="menu menu-horizontal px-1">
@@ -86,7 +100,7 @@ const { isLoggedIn, user, logout } = useAuth();
                         class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
                         <li class="menu-title">{{ user?.name }}</li>
                         <li>
-                            <RouterLink to="/user/edit"><i class="fa-regular fa-address-card"></i> Profil</RouterLink>
+                            <RouterLink to="/user/profil"><i class="fa-regular fa-adress-card"></i> Profil</RouterLink>
                         </li>
                         <li><a @click="logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
                     </ul>

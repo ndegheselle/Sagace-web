@@ -10,7 +10,7 @@ export class ClientDTO implements BaseEntity {
     email: string;
     company: string;
     phone: string;
-    address: string;
+    adress: string;
 
     constructor(data: any = {}) {
         this._id = data._id || '';
@@ -21,7 +21,7 @@ export class ClientDTO implements BaseEntity {
         this.email = data.email || '';
         this.company = data.company || '';
         this.phone = data.phone || '';
-        this.address = data.address || '';
+        this.adress = data.adress || '';
     }
 
     get fullName(): string {

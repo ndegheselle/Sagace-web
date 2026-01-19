@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { useRoute, useRouter } from 'vue-router';
-import { ref, watch, computed, nextTick } from 'vue';
-import { Invoice, api } from '@/lib/api/documents/invoices';
-import { useAlert } from '@/composables/popups/alert';
 import { useAuth } from '@/composables/auth';
+import { useAlert } from '@/composables/popups/alert';
+import { Invoice, api } from '@/lib/api/documents/invoices';
+import { computed, nextTick, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-const { user } = useAuth()
-const route = useRoute()
-const router = useRouter()
-const alert = useAlert()
+const { user } = useAuth();
+const route = useRoute();
+const router = useRouter();
+const alert = useAlert();
 
-const invoice = ref<Invoice>()
+const invoice = ref<Invoice>();
+const apiUrl = import.meta.env.VITE_API_URL;
 
 watch(
     () => route.params.id,
@@ -47,11 +48,20 @@ const dueDate = computed(() =>
 )
 </script>
 <template>
-    <div data-theme="corporate" class="h-full paper">
+    <div data-theme="corporate"
+         class="h-full paper">
         <div class="print-content">
-            <h1 class="text-5xl">
-                Facture {{ invoice?.invoiceNumber }}
-            </h1>
+
+            <div class="flex">
+                <div v-if="user?.company.logoUrl"
+                     class="w-32 rounded-xl">
+                    <img :src="apiUrl + user?.company.logoUrl" />
+                </div>
+
+                <h1 class="text-5xl my-auto">
+                    Facture {{ invoice?.invoiceNumber }}
+                </h1>
+            </div>
 
             <div class="opacity-80 mt-1 space-y-1">
                 <div>Date d’émission : {{ issueDate }}</div>
@@ -73,7 +83,7 @@ const dueDate = computed(() =>
                 <div class="rounded-box border border-base-300 py-2 px-4 text-right">
                     <div class="font-bold uppercase">Facturé à</div>
                     <div>{{ invoice?.client?.fullName }}</div>
-                    <div>{{ invoice?.client?.address }}</div>
+                    <div>{{ invoice?.client?.adress }}</div>
                     <div class="mt-2">{{ invoice?.client?.phone }}</div>
                     <div>{{ invoice?.client?.email }}</div>
                 </div>
@@ -103,7 +113,8 @@ const dueDate = computed(() =>
                     </thead>
 
                     <tbody>
-                        <tr v-for="line in invoice?.lines" :key="line.item._id">
+                        <tr v-for="line in invoice?.lines"
+                            :key="line.item._id">
                             <td class="border-base-300">
                                 <div class="font-medium">
                                     {{ line.item.name }}
@@ -129,7 +140,8 @@ const dueDate = computed(() =>
                         </tr>
 
                         <tr v-if="invoice?.lines.length === 0">
-                            <td colspan="100" class="text-center text-base-content/50 border-base-300">
+                            <td colspan="100"
+                                class="text-center text-base-content/50 border-base-300">
                                 Aucune ligne
                             </td>
                         </tr>
@@ -138,7 +150,8 @@ const dueDate = computed(() =>
                     <!-- Totals -->
                     <tfoot>
                         <tr>
-                            <td colspan="4" class="text-right border-base-300">
+                            <td colspan="4"
+                                class="text-right border-base-300">
                                 Total HT
                             </td>
                             <td class="text-right border-base-300">
@@ -146,7 +159,8 @@ const dueDate = computed(() =>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="4" class="text-right border-base-300">
+                            <td colspan="4"
+                                class="text-right border-base-300">
                                 TVA
                             </td>
                             <td class="text-right border-base-300">
@@ -154,7 +168,8 @@ const dueDate = computed(() =>
                             </td>
                         </tr>
                         <tr class="font-bold">
-                            <td colspan="4" class="text-right border-base-300">
+                            <td colspan="4"
+                                class="text-right border-base-300">
                                 Total TTC
                             </td>
                             <td class="text-right border-base-300">
@@ -173,12 +188,14 @@ const dueDate = computed(() =>
                         Paiement exigible à la date d’échéance indiquée.
                     </p>
 
-                    <p v-if="invoice?.paymentMethod" class="m-0">
+                    <p v-if="invoice?.paymentMethod"
+                       class="m-0">
                         <strong>Moyen de paiement :</strong>
                         {{ invoice.paymentMethod }}
                     </p>
 
-                    <p v-if="invoice?.paidAt" class="m-0">
+                    <p v-if="invoice?.paidAt"
+                       class="m-0">
                         <strong>Facture réglée le :</strong>
                         {{ new Date(invoice.paidAt).toLocaleDateString() }}
                     </p>

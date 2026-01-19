@@ -2,6 +2,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { User, api } from '@/lib/api/auth';
+import { api as usersApi } from '@/lib/api/users';
 
 const isLoggedIn = ref(false);
 const user = ref<User | null>();
@@ -22,7 +23,7 @@ export const useAuth = () => {
 
     const refresh = async () => {
         try {
-            const me = await api.getUser(); // cookie is sent automatically
+            const me = await usersApi.get(); // cookie is sent automatically
             user.value = me;
             isLoggedIn.value = true;
         } catch (err) {

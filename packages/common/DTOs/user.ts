@@ -6,6 +6,7 @@ export class CompanyDTO {
     adress: string = '';
     SIRET: string = '';
     phone: string = '';
+    logoUrl: string = '';
 
     constructor(data: any = {}) {
         this.name = data.name || this.name;
@@ -13,6 +14,7 @@ export class CompanyDTO {
         this.adress = data.adress || this.adress;
         this.SIRET = data.SIRET || this.SIRET;
         this.phone = data.phone || this.phone;
+        this.logoUrl = data.logoUrl || this.logoUrl;
     }
 }
 

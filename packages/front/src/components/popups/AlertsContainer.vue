@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useAlert, EnumAlertType } from '@/composables/popups/alert';
+import { EnumAlertType, useAlert } from '@/composables/popups/alert';
 const { alerts, close } = useAlert();
 </script>
 

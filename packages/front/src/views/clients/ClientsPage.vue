@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { useConfirmation } from '@/composables/popups/confirmation';
 import { Client, api } from '@/lib/api/clients';
-import { useTemplateRef, ref } from 'vue';
-import ClientModal from './ClientModal.vue';
 import { Estimate, api as estimateApi } from '@/lib/api/documents/estimates';
-import { useRouter } from 'vue-router';
 import { formatDate } from '@/lib/base/DateUtils';
+import { ref, useTemplateRef } from 'vue';
+import { useRouter } from 'vue-router';
+import ClientModal from './ClientModal.vue';
 
 import TablePaginatedSearch from '@/components/data/TablePaginatedSearch.vue';
 import type { PaginationOptions } from '@sagace/common/base/paginated';
@@ -79,7 +79,7 @@ async function refresh(search: string, pagination: PaginationOptions) {
                         {{ client.firstName }} {{ client.lastName }}
                     </div>
                     <div class="text-sm opacity-60">
-                        {{ client.address || '—' }}
+                        {{ client.adress || '—' }}
                     </div>
                 </td>
 

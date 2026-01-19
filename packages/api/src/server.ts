@@ -1,6 +1,9 @@
 import cookie from '@fastify/cookie';
 import cors from '@fastify/cors';
+import multipart from '@fastify/multipart';
+import fastifyStatic from '@fastify/static';
 import fastify from 'fastify';
+import path from 'node:path';
 import jwt from './plugins/jwt.js';
 import routes from './routes/index.js';
 
@@ -18,6 +21,15 @@ app.register(cors, {
   credentials: true,
 });
 app.register(jwt);
+app.register(multipart, {
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5 MB
+  }
+});
+app.register(fastifyStatic, {
+  root: path.join(process.cwd(), 'uploads'),
+  prefix: '/api/images/', // exposed route
+});
 
 // Routes
 app.register(routes, { prefix: '/api' });

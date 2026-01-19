@@ -16,7 +16,7 @@ function createFakeClient(overrides: Partial<Client> = {}): Client {
         email: overrides.email ?? `${_id}@example.com`,
         company: overrides.company ?? `Company ${_id}`,
         phone: overrides.phone ?? "+1234567890",
-        address: overrides.address ?? `${clientCounter} Main St, City`,
+        adress: overrides.adress ?? `${clientCounter} Main St, City`,
     });
 
     return client;
