@@ -1,5 +1,5 @@
-import type { BaseEntity } from "@sagace/common/base/BaseEntity";
-import { Paginated, PaginationOptions } from "@sagace/common/base/paginated";
+import type { BaseEntity } from '@sagace/common';
+import { Paginated, PaginationOptions } from '@sagace/common';
 
 export interface IApiCrud<T extends BaseEntity> {
     create(data: T): Promise<string>;

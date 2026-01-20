@@ -1,7 +1,7 @@
 import { CrudRepository } from '@/base/CrudRepository';
 import { database } from '@/database';
 import type { Db } from 'mongodb';
-import { EstimateDTO, EstimateStatus } from '@sagace/common/DTOs/documents/estimate';
+import { EstimateDTO, EstimateStatus } from '@sagace/common';
 
 export class Estimate extends EstimateDTO {
 }

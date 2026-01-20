@@ -1,5 +1,5 @@
 import { ApiCrud } from "@/lib/base/api/ApiCrud";
-import { ServiceDTO } from "@sagace/common/DTOs/billables/service";
+import { ServiceDTO } from '@sagace/common';
 
 export class Service extends ServiceDTO {
 

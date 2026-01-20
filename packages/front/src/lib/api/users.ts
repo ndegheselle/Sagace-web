@@ -1,4 +1,4 @@
-import { CompanyDTO } from '@sagace/common/DTOs/user';
+import { CompanyDTO } from '@sagace/common';
 import { User } from './auth';
 
 async function get(): Promise<User> {

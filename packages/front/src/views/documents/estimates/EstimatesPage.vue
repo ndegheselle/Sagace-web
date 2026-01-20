@@ -4,7 +4,7 @@ import { useConfirmation } from '@/composables/popups/confirmation';
 import { api, Estimate } from '@/lib/api/documents/estimates';
 import { formatDate } from '@/lib/base/DateUtils';
 import EstimateStatusBadge from '@/views/documents/estimates/EstimateStatusBadge.vue';
-import { PaginationOptions } from '@sagace/common/base/paginated';
+import { PaginationOptions } from '@sagace/common';
 import { ref, useTemplateRef } from 'vue';
 import { useRouter } from 'vue-router';
 

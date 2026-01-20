@@ -1,29 +1,30 @@
 import type { BaseEntity } from '../../base/BaseEntity.js';
 import { type BillableItem, BillableItemType, VatRateType } from "./BillableItem.js";
 
-export class ServiceDTO implements BillableItem, BaseEntity {
+export class StockArticleDTO implements BillableItem, BaseEntity {
     _id: string;
-    type: BillableItemType = BillableItemType.SERVICE;
+    type: BillableItemType = BillableItemType.ARTICLE;
     createdAt: Date;
-    updatedAt: Date | undefined;
+    updatedAt?: Date;
 
     name: string;
-    code: string;
+    sku: string;
     description?: string;
     unitPrice: number;
     vatRateType: VatRateType;
-    durationHours?: number;
+
+    quantity: number;
 
     constructor(data: any = {}) {
         this._id = data._id || '';
         this.createdAt = data.createdAt || new Date();
         this.updatedAt = data.updatedAt;
         this.name = data.name || '';
-        this.code = data.code || '';
+        this.sku = data.sku || '';
         this.description = data.description;
         this.unitPrice = data.unitPrice || 0;
         this.vatRateType = data.vatRateType || VatRateType.STANDARD;
-        this.durationHours = data.durationHours;
+        this.quantity = data.quantity || 0;
     }
 
     get isNew(): boolean {

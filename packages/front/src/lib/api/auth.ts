@@ -1,4 +1,4 @@
-import { UserDTO } from "@sagace/common/DTOs/user";
+import { UserDTO } from '@sagace/common';
 
 export class User extends UserDTO {
     constructor(data: any = {}) {

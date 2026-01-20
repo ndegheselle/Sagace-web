@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ListPaginatedSearch from '@/components/data/ListPaginatedSearch.vue';
 import { Client, api } from '@/lib/api/clients';
-import type { PaginationOptions } from '@sagace/common/base/paginated';
+import type { PaginationOptions } from '@sagace/common';
 import { ref } from 'vue';
 
 const props = defineProps<{

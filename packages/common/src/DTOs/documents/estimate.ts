@@ -9,9 +9,9 @@ export enum EstimateStatus {
 }
 
 export class EstimateDTO extends CommercialDocument {
-    reference: string = '';
+    reference: string;
     generatedAt?: Date;
-    status: EstimateStatus = EstimateStatus.Draft;
+    status: EstimateStatus;
 
     constructor(data: any = {}) {
         super(data); // Call the parent class constructor

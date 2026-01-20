@@ -1,5 +1,5 @@
 import { ApiCrud } from "@/lib/base/api/ApiCrud";
-import { StockArticleDTO } from "@sagace/common/DTOs/billables/article";
+import { StockArticleDTO } from '@sagace/common';
 
 export class StockArticle extends StockArticleDTO {
     isSelected: boolean = false;

@@ -1,9 +1,9 @@
 <script setup lang="ts" generic="T extends BaseEntity">
 import { reactive, onMounted } from 'vue';
-import type { PaginationOptions } from '@sagace/common/base/paginated';
+import type { PaginationOptions } from '@sagace/common';
 import Pagination from '@/components/Pagination.vue';
 import { debounce } from '@/lib/base/debounce';
-import type { BaseEntity } from '@sagace/common/base/BaseEntity';
+import type { BaseEntity } from '@sagace/common';
 
 let search = "";
 const pagination = reactive<PaginationOptions>({

@@ -32,14 +32,14 @@ export class BillableLine {
 }
 
 export abstract class CommercialDocument implements BaseEntity {
-    _id: string = '';
+    _id: string;
     clientId?: string;
     client?: ClientDTO;
 
-    lines: BillableLine[] = [];
-    notes: string = '';
-    createdAt: Date = new Date();
-    updatedAt: Date = new Date();
+    lines: BillableLine[];
+    notes: string;
+    createdAt: Date;
+    updatedAt: Date;
 
     constructor(data: any = {}) {
         this._id = data._id || '';

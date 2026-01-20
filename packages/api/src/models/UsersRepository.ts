@@ -1,6 +1,6 @@
 import { CrudRepository } from '@/base/CrudRepository';
 import { database } from '@/database';
-import { CompanyDTO, UserDTO } from '@sagace/common/DTOs/user';
+import { CompanyDTO, UserDTO } from '@sagace/common';
 import type { Db } from 'mongodb';
 
 export class User extends UserDTO{

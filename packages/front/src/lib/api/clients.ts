@@ -1,5 +1,5 @@
-import { ApiCrud } from "@/lib/base/api/ApiCrud";
-import { ClientDTO } from "@sagace/common/DTOs/client";
+import { ApiCrud } from '@/lib/base/api/ApiCrud';
+import { ClientDTO } from '@sagace/common';
 
 export class Client extends ClientDTO {
     isSelected: boolean = false;

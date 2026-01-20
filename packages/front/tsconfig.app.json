@@ -17,6 +17,7 @@
             "@/*": [
                 "src/*"
             ],
+            "@sagace/common/*": ["packages/common/src/*"]
         }
     },
     "include": [

@@ -8,7 +8,7 @@ import { useRouter } from 'vue-router';
 import ClientModal from './ClientModal.vue';
 
 import TablePaginatedSearch from '@/components/data/TablePaginatedSearch.vue';
-import type { PaginationOptions } from '@sagace/common/base/paginated';
+import type { PaginationOptions } from '@sagace/common';
 
 const confirmation = useConfirmation();
 const router = useRouter();

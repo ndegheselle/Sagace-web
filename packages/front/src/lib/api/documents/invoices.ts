@@ -1,6 +1,6 @@
 import { Client } from "@/lib/api/clients";
 import { ApiCrud } from "@/lib/base/api/ApiCrud";
-import { InvoiceDTO, InvoiceStatus } from "@sagace/common/DTOs/documents/invoice";
+import { InvoiceDTO, InvoiceStatus } from '@sagace/common';
 
 export class Invoice extends InvoiceDTO {
     client?: Client = undefined;
