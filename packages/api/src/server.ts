@@ -4,10 +4,10 @@ import multipart from '@fastify/multipart';
 import fastifyStatic from '@fastify/static';
 import fastify from 'fastify';
 import path from 'node:path';
-import jwt from './plugins/jwt.js';
-import routes from './routes/index.js';
+import jwt from './plugins/jwt';
+import routes from './routes/index';
 
-import { connect } from './database.js';
+import { connect } from './database';
 
 connect().catch(console.error);
 

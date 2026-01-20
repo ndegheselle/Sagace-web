@@ -1,8 +1,8 @@
-import { CrudRepository } from '@/base/CrudRepository.js';
-import { database } from '@/database.js';
-import { Estimate } from '@/models/documents/EstimatesRepository.js';
+import { CrudRepository } from '@/base/CrudRepository';
+import { database } from '@/database';
+import { Estimate } from '@/models/documents/EstimatesRepository';
 import type { Db } from 'mongodb';
-import { InvoiceDTO, InvoiceStatus } from '@sagace/common/DTOs/documents/invoice.js';
+import { InvoiceDTO, InvoiceStatus } from '@sagace/common/DTOs/documents/invoice';
 
 export class Invoice extends InvoiceDTO {
 }

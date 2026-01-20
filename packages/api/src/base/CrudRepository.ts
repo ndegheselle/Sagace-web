@@ -1,5 +1,5 @@
 import { Collection, type Document, type Filter, type Sort } from 'mongodb';
-import { Paginated, PaginationOptions } from '@sagace/common/base/paginated.js';
+import { Paginated, PaginationOptions } from '@sagace/common/base/paginated';
 
 export interface JoinConfig {
     from: string;              // foreign collection

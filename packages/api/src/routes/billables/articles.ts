@@ -1,5 +1,5 @@
-import { CrudController } from '@/base/CrudController.js';
-import { type StockArticle, articlesRepo } from '@/models/billables/ArticlesRepository.js';
+import { CrudController } from '@/base/CrudController';
+import { type StockArticle, articlesRepo } from '@/models/billables/ArticlesRepository';
 import type { FastifyInstance, FastifyPluginAsync } from 'fastify';
 
 const articlesRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) => {

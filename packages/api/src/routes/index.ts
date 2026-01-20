@@ -1,13 +1,13 @@
-import { authenticate } from '@/plugins/jwt.js';
+import { authenticate } from '@/plugins/jwt';
 import type { FastifyInstance, FastifyPluginAsync } from 'fastify';
 
-import authRoutes from '@/routes/auth.js';
-import articlesRoutes from '@/routes/billables/articles.js';
-import servicesRoutes from '@/routes/billables/services.js';
-import clientsRoutes from '@/routes/clients.js';
-import estimatesRoutes from '@/routes/documents/estimates.js';
-import invoicesRoutes from '@/routes/documents/invoices.js';
-import usersRoutes from '@/routes/users.js';
+import authRoutes from '@/routes/auth';
+import articlesRoutes from '@/routes/billables/articles';
+import servicesRoutes from '@/routes/billables/services';
+import clientsRoutes from '@/routes/clients';
+import estimatesRoutes from '@/routes/documents/estimates';
+import invoicesRoutes from '@/routes/documents/invoices';
+import usersRoutes from '@/routes/users';
 
 const routes: FastifyPluginAsync = async (fastify: FastifyInstance) => {
     fastify.register(authRoutes, { prefix: '/auth' });

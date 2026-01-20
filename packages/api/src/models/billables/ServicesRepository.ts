@@ -1,7 +1,7 @@
-import { CrudRepository } from '@/base/CrudRepository.js';
-import { database } from '@/database.js';
+import { CrudRepository } from '@/base/CrudRepository';
+import { database } from '@/database';
 import type { Db } from 'mongodb';
-import { ServiceDTO } from '@sagace/common/DTOs/billables/service.js';
+import { ServiceDTO } from '@sagace/common/DTOs/billables/service';
 
 export class Service extends ServiceDTO {
 }

@@ -1,6 +1,6 @@
-import { CrudRepository } from '@/base/CrudRepository.js';
-import { database } from '@/database.js';
-import { CompanyDTO, UserDTO } from '@sagace/common/DTOs/user.js';
+import { CrudRepository } from '@/base/CrudRepository';
+import { database } from '@/database';
+import { CompanyDTO, UserDTO } from '@sagace/common/DTOs/user';
 import type { Db } from 'mongodb';
 
 export class User extends UserDTO{

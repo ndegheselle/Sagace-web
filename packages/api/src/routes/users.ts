@@ -1,4 +1,4 @@
-import { Company, usersRepo } from '@/models/UsersRepository.js';
+import { Company, usersRepo } from '@/models/UsersRepository';
 import type { FastifyInstance, FastifyPluginAsync, FastifyReply, FastifyRequest } from 'fastify';
 import crypto from 'node:crypto';
 import fs from 'node:fs';

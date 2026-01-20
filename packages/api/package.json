@@ -4,7 +4,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "build": "tsup src/server.ts --format esm,cjs --dts",
+    "build": "tsup",
     "start": "node dist/server.js",
     "dev": "tsx watch --env-file=.env src/server.ts",
     "seed:fake": "tsx --env-file=.env src/seeders/fakeSeeder.ts"
@@ -27,6 +27,7 @@
     "@types/bcrypt": "^6.0.0",
     "@types/node": "^25.0.3",
     "tsc-alias": "^1.8.16",
+    "tsconfig-paths": "^4.2.0",
     "tsup": "^8.5.1",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"

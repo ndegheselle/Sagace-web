@@ -1,5 +1,5 @@
-import { CrudController } from '@/base/CrudController.js';
-import { type Invoice, invoicesRepo } from '@/models/documents/InvoicesRepository.js';
+import { CrudController } from '@/base/CrudController';
+import { type Invoice, invoicesRepo } from '@/models/documents/InvoicesRepository';
 import type { FastifyInstance, FastifyPluginAsync } from 'fastify';
 
 const invoicesRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) => {

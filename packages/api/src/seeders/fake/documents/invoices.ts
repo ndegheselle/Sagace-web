@@ -1,7 +1,7 @@
-import { fakeArticles } from '@/seeders/fake/billables/articles.js';
-import { fakeServices } from '@/seeders/fake/billables/services.js';
-import { fakeClients } from '@/seeders/fake/clients.js';
-import { Invoice, InvoiceStatus } from '@/models/documents/InvoicesRepository.js';
+import { fakeArticles } from '@/seeders/fake/billables/articles';
+import { fakeServices } from '@/seeders/fake/billables/services';
+import { fakeClients } from '@/seeders/fake/clients';
+import { Invoice, InvoiceStatus } from '@/models/documents/InvoicesRepository';
 
 let invoiceCounter = 1;
 function createInvoiceNumber(counter: number): string {

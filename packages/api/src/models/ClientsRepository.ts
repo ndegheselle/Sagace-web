@@ -1,7 +1,7 @@
-import { database } from '@/database.js';
+import { database } from '@/database';
 import type { Db } from 'mongodb';
-import { ClientDTO } from '@sagace/common/DTOs/client.js';
-import { CrudRepository } from '../base/CrudRepository.js';
+import { ClientDTO } from '@sagace/common/DTOs/client';
+import { CrudRepository } from '../base/CrudRepository';
 
 export class Client extends ClientDTO {
 }

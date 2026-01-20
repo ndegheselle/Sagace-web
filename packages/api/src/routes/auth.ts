@@ -1,4 +1,4 @@
-import { usersRepo } from '@/models/UsersRepository.js';
+import { usersRepo } from '@/models/UsersRepository';
 import bcrypt from 'bcrypt';
 import type { FastifyInstance, FastifyPluginAsync, FastifyReply, FastifyRequest } from 'fastify';
 

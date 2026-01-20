@@ -1,4 +1,4 @@
-import { User, Company } from '@/models/UsersRepository.js';
+import { User, Company } from '@/models/UsersRepository';
 import bcrypt from 'bcrypt';
 
 let userCounter = 1;
