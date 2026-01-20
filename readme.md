@@ -2,6 +2,7 @@
 # Development
 docker compose up
 ```
+Build the common package before building the rest.
 
 # Production
 

@@ -6,6 +6,9 @@ COPY package.json package-lock.json ./
 COPY packages/common packages/common
 COPY packages/api packages/api
 
+RUN npm install --workspace=packages/common
+RUN npm run build --workspace=packages/common
+
 RUN npm install --workspace=packages/api
 RUN npm run build --workspace=packages/api
 RUN npm prune --omit=dev --workspace=packages/api
