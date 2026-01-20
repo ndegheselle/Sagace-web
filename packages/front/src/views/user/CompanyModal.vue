@@ -21,7 +21,6 @@ async function uploadLogo() {
     isUploadingLogo.value = true;
     try {
         form.logoUrl = await api.updateCompanyLogo(logoFile.value);
-        console.log(form.logoUrl);
     } catch {
         error.value = 'Échec du téléversement du logo';
     } finally {
@@ -76,11 +75,11 @@ defineExpose({ company: form, show });
                 <div class="flex mb-4">
                     <div class="avatar">
                         <div v-if="form.logoUrl"
-                             class="w-24 rounded-full">
+                             class="w-24 rounded-xl">
                             <img :src="apiUrl + form.logoUrl" />
                         </div>
                         <div v-else
-                             class="w-24 rounded-full flex items-center justify-center text-3xl border">
+                             class="w-24 rounded-xl flex items-center justify-center text-3xl border">
                             <i class="fa-solid fa-image"></i>
                         </div>
                     </div>

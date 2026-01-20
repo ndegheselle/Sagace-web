@@ -45,18 +45,18 @@ const apiUrl = import.meta.env.VITE_API_URL;
                 </div>
 
                 <RouterLink to="/" class="btn btn-ghost text-xl">
-                                        <div class="avatar">
-                        <div v-if="user?.company.logoUrl"
-                             class="w-10 rounded-xl">
-                            <img :src="apiUrl + user?.company.logoUrl" />
+                    <div v-if="isLoggedIn">
+                        <div class="avatar">
+                            <div v-if="user?.company.logoUrl" class="w-10 rounded-xl">
+                                <img :src="apiUrl + user?.company.logoUrl" />
+                            </div>
+                            <div v-else class="w-10 rounded-full flex items-center justify-center border text-2xl">
+                                <i class="fa-solid fa-image"></i>
+                            </div>
                         </div>
-                        <div v-else
-                             class="w-10 rounded-full flex items-center justify-center border text-2xl">
-                            <i class="fa-solid fa-image"></i>
-                        </div>
+                        <span>{{ user?.company.name || 'Entreprise' }}</span>
                     </div>
-                    <span>{{ user?.company.name || 'Entreprise' }}</span>
-
+                    <span v-else>Sagaced</span>
                 </RouterLink>
             </div>
             <div class="navbar-center hidden lg:flex">

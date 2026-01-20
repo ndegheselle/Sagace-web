@@ -1,11 +1,6 @@
 import { UserDTO } from '@sagace/common';
 
 export class User extends UserDTO {
-    constructor(data: any = {}) {
-        console.log(data);
-        super(data);
-        console.log(this.company);
-    }
 }
 
 async function login(email: string, password: string): Promise<User | null> {
