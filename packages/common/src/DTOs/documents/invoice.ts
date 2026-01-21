@@ -1,7 +1,6 @@
 import { CommercialDocument } from "./CommercialDocument.js";
 
 export enum InvoiceStatus {
-    Draft,
     Issued,
     Paid,
     Overdue,
@@ -12,7 +11,7 @@ export class InvoiceDTO extends CommercialDocument {
     invoiceNumber: string;
     dueDate: Date;
 
-    issuedAt?: Date;
+    issuedAt: Date;
     paidAt?: Date;
     paymentMethod?: string;
 
@@ -35,17 +34,12 @@ export class InvoiceDTO extends CommercialDocument {
         }
 
         if (
-            this.issuedAt &&
             this.dueDate &&
             new Date(this.dueDate).getTime() < new Date().getTime()
         ) {
             return InvoiceStatus.Overdue;
         }
 
-        if (this.issuedAt) {
-            return InvoiceStatus.Issued;
-        }
-
-        return InvoiceStatus.Draft;
+        return InvoiceStatus.Issued;
     }
 }

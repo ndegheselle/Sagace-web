@@ -7,7 +7,6 @@ const props = defineProps<{
 }>();
 
 const statusClassMap: Record<InvoiceStatus, string> = {
-  [InvoiceStatus.Draft]: 'badge-neutral',
   [InvoiceStatus.Issued]: 'badge-info',
   [InvoiceStatus.Paid]: 'badge-success',
   [InvoiceStatus.Overdue]: 'badge-warning',
@@ -17,7 +16,6 @@ const statusClassMap: Record<InvoiceStatus, string> = {
 const badgeClass = computed(() => statusClassMap[props.status]);
 
 const statusLabelMap: Record<InvoiceStatus, string> = {
-  [InvoiceStatus.Draft]: 'Brouillon',
   [InvoiceStatus.Issued]: 'Émise',
   [InvoiceStatus.Paid]: 'Payée',
   [InvoiceStatus.Overdue]: 'En retard',

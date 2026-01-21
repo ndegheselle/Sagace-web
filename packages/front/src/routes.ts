@@ -1,4 +1,4 @@
-import HomeView from './views/home.vue';
+import HomeView from './views/HomePage.vue';
 import LoginView from './views/user/login.vue';
 import UserProfilPage from './views/user/ProfilPage.vue';
 
@@ -34,7 +34,7 @@ const routes: RouteRecordRaw[] = [
         component: Default,
         children: [
             {
-                path: '/',
+                path: '',
                 component: HomeView,
             },
             {

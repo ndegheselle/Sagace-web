@@ -6,6 +6,7 @@
   ],
   "scripts": {
     "dev:api": "npm run dev -w @sagace/api",
-    "dev:front": "npm run dev -w @sagace/front"
+    "dev:front": "npm run dev -w @sagace/front",
+    "build:common": "npm run build -w @sagace/common"
   }
 }
