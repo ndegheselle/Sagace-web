@@ -49,7 +49,7 @@ onMounted(refresh);
             </div>
         </div>
         <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 flex-1 mt-1">
-            <table class="table">
+            <table class="table table-xs">
                 <thead>
                     <tr>
                         <slot name="header" />

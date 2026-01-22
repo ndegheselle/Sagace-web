@@ -5,6 +5,13 @@ import { useAuth } from '@/composables/auth';
 
 const { isLoggedIn, user, logout } = useAuth();
 const apiUrl = import.meta.env.VITE_API_URL;
+
+let isDark = JSON.parse(localStorage.getItem('isdark') ?? 'false');
+function toggleTheme(dark: boolean)
+{
+    localStorage.setItem('isdark', JSON.stringify(dark));
+    isDark = dark;
+}
 </script>
 
 <template>
@@ -64,7 +71,8 @@ const apiUrl = import.meta.env.VITE_API_URL;
                     <li>
                         <RouterLink to="/clients"><i class="fa-solid fa-users"></i> Clients</RouterLink>
                     </li>
-                    <li>
+                    <li class="indicator">
+                        <span class="indicator-item badge badge-secondary badge-xs"></span>
                         <RouterLink to="/documents/estimates"><i class="fa-solid fa-file-invoice"></i>Devis</RouterLink>
                     </li>
                     <li>
@@ -90,6 +98,11 @@ const apiUrl = import.meta.env.VITE_API_URL;
             </div>
 
             <div class="navbar-end">
+                <label class="swap swap-rotate me-4">
+                    <input type="checkbox" class="theme-controller" :checked="isDark" value="corporate" @change="() => toggleTheme(!isDark)"/>
+                    <i class="swap-off fa-solid fa-moon"></i>
+                    <i class="swap-on fa-solid fa-sun"></i>
+                </label>
                 <div v-if="isLoggedIn" class="dropdown dropdown-end">
                     <div tabindex="0" role="button" class="btn btn-circle avatar">
                         <div class="rounded-full text-lg">

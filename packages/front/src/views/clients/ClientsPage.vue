@@ -103,7 +103,7 @@ async function refresh(search: string, pagination: PaginationOptions) {
 
                 <td class="text-right">
                     <details class="dropdown dropdown-end">
-                        <summary class="btn btn-circle btn-sm">
+                        <summary class="btn btn-circle btn-xs">
                             <i class="fa-solid fa-ellipsis-vertical"></i>
                         </summary>
                         <ul class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
