@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EstimateStatus } from '@/lib/api/documents/estimates';
+import { EstimateStatus } from '@/data/documents/estimates';
 import { computed } from 'vue';
 
 const props = defineProps<{

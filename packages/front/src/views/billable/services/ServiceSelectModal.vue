@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ListPaginatedSearch from '@/components/data/ListPaginatedSearch.vue';
 import { useDeferredModal } from '@/composables/popups/modal';
-import { Service, api } from '@/lib/api/billables/services';
+import { Service, api } from '@/data/billables/services';
 import type { PaginationOptions } from '@sagace/common';
 import { ref, useTemplateRef } from 'vue';
 

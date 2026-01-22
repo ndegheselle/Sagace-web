@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useAuth } from '@/composables/auth';
 import { useAlert } from '@/composables/popups/alert';
-import { Estimate, api } from '@/lib/api/documents/estimates';
-import { formatDate } from '@/lib/base/DateUtils';
+import { Estimate, api } from '@/data/documents/estimates';
+import { formatDate } from '@/base/DateUtils';
 import { nextTick, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 

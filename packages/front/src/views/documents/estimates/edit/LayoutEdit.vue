@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useAlert } from '@/composables/popups/alert';
-import { Estimate, api } from '@/lib/api/documents/estimates';
+import { Estimate, api } from '@/data/documents/estimates';
 import { ref, watch } from 'vue';
 import { RouterView, useRoute, useRouter } from 'vue-router';
 

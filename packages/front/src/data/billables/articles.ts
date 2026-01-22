@@ -1,4 +1,4 @@
-import { ApiCrud } from "@/lib/base/api/ApiCrud";
+import { ApiCrud } from "@/base/api/ApiCrud";
 import { StockArticleDTO } from '@sagace/common';
 
 export class StockArticle extends StockArticleDTO {

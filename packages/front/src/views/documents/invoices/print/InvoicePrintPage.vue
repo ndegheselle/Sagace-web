@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useAuth } from '@/composables/auth';
 import { useAlert } from '@/composables/popups/alert';
-import { Invoice, api } from '@/lib/api/documents/invoices';
+import { Invoice, api } from '@/data/documents/invoices';
 import { computed, nextTick, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
