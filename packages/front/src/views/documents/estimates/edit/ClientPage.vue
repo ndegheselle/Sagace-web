@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Client } from '@/lib/api/clients';
-import { Estimate, api as estimateApi } from "@/lib/api/documents/estimates";
+import { Client } from '@/data/clients';
+import { Estimate, api as estimateApi } from "@/data/documents/estimates";
 import ClientModal from '@/views/clients/ClientModal.vue';
 import ClientSelection from '@/views/clients/ClientSelection.vue';
 import { ref, useTemplateRef } from 'vue';

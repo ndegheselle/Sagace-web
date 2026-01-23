@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { useConfirmation } from '@/composables/popups/confirmation';
-import { StockArticle, api } from '@/lib/api/billables/articles';
+import { StockArticle, api } from '@/data/billables/articles';
 import { useTemplateRef, ref } from 'vue';
 import ArticleModal from './ArticleModal.vue';
 import TablePaginatedSearch from '@/components/data/TablePaginatedSearch.vue';
-import { formatDate } from '@/lib/base/DateUtils';
+import { formatDate } from '@/base/DateUtils';
 
 const confirmation = useConfirmation();
 const modalRef = useTemplateRef('modal');

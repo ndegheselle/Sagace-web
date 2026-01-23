@@ -1,5 +1,5 @@
-import { Client } from "@/lib/api/clients";
-import { ApiCrud } from "@/lib/base/api/ApiCrud";
+import { Client } from "@/data/clients";
+import { ApiCrud } from "@/base/api/ApiCrud";
 import { EstimateDTO, EstimateStatus } from '@sagace/common';
 
 export class Estimate extends EstimateDTO {

@@ -2,7 +2,7 @@
 import { reactive, onMounted } from 'vue';
 import type { PaginationOptions } from '@sagace/common';
 import Pagination from '@/components/Pagination.vue';
-import { debounce } from '@/lib/base/debounce';
+import { debounce } from '@/base/debounce';
 import type { BaseEntity } from '@sagace/common';
 
 let search = "";

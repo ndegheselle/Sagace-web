@@ -1,8 +1,8 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { User, api } from '@/lib/api/auth';
-import { api as usersApi } from '@/lib/api/users';
+import { User, api } from '@/data/auth';
+import { api as usersApi } from '@/data/users';
 
 const isLoggedIn = ref(false);
 const user = ref<User | null>();

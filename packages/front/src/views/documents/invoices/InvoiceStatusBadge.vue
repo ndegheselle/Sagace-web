@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { InvoiceStatus } from '@/lib/api/documents/invoices';
+import { InvoiceStatus } from '@/data/documents/invoices';
 import { computed } from 'vue';
 
 const props = defineProps<{

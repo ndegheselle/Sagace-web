@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useConfirmation } from '@/composables/popups/confirmation';
-import { Client, api } from '@/lib/api/clients';
-import { Estimate, api as estimateApi } from '@/lib/api/documents/estimates';
-import { formatDate } from '@/lib/base/DateUtils';
+import { Client, api } from '@/data/clients';
+import { Estimate, api as estimateApi } from '@/data/documents/estimates';
+import { formatDate } from '@/base/DateUtils';
 import { ref, useTemplateRef } from 'vue';
 import { useRouter } from 'vue-router';
 import ClientModal from './ClientModal.vue';

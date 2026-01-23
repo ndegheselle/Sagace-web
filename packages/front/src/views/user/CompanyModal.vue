@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useDeferredModal } from '@/composables/popups/modal';
-import { api } from '@/lib/api/users';
+import { api } from '@/data/users';
 import { CompanyDTO } from '@sagace/common';
 import { reactive, ref, useTemplateRef } from 'vue';
 

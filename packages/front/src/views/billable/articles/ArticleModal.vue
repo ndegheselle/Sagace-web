@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useAlert } from '@/composables/popups/alert';
 import { useDeferredModal } from '@/composables/popups/modal';
-import { StockArticle, api } from '@/lib/api/billables/articles';
+import { StockArticle, api } from '@/data/billables/articles';
 import { reactive, ref, useTemplateRef } from 'vue';
 
 const dialog = useTemplateRef<HTMLDialogElement>('dialog');

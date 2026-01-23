@@ -1,4 +1,4 @@
-import { ApiCrud } from '@/lib/base/api/ApiCrud';
+import { ApiCrud } from '@/base/api/ApiCrud';
 import { ClientDTO } from '@sagace/common';
 
 export class Client extends ClientDTO {
