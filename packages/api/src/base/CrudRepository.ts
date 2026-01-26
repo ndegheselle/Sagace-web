@@ -1,5 +1,11 @@
-import { Collection, type Document, type Filter, type Sort } from 'mongodb';
 import { Paginated, PaginationOptions } from '@sagace/common';
+import { Collection, ObjectId, type Document, type Filter, type Sort } from 'mongodb';
+
+function normalizeId(id: string | ObjectId): string | ObjectId {
+    if (id instanceof ObjectId) return id;
+
+    return ObjectId.isValid(id) ? new ObjectId(id) : id;
+}
 
 export interface JoinConfig {
     from: string;              // foreign collection
@@ -43,35 +49,41 @@ export class CrudRepository<T extends Document> {
     }
 
     async create(data: T): Promise<string> {
-        const result = await this.collection.insertOne(data as any);
+        const doc = data as any;
+        doc._id = undefined;
+        const result = await this.collection.insertOne(doc);
         return result.insertedId.toString();
     }
 
     async update(id: string, data: T): Promise<void> {
+        const normalizedId = normalizeId(id);
         await this.collection.updateOne(
-            { _id: id } as Filter<T>,
+            { _id: normalizedId } as Filter<T>,
             { $set: { ...data, updatedAt: new Date() } }
         );
     }
 
     async delete(id: string): Promise<void> {
-        await this.collection.deleteOne({ _id: id } as Filter<T>);
+        const normalizedId = normalizeId(id);
+        await this.collection.deleteOne({ _id: normalizedId } as Filter<T>);
     }
 
     async count(): Promise<number> {
         return await this.collection.countDocuments();
     }
 
-    async getById(id: string): Promise<T | null> {
+    async getById(id: string | ObjectId): Promise<T | null> {
+        const normalizedId = normalizeId(id);
+
         if (this.joins.length === 0) {
             return await this.collection.findOne(
-                { _id: id } as Filter<T>,
+                { _id: normalizedId } as Filter<T>,
                 { projection: this.projection }
             ) as T | null;
         }
 
         const pipeline = [
-            { $match: { _id: id } },
+            { $match: { _id: normalizedId } },
             ...this.buildJoinPipeline(),
             ...(this.projection ? [{ $project: this.projection }] : [])
         ];

@@ -1,11 +1,21 @@
 import { CrudRepository } from '@/base/CrudRepository';
 import { database } from '@/database';
-import type { Db } from 'mongodb';
 import { EstimateDTO, EstimateStatus } from '@sagace/common';
+import type { Db } from 'mongodb';
 
 export class Estimate extends EstimateDTO {
 }
 export { EstimateStatus };
+
+function generateCode() {
+  const letters = Array.from({ length: 3 }, () =>
+    String.fromCharCode(65 + Math.floor(Math.random() * 26))
+  ).join('');
+
+  const numbers = Math.floor(100000 + Math.random() * 900000);
+
+  return `${letters}-${numbers}`;
+}
 
 export class EstimatesRepository extends CrudRepository<Estimate> {
     constructor(db: Db) {
@@ -18,6 +28,11 @@ export class EstimatesRepository extends CrudRepository<Estimate> {
                 unwind: true
             }
         ]);
+    }
+
+    override async create(data: Estimate): Promise<string> {
+        data.reference = generateCode();
+        return super.create(data);
     }
 }
 

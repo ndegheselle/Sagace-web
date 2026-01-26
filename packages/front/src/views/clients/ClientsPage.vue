@@ -1,10 +1,10 @@
 <script setup lang="ts">
+import { formatDate } from '@/base/DateUtils';
 import { useConfirmation } from '@/composables/popups/confirmation';
 import { Client, api } from '@/data/clients';
 import { Estimate, api as estimateApi } from '@/data/documents/estimates';
-import { formatDate } from '@/base/DateUtils';
-import { ref, useTemplateRef } from 'vue';
-import { useRouter } from 'vue-router';
+import { onMounted, ref, useTemplateRef, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import ClientModal from './ClientModal.vue';
 
 import TablePaginatedSearch from '@/components/data/TablePaginatedSearch.vue';
@@ -12,12 +12,26 @@ import type { PaginationOptions } from '@sagace/common';
 
 const confirmation = useConfirmation();
 const router = useRouter();
+const route = useRoute();
 const modalRef = useTemplateRef('modal');
 const tableRef = useTemplateRef('table');
 
 const clients = ref<Client[]>([]);
 const total = ref<number>(0);
 
+onMounted(() => {
+    watch(
+        () => route.params.mode,
+        async (mode) => {
+            if (!modalRef.value) return;
+
+            if (mode === 'new') {
+                await edit(new Client());
+            }
+        },
+        { immediate: true }
+    );
+});
 async function remove(client: Client) {
     const confirmed = await confirmation.show(
         'Confirmer la suppression',
@@ -58,9 +72,14 @@ async function refresh(search: string, pagination: PaginationOptions) {
             Clients
         </h1>
 
-        <TablePaginatedSearch class="flex-1" ref="table" @refresh="refresh" :total="total" :items="clients">
+        <TablePaginatedSearch class="flex-1"
+                              ref="table"
+                              @refresh="refresh"
+                              :total="total"
+                              :items="clients">
             <template #actions>
-                <button class="btn btn-sm ms-1" @click="edit(new Client())">
+                <button class="btn btn-sm ms-1"
+                        @click="edit(new Client())">
                     <i class="fa-solid fa-plus"></i>
                     Nouveau
                 </button>
@@ -88,7 +107,8 @@ async function refresh(search: string, pagination: PaginationOptions) {
                 </td>
 
                 <td>
-                    <a :href="`mailto:${client.email}`" class="link link-hover">
+                    <a :href="`mailto:${client.email}`"
+                       class="link link-hover">
                         {{ client.email }}
                     </a>
                 </td>
@@ -108,19 +128,22 @@ async function refresh(search: string, pagination: PaginationOptions) {
                         </summary>
                         <ul class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
                             <li>
-                                <a href="#" @click.prevent="createEstimate(client)">
+                                <a href="#"
+                                   @click.prevent="createEstimate(client)">
                                     <i class="fa-solid fa-file-invoice"></i>
                                     Nouveau devis
                                 </a>
                             </li>
                             <li>
-                                <a href="#" @click.prevent="edit(client)">
+                                <a href="#"
+                                   @click.prevent="edit(client)">
                                     <i class="fa-solid fa-pen"></i>
                                     Modifier
                                 </a>
                             </li>
-                            <li><a class="text-error" href="#" @click.prevent="remove(client)"><i
-                                        class="fa-solid fa-trash"></i> Supprimer</a></li>
+                            <li><a class="text-error"
+                                   href="#"
+                                   @click.prevent="remove(client)"><i class="fa-solid fa-trash"></i> Supprimer</a></li>
                         </ul>
                     </details>
                 </td>

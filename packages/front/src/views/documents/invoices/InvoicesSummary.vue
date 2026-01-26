@@ -3,7 +3,7 @@
 </script>
 
 <template>
-    <div class="stats grid grid-cols-2 border-base-300 border bg-base-200">
+    <div class="stats w-full stats-vertical lg:stats-horizontal border-base-300 border bg-base-200">
         <div class="stat">
             <div class="stat-figure text-secondary text-4xl"><i class="fa-regular fa-hourglass"></i>
             </div>

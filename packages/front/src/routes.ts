@@ -46,7 +46,7 @@ const routes: RouteRecordRaw[] = [
                 component: LoginView,
             },
             {
-                path: '/clients',
+                path: '/clients/:mode?',
                 component: ClientsPage,
             },
             {

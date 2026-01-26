@@ -3,14 +3,14 @@
 </script>
 
 <template>
-    <div class="stats grid grid-cols-2 border-base-300 border bg-base-200">
+    <div class="stats w-full stats-vertical lg:stats-horizontal border-base-300 border bg-base-200">
         <div class="stat">
             <div class="stat-figure text-secondary">
                 <i class="fa-regular fa-circle-question text-4xl"></i>
             </div>
             <div class="stat-title">Brouillons</div>
             <div class="stat-value">4,200</div>
-            <div class="stat-desc">A finnaliser</div>
+            <div class="stat-desc">A finaliser</div>
         </div>
         <div class="stat">
             <div class="stat-figure text-primary">

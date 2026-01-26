@@ -112,7 +112,6 @@ export class ApiCrud<T extends BaseEntity> implements IApiCrud<T> {
     async delete(id: string): Promise<void> {
         const response = await fetch(`${this.baseUrl}/${id}`, {
             method: "DELETE",
-            headers: this.headers,
             credentials: "include"
         });
 
