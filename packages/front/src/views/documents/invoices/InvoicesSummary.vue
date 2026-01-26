@@ -16,7 +16,7 @@ onMounted(async () => {
         <div class="stat">
             <div class="stat-figure text-secondary text-4xl"><i class="fa-regular fa-hourglass"></i>
             </div>
-            <div class="stat-title">Émise</div>
+            <div class="stat-title">Factures émise</div>
             <div class="stat-value">{{ countIssued }}</div>
             <div class="stat-desc">En attente de payement</div>
         </div>
@@ -24,7 +24,7 @@ onMounted(async () => {
             <div class="stat-figure text-error text-4xl">
                 <i class="fa-solid fa-file-circle-exclamation"></i>
             </div>
-            <div class="stat-title">En retard</div>
+            <div class="stat-title">Factures en retard</div>
             <div class="stat-value text-error">{{ countoverdue }}</div>
             <div class="stat-desc">Client à relancé</div>
         </div>
