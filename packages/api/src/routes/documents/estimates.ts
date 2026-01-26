@@ -11,7 +11,7 @@ const estimatesRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) => 
     fastify.post("/", crud.create.bind(crud));
     fastify.put("/:id", crud.update.bind(crud));
     fastify.delete("/:id", crud.remove.bind(crud));
-    
+
     fastify.post("/:id/to-invoice", async (request, reply) => {
         const { id } = request.params as { id: string };
         var estimate = await estimatesRepo.getById(id);
@@ -21,7 +21,14 @@ const estimatesRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) => 
         }
 
         var invoiceId = await invoicesRepo.fromEstimate(estimate);
-        return {id: invoiceId};
+        return { id: invoiceId };
+    });
+
+    fastify.get("/count/draft", async () => {
+        return { count: await estimatesRepo.countDraft() };
+    });
+    fastify.get("/count/sent", async () => {
+        return { count: await estimatesRepo.countSent() };
     });
 };
 

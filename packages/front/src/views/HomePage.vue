@@ -2,13 +2,13 @@
 import EstimatesSummary from '@/views/documents/estimates/EstimatesSummary.vue';
 import InvoicesSummary from '@/views/documents/invoices/InvoicesSummary.vue';
 
-import { api, Estimate } from '@/data/documents/estimates';
+import { Estimate, api as estimatesApi } from '@/data/documents/estimates';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
 async function createEstimate() {
-    const id = await api.create(new Estimate());
+    const id = await estimatesApi.create(new Estimate());
     router.push(`/documents/estimates/${id}/items`);
 }
 </script>

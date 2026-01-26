@@ -1,8 +1,8 @@
 import { CrudRepository } from '@/base/CrudRepository';
 import { database } from '@/database';
 import { Estimate } from '@/models/documents/EstimatesRepository';
-import type { Db } from 'mongodb';
 import { InvoiceDTO, InvoiceStatus } from '@sagace/common';
+import type { Db } from 'mongodb';
 
 export class Invoice extends InvoiceDTO {
 }
@@ -40,6 +40,27 @@ export class InvoicesRepository extends CrudRepository<Invoice> {
         invoice.dueDate.setDate(invoice.dueDate.getDate() + 30); // Default: due in 30 days
 
         return this.create(invoice);
+    }
+
+    async countIssued(): Promise<number> {
+        const now = new Date();
+
+        return this.collection.countDocuments({
+            paidAt: { $exists: false },
+            $or: [
+                { dueDate: { $gte: now } },
+                { dueDate: { $exists: false } }
+            ]
+        });
+    }
+
+    async countOverdue(): Promise<number> {
+        const now = new Date();
+
+        return this.collection.countDocuments({
+            paidAt: null,
+            dueDate: { $lt: now }
+        });
     }
 }
 

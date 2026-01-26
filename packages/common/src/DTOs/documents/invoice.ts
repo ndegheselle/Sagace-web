@@ -12,7 +12,7 @@ export class InvoiceDTO extends CommercialDocument {
     dueDate: Date;
 
     issuedAt: Date;
-    paidAt?: Date;
+    paidAt?: Date | null;
     paymentMethod?: string;
 
     estimateId?: string;

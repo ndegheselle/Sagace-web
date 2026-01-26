@@ -71,8 +71,7 @@ function toggleTheme(dark: boolean)
                     <li>
                         <RouterLink to="/clients"><i class="fa-solid fa-users"></i> Clients</RouterLink>
                     </li>
-                    <li class="indicator">
-                        <span class="indicator-item badge badge-secondary badge-xs"></span>
+                    <li>
                         <RouterLink to="/documents/estimates"><i class="fa-solid fa-file-invoice"></i>Devis</RouterLink>
                     </li>
                     <li>

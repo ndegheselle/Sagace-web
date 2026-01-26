@@ -1,5 +1,14 @@
 <script setup lang="ts">
+import { api } from '@/data/documents/estimates';
+import { onMounted, ref } from 'vue';
 
+const countDraft = ref(0);
+const countSent = ref(0);
+
+onMounted(async () => {
+  countDraft.value = await api.countDraft();
+  countSent.value = await api.countSent();
+});
 </script>
 
 <template>
@@ -9,7 +18,7 @@
                 <i class="fa-regular fa-circle-question text-4xl"></i>
             </div>
             <div class="stat-title">Brouillons</div>
-            <div class="stat-value">4,200</div>
+            <div class="stat-value">{{ countDraft }}</div>
             <div class="stat-desc">A finaliser</div>
         </div>
         <div class="stat">
@@ -17,7 +26,7 @@
                 <i class="fa-regular fa-paper-plane text-3xl"></i>
             </div>
             <div class="stat-title">Envoyé</div>
-            <div class="stat-value">4,200</div>
+            <div class="stat-value">{{ countSent }}</div>
             <div class="stat-desc">A valider par le client</div>
         </div>
     </div>

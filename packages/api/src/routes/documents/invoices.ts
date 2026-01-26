@@ -10,6 +10,13 @@ const invoicesRoutes: FastifyPluginAsync = async (fastify: FastifyInstance) => {
     fastify.post("/", crud.create.bind(crud));
     fastify.put("/:id", crud.update.bind(crud));
     fastify.delete("/:id", crud.remove.bind(crud));
+
+    fastify.get("/count/issued", async () => {
+        return { count: await invoicesRepo.countIssued() };
+    });
+    fastify.get("/count/overdue", async () => {
+        return { count: await invoicesRepo.countOverdue() };
+    });
 };
 
 export default invoicesRoutes;

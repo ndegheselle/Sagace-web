@@ -34,6 +34,14 @@ export class EstimatesRepository extends CrudRepository<Estimate> {
         data.reference = generateCode();
         return super.create(data);
     }
+
+    async countDraft(): Promise<number> {
+        return this.collection.countDocuments({status: EstimateStatus.Draft});
+    }
+    
+    async countSent(): Promise<number> {
+        return this.collection.countDocuments({status: EstimateStatus.Sent});
+    }
 }
 
 export const estimatesRepo = new EstimatesRepository(database);
