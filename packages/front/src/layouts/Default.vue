@@ -61,7 +61,7 @@ function toggleTheme(dark: boolean)
                                 <i class="fa-solid fa-image"></i>
                             </div>
                         </div>
-                        <span>{{ user?.company.name || 'Entreprise' }}</span>
+                        <span class="ms-2">{{ user?.company.name || 'Entreprise' }}</span>
                     </div>
                     <span v-else>Sagaced</span>
                 </RouterLink>
