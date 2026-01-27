@@ -17,7 +17,7 @@ onMounted(async () => {
             <div class="stat-figure text-secondary">
                 <i class="fa-regular fa-circle-question text-4xl"></i>
             </div>
-            <div class="stat-title">Brouillons</div>
+            <div class="stat-title">Devis en brouillons</div>
             <div class="stat-value">{{ countDraft }}</div>
             <div class="stat-desc">A finaliser</div>
         </div>
@@ -25,7 +25,7 @@ onMounted(async () => {
             <div class="stat-figure text-primary">
                 <i class="fa-regular fa-paper-plane text-3xl"></i>
             </div>
-            <div class="stat-title">Envoyé</div>
+            <div class="stat-title">Devis envoyés</div>
             <div class="stat-value">{{ countSent }}</div>
             <div class="stat-desc">A valider par le client</div>
         </div>
