@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { useAuth } from '@/composables/auth';
-import CompanyModal from '@/views/user/CompanyModal.vue';
+import { useAuth } from '@/composables/auth.ts';
+import CompanyModal from './CompanyModal.vue';
 import { useTemplateRef } from 'vue';
+
 const { user } = useAuth();
 const modalRef = useTemplateRef('modal');
-const apiUrl = import.meta.env.VITE_API_URL;
 
 async function edit() {
     if (!user.value)

@@ -7,6 +7,10 @@
   },
   "license": "MIT",
   "imports": {
-    "@std/assert": "jsr:@std/assert@1"
+    "@/": "./",
+    "@std/assert": "jsr:@std/assert@1",
+    "pocketbase": "npm:pocketbase@^0.26.7",
+    "vue": "npm:vue@^3.5.27",
+    "vue-router": "npm:vue-router@^5.0.0"
   }
 }
