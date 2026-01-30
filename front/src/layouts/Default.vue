@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import AlertsContainer from '@/components/popups/AlertsContainer.vue';
-import ConfirmationModal from '@/components/popups/ConfirmationModal.vue';
-import { useAuth } from '@/composables/auth';
+import AlertsContainer from '@sagace/common/composables/AlertsContainer.vue';
+import ConfirmationModal from '@sagace/common/composables/popups/ConfirmationModal.vue';
+import { useAuth } from '@sagace/common/composables/auth.ts';
 
 const { isLoggedIn, user, logout } = useAuth();
 const apiUrl = import.meta.env.VITE_API_URL;

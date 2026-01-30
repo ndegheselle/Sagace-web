@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import EstimatesSummary from '@/views/documents/estimates/EstimatesSummary.vue';
-import InvoicesSummary from '@/views/documents/invoices/InvoicesSummary.vue';
 </script>
 
 <template>
@@ -11,14 +9,12 @@ import InvoicesSummary from '@/views/documents/invoices/InvoicesSummary.vue';
                     <i class="fa-solid fa-file-invoice"></i>
                     Devis
                 </h1>
-                <EstimatesSummary />
             </div>
             <div>
                 <h1 class="text-heading opacity-50">
                     <i class="fa-solid fa-file-invoice-dollar"></i>
                     Factures
                 </h1>
-                <InvoicesSummary />
             </div>
         </div>
         <h1 class="text-heading opacity-50">

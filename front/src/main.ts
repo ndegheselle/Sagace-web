@@ -1,10 +1,10 @@
 import './style.css';
 
-import { useAuth } from '@/composables/auth';
+import { useAuth } from '@sagace/common/composables/auth.ts';
 import { createApp } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import App from './App.vue';
-import routes from './routes';
+import routes from './routes.ts';
 
 export const router = createRouter({
     history: createWebHistory(),
