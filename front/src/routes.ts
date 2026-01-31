@@ -1,11 +1,9 @@
-import HomeView from './views/HomePage.vue';
-import LoginView from '@sagace/common/views/LoginPage.vue';
-import UserProfilPage from '@sagace/common/views/UserProfilPage.vue';
-
+import type { RouteRecordRaw } from 'vue-router';
 import Default from '@/layouts/Default.vue';
 
-
-import type { RouteRecordRaw } from 'vue-router';
+import HomePage from '@/views/HomePage.vue';
+import UserProfilPage from '@common/views/UserProfilPage.vue';
+import LoginPage from '@common/views/LoginPage.vue';
 
 const routes: RouteRecordRaw[] = [
     {
@@ -14,7 +12,7 @@ const routes: RouteRecordRaw[] = [
         children: [
             {
                 path: '',
-                component: HomeView,
+                component: HomePage,
             },
             {
                 path: '/user/profil',
@@ -22,7 +20,7 @@ const routes: RouteRecordRaw[] = [
             },
             {
                 path: '/user/login',
-                component: LoginView,
+                component: LoginPage,
             },
         ]
     }

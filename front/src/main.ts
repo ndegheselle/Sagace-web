@@ -1,16 +1,17 @@
 import './style.css';
 
-import { useAuth } from '@sagace/common/composables/auth.ts';
 import { createApp } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import App from './App.vue';
-import routes from './routes.ts';
+import routes from './routes';
+import { useAuth } from '@common/composables/auth';
+import { initDatabase } from '@common/database/pocketbase';
+initDatabase(import.meta.env.VITE_API_URL);
 
-export const router = createRouter({
+const router = createRouter({
     history: createWebHistory(),
     routes,
 });
-
 router.beforeEach(async (to) => {
     if (to.path === '/user/login')
         return;
@@ -20,7 +21,7 @@ router.beforeEach(async (to) => {
     {
         return { path: '/user/login' };
     }
-})
+});
 
 createApp(App).use(router).mount('#app');
 

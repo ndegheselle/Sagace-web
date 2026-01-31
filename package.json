@@ -1,8 +1,0 @@
-{
-    "name": "sagace",
-    "private": true,
-    "workspaces": [
-        "front",
-        "lib/@common"
-    ]
-}

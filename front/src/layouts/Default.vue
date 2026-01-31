@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import AlertsContainer from '@sagace/common/composables/AlertsContainer.vue';
-import ConfirmationModal from '@sagace/common/composables/popups/ConfirmationModal.vue';
-import { useAuth } from '@sagace/common/composables/auth.ts';
+import AlertsContainer from '@common/components/popups/AlertsContainer.vue';
+import ConfirmationModal from '@common/components/popups/ConfirmationModal.vue';
+import { useAuth } from '@common/composables/auth';
 
 const { isLoggedIn, user, logout } = useAuth();
 const apiUrl = import.meta.env.VITE_API_URL;
@@ -98,7 +98,7 @@ function toggleTheme(dark: boolean)
             </div>
 
             <div class="navbar-end">
-                <label class="swap swap-rotate me-4">
+                <label class="btn btn-circle avatar swap swap-rotate me-4">
                     <input type="checkbox" class="theme-controller" :checked="isDark" value="corporate" @change="() => toggleTheme(!isDark)"/>
                     <i class="swap-off fa-solid fa-moon"></i>
                     <i class="swap-on fa-solid fa-sun"></i>
