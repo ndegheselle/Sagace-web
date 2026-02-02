@@ -1,12 +1,4 @@
 services:
-  database:
-    image: mongo:latest
-    restart: unless-stopped
-    volumes:
-      - ./database/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-    ports:
-      - "27017:27017"
-
   api:
     image: node:alpine
     working_dir: /repo
