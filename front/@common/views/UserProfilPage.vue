@@ -1,17 +1,36 @@
 <script setup lang="ts">
 import { useAuth } from '@common/composables/auth';
-import CompanyModal from '@common/views/CompanyModal.vue';
-import { useTemplateRef } from 'vue';
+import { getLogo } from '@common/data/companies';
+import { ref, reactive, watch } from 'vue';
+import type { CompaniesRecord } from '@common/database/types.g';
+
+import { companies } from '@common/data/companies';
+
 const { user } = useAuth();
-const modalRef = useTemplateRef('modal');
-const apiUrl = import.meta.env.VITE_API_URL;
+const company = reactive<CompaniesRecord>({} as CompaniesRecord);
+const fileInput = ref<HTMLInputElement | null>(null);
 
-async function edit() {
-    if (!user.value)
-        return;
+watch(
+    () => user.value?.expand?.company,
+    (c) => {
+        if (c) {
+            Object.assign(company, c);
+        }
+    },
+    { immediate: true }
+);
 
-    if (await modalRef.value?.show(user.value.company) == true && modalRef.value?.company)
-        user.value.company = modalRef.value.company;
+async function editCompany() {
+    const files = fileInput.value?.files;
+    const file = files?.[0];
+
+    if (file) {
+        // @ts-expect-error
+        company.logo = file;
+    }
+
+    const response = await companies.update(company);
+    company.logo = response.logo;
 }
 </script>
 
@@ -21,19 +40,15 @@ async function edit() {
             <div class="card-body">
                 <div class="flex items-center gap-4">
                     <div class="avatar">
-                        <div class="w-16 rounded-full flex items-center justify-center border text-2xl">
+                        <div class="w-16 rounded-full flex items-center justify-center bg-base-100 text-2xl">
                             <i class="fa-solid fa-user "></i>
                         </div>
                     </div>
 
                     <div class="flex-1">
                         <h2 class="card-title">
-                            {{ user?.name }}
-                        </h2>
-                        <p v-if="user?.email"
-                           class="text-sm text-gray-500">
                             {{ user?.email }}
-                        </p>
+                        </h2>
                     </div>
                 </div>
             </div>
@@ -41,60 +56,47 @@ async function edit() {
 
         <div class="card bg-base-200 mt-2">
             <div class="card-body">
-                <!-- Header -->
-                <div class="flex items-center gap-4">
-                    <div class="avatar">
-                        <div v-if="user?.company.logoUrl"
-                             class="w-16 rounded-xl">
-                            <img :src="apiUrl + user?.company.logoUrl" />
+                <h2 class="card-title">Entreprise</h2>
+                <fieldset class="fieldset">
+                    <!-- Logo -->
+                    <div class="flex mb-4">
+                        <div class="avatar">
+                            <div v-if="company.logo" class="w-24 rounded-xl">
+                                <img :src="getLogo(company)" />
+                            </div>
+                            <div v-else class="w-24 rounded-xl flex items-center justify-center text-3xl border">
+                                <i class="fa-solid fa-image"></i>
+                            </div>
                         </div>
-                        <div v-else
-                             class="w-16 rounded-full flex items-center justify-center border text-2xl">
-                            <i class="fa-solid fa-image"></i>
-                        </div>
+
+                        <input ref="fileInput" type="file" accept="image/png, image/gif, image/jpeg"
+                            class="file-input w-full ms-2 my-auto" />
                     </div>
 
-                    <div class="flex-1">
-                        <h2 class="card-title">
-                            {{ user?.company.name || 'Entreprise' }}
-                        </h2>
-                        <p v-if="user?.company.email"
-                           class="text-sm text-gray-500">
-                            {{ user?.company.email }}
-                        </p>
-                    </div>
+                    <!-- Name -->
+                    <label class="label">Nom</label>
+                    <input v-model="company.name" type="text" class="input input-bordered w-full" required />
 
-                    <button class="btn btn-sm btn-ghost"
-                            @click="edit">
-                        <i class="fa-solid fa-pen"></i>
-                    </button>
-                </div>
+                    <!-- Email -->
+                    <label class="label">Email</label>
+                    <input v-model="company.email" type="email" class="input input-bordered w-full" />
 
-                <!-- Divider -->
-                <div class="divider my-2"></div>
+                    <!-- adress -->
+                    <label class="label">Adresse</label>
+                    <input v-model="company.adress" type="text" class="input input-bordered w-full" />
 
-                <!-- Infos -->
-                <div class="space-y-2 text-sm">
-                    <div v-if="user?.company.adress"
-                         class="flex gap-2 items-center">
-                        <i class="fa-solid fa-location-dot w-4 text-center"></i>
-                        <span>{{ user?.company.adress }}</span>
-                    </div>
+                    <!-- SIRET -->
+                    <label class="label">SIRET</label>
+                    <input v-model="company.SIRET" type="text" class="input input-bordered w-full" />
 
-                    <div v-if="user?.company.phone"
-                         class="flex gap-2 items-center">
-                        <i class="fa-solid fa-phone w-4 text-center"></i>
-                        <span>{{ user?.company.phone }}</span>
-                    </div>
-
-                    <div v-if="user?.company.SIRET"
-                         class="flex gap-2 items-center">
-                        <i class="fa-solid fa-building w-4 text-center"></i>
-                        <span>SIRET : {{ user?.company.SIRET }}</span>
-                    </div>
+                    <!-- Phone -->
+                    <label class="label">Téléphone</label>
+                    <input v-model="company.phone" type="tel" class="input input-bordered w-full" />
+                </fieldset>
+                <div class="justify-end card-actions">
+                    <button class="btn btn-primary" @click="editCompany">Modifier</button>
                 </div>
             </div>
         </div>
-        <CompanyModal ref="modal" />
     </div>
 </template>

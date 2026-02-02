@@ -18,26 +18,30 @@ function toggleTheme(dark: boolean) {
         <nav class="navbar bg-base-300 shadow-sm">
             <div class="navbar-start">
                 <div class="dropdown">
-                    <div tabindex="0"
-                         role="button"
-                         class="btn btn-ghost lg:hidden">
+                    <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
                         <i class="fa-solid fa-bars-staggered"></i>
                     </div>
                     <ul tabindex="-1"
-                        class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+                        class="menu menu-sm dropdown-content bg-base-200 rounded-box z-1 mt-3 w-52 p-2 shadow">
                         <li>
-                            <RouterLink to="/clients"><i class="fa-solid fa-users"></i>Clients</RouterLink>
+                            <h2 class="menu-title">Facture</h2>
+                            <ul>
+                                <li>
+                                    <RouterLink to="/clients"><i class="fa-solid fa-users"></i>Clients</RouterLink>
+                                </li>
+                                <li>
+                                    <RouterLink to="/documents/estimates"><i class="fa-solid fa-file-invoice"></i>Devis
+                                    </RouterLink>
+                                </li>
+                                <li>
+                                    <RouterLink to="/documents/invoices"><i
+                                            class="fa-solid fa-file-invoice-dollar"></i>Factures
+                                    </RouterLink>
+                                </li>
+                            </ul>
                         </li>
                         <li>
-                            <RouterLink to="/documents/estimates"><i class="fa-solid fa-file-invoice"></i>Devis
-                            </RouterLink>
-                        </li>
-                        <li>
-                            <RouterLink to="/documents/invoices"><i class="fa-solid fa-file-invoice-dollar"></i>Factures
-                            </RouterLink>
-                        </li>
-                        <li>
-                            <h2 class="menu-title">Préstations</h2>
+                            <h2 class="menu-title">Stock</h2>
                             <ul>
                                 <li>
                                     <RouterLink to="/articles"><i class="fa-solid fa-boxes-stacked"></i>Articles
@@ -52,16 +56,13 @@ function toggleTheme(dark: boolean) {
                     </ul>
                 </div>
 
-                <RouterLink to="/"
-                            class="text-xl">
+                <RouterLink to="/" class="text-xl">
                     <div v-if="isLoggedIn">
                         <div class="avatar">
-                            <div v-if="user?.expand.company.logo"
-                                 class="w-10 rounded-xl">
+                            <div v-if="user?.expand.company.logo" class="w-10 rounded-xl">
                                 <img :src="getLogo(user?.expand.company)" />
                             </div>
-                            <div v-else
-                                 class="w-10 flex items-center justify-center text-2xl">
+                            <div v-else class="w-10 flex items-center justify-center text-2xl">
                                 <i class="fa-solid fa-image"></i>
                             </div>
                         </div>
@@ -72,19 +73,27 @@ function toggleTheme(dark: boolean) {
             <div class="navbar-center hidden lg:flex">
                 <ul class="menu menu-horizontal px-1">
                     <li>
-                        <RouterLink to="/clients"><i class="fa-solid fa-users"></i> Clients</RouterLink>
-                    </li>
-                    <li class="indicator">
-                        <span class="indicator-item badge badge-secondary badge-xs"></span>
-                        <RouterLink to="/documents/estimates"><i class="fa-solid fa-file-invoice"></i>Devis</RouterLink>
-                    </li>
-                    <li>
-                        <RouterLink to="/documents/invoices"><i class="fa-solid fa-file-invoice-dollar"></i>Factures
-                        </RouterLink>
+                        <details>
+                            <summary>Factures</summary>
+                            <ul class="bg-base-100 rounded-t-none p-2">
+                                <li>
+                                    <RouterLink to="/clients"><i class="fa-solid fa-users"></i> Clients</RouterLink>
+                                </li>
+                                <li>
+                                    <RouterLink to="/documents/estimates"><i class="fa-solid fa-file-invoice"></i>Devis
+                                    </RouterLink>
+                                </li>
+                                <li>
+                                    <RouterLink to="/documents/invoices"><i
+                                            class="fa-solid fa-file-invoice-dollar"></i>Factures
+                                    </RouterLink>
+                                </li>
+                            </ul>
+                        </details>
                     </li>
                     <li>
                         <details>
-                            <summary>Préstations</summary>
+                            <summary>Stock</summary>
                             <ul class="bg-base-100 rounded-t-none p-2">
                                 <li>
                                     <RouterLink to="/articles"><i class="fa-solid fa-boxes-stacked"></i>Articles
@@ -103,36 +112,30 @@ function toggleTheme(dark: boolean) {
             <div class="navbar-end">
                 <button class="btn btn-ghost btn-circle avatar me-1">
                     <label class="swap swap-rotate">
-                        <input type="checkbox"
-                               class="theme-controller"
-                               :checked="isDark"
-                               value="corporate"
-                               @change="() => toggleTheme(!isDark)" />
+                        <input type="checkbox" class="theme-controller" :checked="isDark" value="corporate"
+                            @change="() => toggleTheme(!isDark)" />
                         <i class="swap-on fa-solid fa-sun"></i>
                         <i class="swap-off fa-solid fa-moon"></i>
                     </label>
                 </button>
-                <div v-if="isLoggedIn"
-                     class="dropdown dropdown-end">
-                    <div tabindex="0"
-                         role="button"
-                         class="btn btn-circle avatar">
+                <div v-if="isLoggedIn" class="dropdown dropdown-end">
+                    <div tabindex="0" role="button" class="btn btn-circle avatar">
                         <div class="rounded-full text-lg">
                             <i class="fa-solid fa-user "></i>
                         </div>
                     </div>
                     <ul tabindex="-1"
-                        class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+                        class="menu menu-sm dropdown-content bg-base-200 rounded-box z-1 mt-3 w-52 p-2">
                         <li class="menu-title">{{ user?.email }}</li>
                         <li>
                             <RouterLink to="/user/profil">
-                                <i class="fa-solid fa-address-card"></i> Profil</RouterLink>
+                                <i class="fa-solid fa-address-card"></i> Profil
+                            </RouterLink>
                         </li>
                         <li><a @click="logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
                     </ul>
                 </div>
-                <ul v-else
-                    class="menu menu-horizontal px-1">
+                <ul v-else class="menu menu-horizontal px-1">
                     <li>
                         <RouterLink to="/user/login"><i class="fa-solid fa-user"></i> Login</RouterLink>
                     </li>
