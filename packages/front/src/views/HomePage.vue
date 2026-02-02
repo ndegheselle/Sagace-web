@@ -22,8 +22,8 @@ async function createEstimate() {
                     <p class="py-6">
                         Créer un client ou un devis, ajouter des articles et services.
                     </p>
-                    <RouterLink class="btn btn-neutral" to="/clients/new"><i class="fa-solid fa-users"></i> Ajouter un client</RouterLink>
-                    <button class="btn btn-neutral ms-1" @click="createEstimate"><i class="fa-solid fa-file-invoice"></i> Créer un
+                    <RouterLink class="btn btn-neutral mt-1" to="/clients/new"><i class="fa-solid fa-users"></i> Ajouter un client</RouterLink>
+                    <button class="btn btn-neutral ms-1 mt-1" @click="createEstimate"><i class="fa-solid fa-file-invoice"></i> Créer un
                         devis</button>
                 </div>
             </div>
