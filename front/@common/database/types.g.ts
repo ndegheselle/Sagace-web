@@ -154,7 +154,6 @@ export enum EstimatesStatusOptions {
 }
 export type EstimatesRecord = {
 	articles?: RecordIdString
-	client?: RecordIdString
 	created: IsoAutoDateString
 	id: string
 	notes?: string
@@ -192,7 +191,6 @@ export enum InvoicesStatusOptions {
 }
 export type InvoicesRecord = {
 	articles?: RecordIdString
-	client: RecordIdString
 	created: IsoAutoDateString
 	dueDate: IsoDateString
 	estimate: RecordIdString
@@ -248,11 +246,11 @@ export type ServicesRecord = {
 
 export type UsersRecord = {
 	avatar?: FileNameString
+	company: RecordIdString
 	created: IsoAutoDateString
 	email: string
 	emailVisibility?: boolean
 	id: string
-	name?: string
 	password: string
 	tokenKey: string
 	updated: IsoAutoDateString

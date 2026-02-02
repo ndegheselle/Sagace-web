@@ -2,13 +2,12 @@
 import AlertsContainer from '@common/components/popups/AlertsContainer.vue';
 import ConfirmationModal from '@common/components/popups/ConfirmationModal.vue';
 import { useAuth } from '@common/composables/auth';
+import { getLogo } from '@common/data/companies';
 
 const { isLoggedIn, user, logout } = useAuth();
-const apiUrl = import.meta.env.VITE_API_URL;
 
 let isDark = JSON.parse(localStorage.getItem('isdark') ?? 'false');
-function toggleTheme(dark: boolean)
-{
+function toggleTheme(dark: boolean) {
     localStorage.setItem('isdark', JSON.stringify(dark));
     isDark = dark;
 }
@@ -19,7 +18,9 @@ function toggleTheme(dark: boolean)
         <nav class="navbar bg-base-300 shadow-sm">
             <div class="navbar-start">
                 <div class="dropdown">
-                    <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+                    <div tabindex="0"
+                         role="button"
+                         class="btn btn-ghost lg:hidden">
                         <i class="fa-solid fa-bars-staggered"></i>
                     </div>
                     <ul tabindex="-1"
@@ -51,19 +52,21 @@ function toggleTheme(dark: boolean)
                     </ul>
                 </div>
 
-                <RouterLink to="/" class="btn btn-ghost text-xl">
+                <RouterLink to="/"
+                            class="text-xl">
                     <div v-if="isLoggedIn">
                         <div class="avatar">
-                            <div v-if="user?.company.logoUrl" class="w-10 rounded-xl">
-                                <img :src="apiUrl + user?.company.logoUrl" />
+                            <div v-if="user?.expand.company.logo"
+                                 class="w-10 rounded-xl">
+                                <img :src="getLogo(user?.expand.company)" />
                             </div>
-                            <div v-else class="w-10 rounded-full flex items-center justify-center border text-2xl">
+                            <div v-else
+                                 class="w-10 flex items-center justify-center text-2xl">
                                 <i class="fa-solid fa-image"></i>
                             </div>
                         </div>
-                        <span>{{ user?.company.name || 'Entreprise' }}</span>
+                        <span class="ms-2">{{ user?.expand.company.name || 'Entreprise' }}</span>
                     </div>
-                    <span v-else>Sagaced</span>
                 </RouterLink>
             </div>
             <div class="navbar-center hidden lg:flex">
@@ -98,27 +101,38 @@ function toggleTheme(dark: boolean)
             </div>
 
             <div class="navbar-end">
-                <label class="btn btn-circle avatar swap swap-rotate me-4">
-                    <input type="checkbox" class="theme-controller" :checked="isDark" value="corporate" @change="() => toggleTheme(!isDark)"/>
-                    <i class="swap-off fa-solid fa-moon"></i>
-                    <i class="swap-on fa-solid fa-sun"></i>
-                </label>
-                <div v-if="isLoggedIn" class="dropdown dropdown-end">
-                    <div tabindex="0" role="button" class="btn btn-circle avatar">
+                <button class="btn btn-ghost btn-circle avatar me-1">
+                    <label class="swap swap-rotate">
+                        <input type="checkbox"
+                               class="theme-controller"
+                               :checked="isDark"
+                               value="corporate"
+                               @change="() => toggleTheme(!isDark)" />
+                        <i class="swap-on fa-solid fa-sun"></i>
+                        <i class="swap-off fa-solid fa-moon"></i>
+                    </label>
+                </button>
+                <div v-if="isLoggedIn"
+                     class="dropdown dropdown-end">
+                    <div tabindex="0"
+                         role="button"
+                         class="btn btn-circle avatar">
                         <div class="rounded-full text-lg">
                             <i class="fa-solid fa-user "></i>
                         </div>
                     </div>
                     <ul tabindex="-1"
                         class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                        <li class="menu-title">{{ user?.name }}</li>
+                        <li class="menu-title">{{ user?.email }}</li>
                         <li>
-                            <RouterLink to="/user/profil"><i class="fa-regular fa-adress-card"></i> Profil</RouterLink>
+                            <RouterLink to="/user/profil">
+                                <i class="fa-solid fa-address-card"></i> Profil</RouterLink>
                         </li>
                         <li><a @click="logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
                     </ul>
                 </div>
-                <ul v-else class="menu menu-horizontal px-1">
+                <ul v-else
+                    class="menu menu-horizontal px-1">
                     <li>
                         <RouterLink to="/user/login"><i class="fa-solid fa-user"></i> Login</RouterLink>
                     </li>

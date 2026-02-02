@@ -1,20 +1,23 @@
-import { type UsersRecord, Collections } from "@common/database/types.g.ts";
 import { usePocketBase } from "@common/database/pocketbase.ts";
+import { type CompaniesResponse, type UsersResponse, Collections } from "@common/database/types.g.ts";
 
+export type UserExpand = {
+    company: CompaniesResponse;
+};
 
-async function login(email: string, password: string): Promise<UsersRecord | null> {
+async function login(email: string, password: string): Promise<UsersResponse<UserExpand> | null> {
     const { pb } = usePocketBase();
     const collection = pb.collection(Collections.Users);
 
-    const result = await collection.authWithPassword(email, password);
+    const result = await collection.authWithPassword<UsersResponse<UserExpand>>(email, password, { expand: "company" });
     return result?.record;
 }
 
-async function refresh(): Promise<UsersRecord | null> {
+async function refresh(): Promise<UsersResponse<UserExpand> | null> {
     const { pb } = usePocketBase();
     const collection = pb.collection(Collections.Users);
     
-    const result = await collection.authRefresh();
+    const result = await collection.authRefresh<UsersResponse<UserExpand>>({ expand: "company" });
     return result?.record;
 }
 
