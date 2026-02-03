@@ -644,6 +644,19 @@ migrate((app) => {
           "type": "email"
         },
         {
+          "cascadeDelete": false,
+          "collectionId": "pbc_2442875294",
+          "hidden": false,
+          "id": "relation1337919823",
+          "maxSelect": 1,
+          "minSelect": 0,
+          "name": "company",
+          "presentable": false,
+          "required": true,
+          "system": false,
+          "type": "relation"
+        },
+        {
           "hidden": false,
           "id": "bool1547992806",
           "name": "emailVisibility",
@@ -897,16 +910,16 @@ migrate((app) => {
       ],
       "id": "pbc_3866053794",
       "indexes": [],
-      "listRule": null,
+      "listRule": "",
       "name": "companies",
       "system": false,
       "type": "base",
-      "updateRule": null,
-      "viewRule": null
+      "updateRule": "",
+      "viewRule": ""
     },
     {
-      "createRule": null,
-      "deleteRule": null,
+      "createRule": "",
+      "deleteRule": "",
       "fields": [
         {
           "autogeneratePattern": "[a-z0-9]{15}",
@@ -1026,16 +1039,16 @@ migrate((app) => {
       ],
       "id": "pbc_2442875294",
       "indexes": [],
-      "listRule": null,
+      "listRule": "",
       "name": "clients",
       "system": false,
       "type": "base",
-      "updateRule": null,
-      "viewRule": null
+      "updateRule": "",
+      "viewRule": ""
     },
     {
-      "createRule": null,
-      "deleteRule": null,
+      "createRule": "",
+      "deleteRule": "",
       "fields": [
         {
           "autogeneratePattern": "[a-z0-9]{15}",
@@ -1157,16 +1170,16 @@ migrate((app) => {
       ],
       "id": "pbc_4287850865",
       "indexes": [],
-      "listRule": null,
+      "listRule": "",
       "name": "articles",
       "system": false,
       "type": "base",
-      "updateRule": null,
-      "viewRule": null
+      "updateRule": "",
+      "viewRule": ""
     },
     {
-      "createRule": null,
-      "deleteRule": null,
+      "createRule": "",
+      "deleteRule": "",
       "fields": [
         {
           "autogeneratePattern": "[a-z0-9]{15}",
@@ -1288,16 +1301,16 @@ migrate((app) => {
       ],
       "id": "pbc_863811952",
       "indexes": [],
-      "listRule": null,
+      "listRule": "",
       "name": "services",
       "system": false,
       "type": "base",
-      "updateRule": null,
-      "viewRule": null
+      "updateRule": "",
+      "viewRule": ""
     },
     {
-      "createRule": null,
-      "deleteRule": null,
+      "createRule": "",
+      "deleteRule": "",
       "fields": [
         {
           "autogeneratePattern": "[a-z0-9]{15}",
@@ -1385,16 +1398,16 @@ migrate((app) => {
       ],
       "id": "pbc_2195034256",
       "indexes": [],
-      "listRule": null,
+      "listRule": "",
       "name": "estimates_articles",
       "system": false,
       "type": "base",
-      "updateRule": null,
-      "viewRule": null
+      "updateRule": "",
+      "viewRule": ""
     },
     {
-      "createRule": null,
-      "deleteRule": null,
+      "createRule": "",
+      "deleteRule": "",
       "fields": [
         {
           "autogeneratePattern": "[a-z0-9]{15}",
@@ -1482,15 +1495,15 @@ migrate((app) => {
       ],
       "id": "pbc_1312440465",
       "indexes": [],
-      "listRule": null,
+      "listRule": "",
       "name": "estimates_services",
       "system": false,
       "type": "base",
-      "updateRule": null,
-      "viewRule": null
+      "updateRule": "",
+      "viewRule": ""
     },
     {
-      "createRule": null,
+      "createRule": "",
       "deleteRule": null,
       "fields": [
         {
@@ -1579,15 +1592,15 @@ migrate((app) => {
       ],
       "id": "pbc_4042305242",
       "indexes": [],
-      "listRule": null,
+      "listRule": "",
       "name": "invoices_services",
       "system": false,
       "type": "base",
       "updateRule": null,
-      "viewRule": null
+      "viewRule": ""
     },
     {
-      "createRule": null,
+      "createRule": "",
       "deleteRule": null,
       "fields": [
         {
@@ -1676,16 +1689,16 @@ migrate((app) => {
       ],
       "id": "pbc_1008697051",
       "indexes": [],
-      "listRule": null,
+      "listRule": "",
       "name": "invoices_articles",
       "system": false,
       "type": "base",
       "updateRule": null,
-      "viewRule": null
+      "viewRule": ""
     },
     {
-      "createRule": null,
-      "deleteRule": null,
+      "createRule": "",
+      "deleteRule": "",
       "fields": [
         {
           "autogeneratePattern": "[a-z0-9]{15}",
@@ -1808,15 +1821,15 @@ migrate((app) => {
       ],
       "id": "pbc_3784529526",
       "indexes": [],
-      "listRule": null,
+      "listRule": "",
       "name": "estimates",
       "system": false,
       "type": "base",
-      "updateRule": null,
-      "viewRule": null
+      "updateRule": "",
+      "viewRule": ""
     },
     {
-      "createRule": null,
+      "createRule": "",
       "deleteRule": null,
       "fields": [
         {
@@ -1999,15 +2012,15 @@ migrate((app) => {
       ],
       "id": "pbc_2703029140",
       "indexes": [],
-      "listRule": null,
+      "listRule": "",
       "name": "invoices",
       "system": false,
       "type": "base",
-      "updateRule": null,
-      "viewRule": null
+      "updateRule": "",
+      "viewRule": ""
     }
   ];
-  
+
   return app.importCollections(snapshot, false);
 }, (app) => {
   return null;

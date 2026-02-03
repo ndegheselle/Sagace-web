@@ -4,6 +4,8 @@ migrate((app) => {
 
   // update collection data
   unmarshal({
+    "listRule": "",
+    "updateRule": "",
     "viewRule": ""
   }, collection)
 
@@ -13,6 +15,8 @@ migrate((app) => {
 
   // update collection data
   unmarshal({
+    "listRule": null,
+    "updateRule": null,
     "viewRule": null
   }, collection)
 
