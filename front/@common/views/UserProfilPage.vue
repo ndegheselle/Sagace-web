@@ -31,6 +31,8 @@ async function editCompany() {
 
     const response = await companies.update(company);
     company.logo = response.logo;
+    if (user.value && response.logo)
+        user.value.expand.company.logo = response.logo;
 }
 </script>
 

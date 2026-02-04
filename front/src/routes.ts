@@ -22,6 +22,8 @@ const routes: RouteRecordRaw[] = [
                 path: '/user/login',
                 component: LoginPage,
             },
+
+            
         ]
     }
 ];
