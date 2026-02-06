@@ -32,12 +32,12 @@ export class Paginated<T> {
     }
 }
 
-export interface IDataCrud<T extends {id: string}> {
-    create(data: T): Promise<string>;
-    update(id: string, data: T): Promise<void>;
+export interface IDataCrud<TResponse extends {id: string}> {
+    create(data: TResponse): Promise<string>;
+    update(id: string, data: TResponse): Promise<void>;
     delete(id: string): Promise<void>;
 
-    getById(id: string): Promise<T | null>;
-    getAll(options: PaginationOptions): Promise<Paginated<T>>;
-    search(search: string, options: PaginationOptions): Promise<Paginated<T>>;
+    getById(id: string): Promise<TResponse | null>;
+    getAll(options: PaginationOptions): Promise<Paginated<TResponse>>;
+    search(search: string, options: PaginationOptions): Promise<Paginated<TResponse>>;
 }

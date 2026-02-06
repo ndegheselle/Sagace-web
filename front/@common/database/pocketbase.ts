@@ -21,27 +21,27 @@ export function usePocketBase() {
     }
 }
 
-export class PocketbaseCrud<T extends {id: string}> implements IDataCrud<T> {
+export class PocketbaseCrud<TResponse extends {id: string}> implements IDataCrud<TResponse> {
 
     constructor(
         protected readonly collectionName: string,
-        protected readonly expand: string | undefined = undefined,
         protected readonly searchFields: string[] | undefined = undefined,
+        protected readonly expands: string[] | undefined = undefined,
     ) {}
 
-    async create(data: T): Promise<string>
+    async create(data: TResponse): Promise<string>
     {
         const { pb } = usePocketBase();
         const collection = pb.collection(this.collectionName);
-        const record = await collection.create<T>(data);
+        const record = await collection.create<TResponse>(data);
         return record.id;
     }
 
-    async update(id: string, data: T): Promise<void>
+    async update(id: string, data: TResponse): Promise<void>
     {
         const { pb } = usePocketBase();
         const collection = pb.collection(this.collectionName);
-        await collection.update<T>(id, data);
+        await collection.update<TResponse>(id, data);
     }
 
     async delete(id: string): Promise<void>
@@ -51,26 +51,26 @@ export class PocketbaseCrud<T extends {id: string}> implements IDataCrud<T> {
         await collection.delete(id);
     }
 
-    async getById(id: string): Promise<T | null>
+    async getById(id: string): Promise<TResponse | null>
     {
         const { pb } = usePocketBase();
         const collection = pb.collection(this.collectionName);
-        return await collection.getOne<T>(id, { expand: this.expand });
+        return await collection.getOne<TResponse>(id, { expand: this.expands?.join(",") });
     }
 
-    async getAll(options: PaginationOptions): Promise<Paginated<T>>
+    async getAll(options: PaginationOptions): Promise<Paginated<TResponse>>
     {
         const { pb } = usePocketBase();
         const collection = pb.collection(this.collectionName);
-        const result = await collection.getList<T>(options.page, options.perPage, {
-            expand: this.expand,
+        const result = await collection.getList<TResponse>(options.page, options.perPage, {
+            expand: this.expands?.join(","),
             sort: options.orderBy ? `${options.orderDirection}${options.orderBy}` : undefined,
         });
 
-        return new Paginated<T>(result.items, result.totalItems, options);
+        return new Paginated<TResponse>(result.items, result.totalItems, options);
     }
 
-    async search(search: string, options: PaginationOptions): Promise<Paginated<T>>
+    async search(search: string, options: PaginationOptions): Promise<Paginated<TResponse>>
     {
         if (!this.searchFields || this.searchFields.length === 0)
             return this.getAll(options);
@@ -78,11 +78,11 @@ export class PocketbaseCrud<T extends {id: string}> implements IDataCrud<T> {
         const { pb } = usePocketBase();
         const collection = pb.collection(this.collectionName);
         const filter = this.searchFields.map(field => `${field}~'${search}'`).join(" || ");
-        const result = await collection.getList<T>(options.page, options.perPage, {
-            expand: this.expand,
+        const result = await collection.getList<TResponse>(options.page, options.perPage, {
+            expand: this.expands?.join(","),
             sort: options.orderBy ? `${options.orderDirection}${options.orderBy}` : undefined,
             filter: filter,
         });
-        return new Paginated<T>(result.items, result.totalItems, options);
+        return new Paginated<TResponse>(result.items, result.totalItems, options);
     }
 }

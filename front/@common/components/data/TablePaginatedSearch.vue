@@ -1,14 +1,13 @@
-<script setup lang="ts" generic="T extends BaseEntity">
+<script setup lang="ts" generic="T extends { id: string }">
 import { reactive, onMounted } from 'vue';
-import type { PaginationOptions } from '@sagace/common';
-import Pagination from '@/components/Pagination.vue';
-import { debounce } from '@/base/debounce';
-import type { BaseEntity } from '@sagace/common';
+import type { PaginationOptions } from '@common/database/crud';
+import Pagination from '@common/components/data/Pagination.vue';
+import { debounce } from '@common/utils/debounce';
 
 let search = "";
 const pagination = reactive<PaginationOptions>({
     page: 1,
-    limit: 5
+    perPage: 5
 });
 
 const props = defineProps<{
@@ -58,7 +57,7 @@ onMounted(refresh);
 
                 <tbody>
                     <template v-if="items.length">
-                        <tr v-for="item in items" :key="item._id">
+                        <tr v-for="item in items" :key="item.id">
                             <slot name="row" :item="(item as T)" />
                         </tr>
                     </template>
@@ -70,7 +69,7 @@ onMounted(refresh);
                 </tbody>
             </table>
         </div>
-        <Pagination class="mt-1" v-model:page="pagination.page" v-model:total="props.total" v-model:capacity="pagination.limit"
+        <Pagination class="mt-1" v-model:page="pagination.page" v-model:total="props.total" v-model:capacity="pagination.perPage"
             @change="refresh" />
     </div>
 </template>

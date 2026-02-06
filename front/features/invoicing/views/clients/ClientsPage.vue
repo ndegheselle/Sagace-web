@@ -2,8 +2,9 @@
 import { formatDate } from '@common/utils/date';
 import { useConfirmation } from '@common/composables/popups/confirmation';
 
-import type { ClientsRecord, EstimatesRecord } from '@common/database/types.g';
-import { clients } from '@features/invoices/data/clients';
+import type { ClientsResponse, EstimatesResponse } from '@common/database/types.g';
+import { clients } from '@features/invoicing/data/clients';
+import { estimates } from '@features/invoicing/data/estimates';
 
 import { onMounted, ref, useTemplateRef, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -18,7 +19,7 @@ const route = useRoute();
 const modalRef = useTemplateRef('modal');
 const tableRef = useTemplateRef('table');
 
-const clientsList = ref<ClientsRecord[]>([]);
+const list = ref<ClientsResponse[]>([]);
 const total = ref<number>(0);
 
 onMounted(() => {
@@ -28,13 +29,13 @@ onMounted(() => {
             if (!modalRef.value) return;
 
             if (mode === 'new') {
-                await edit({} as ClientsRecord);
+                await edit({} as ClientsResponse);
             }
         },
         { immediate: true }
     );
 });
-async function remove(client: ClientsRecord) {
+async function remove(client: ClientsResponse) {
     const confirmed = await confirmation.show(
         'Confirmer la suppression',
         `Êtes-vous sûr de vouloir supprimer le client <b>${client.firstName} ${client.lastName}</b> ?`,
@@ -48,19 +49,19 @@ async function remove(client: ClientsRecord) {
     tableRef.value?.refresh();
 }
 
-async function edit(client: ClientsRecord) {
+async function edit(client: ClientsResponse) {
     if (await modalRef.value?.show(client) == true)
         tableRef.value?.refresh();
 }
 
-async function createEstimate(client: ClientsRecord) {
-    const id = await estimates.create({client: client.id} as EstimatesRecord);
+async function createEstimate(client: ClientsResponse) {
+    const id = await estimates.create({client: client.id} as EstimatesResponse);
     router.push(`/documents/estimates/${id}/items`);
 }
 
 async function refresh(search: string, pagination: PaginationOptions) {
     const result = await clients.search(search, pagination);
-    clientsList.value = result.data || [];
+    list.value = result.data || [];
     total.value = result.total || 0;
 }
 </script>
@@ -76,10 +77,10 @@ async function refresh(search: string, pagination: PaginationOptions) {
                               ref="table"
                               @refresh="refresh"
                               :total="total"
-                              :items="clientsList">
+                              :items="list">
             <template #actions>
                 <button class="btn btn-sm ms-1"
-                        @click="edit({} as ClientsRecord)">
+                        @click="edit({} as ClientsResponse)">
                     <i class="fa-solid fa-plus"></i>
                     Nouveau
                 </button>

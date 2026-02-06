@@ -1,9 +1,8 @@
-<script setup lang="ts" generic="T extends BaseEntity">
+<script setup lang="ts" generic="T extends { id: string}">
 import { reactive, ref, watch, onMounted } from 'vue';
-import type { PaginationOptions } from '@sagace/common';
-import Pagination from '@/components/Pagination.vue';
-import { debounce } from '@/base/debounce';
-import type { BaseEntity } from '@sagace/common';
+import type { PaginationOptions } from '@common/database/crud';
+import Pagination from '@common/components/data/Pagination.vue';
+import { debounce } from '@common/utils/debounce';
 
 const props = defineProps<{
     selected: T | null;
@@ -19,7 +18,7 @@ const emit = defineEmits<{
 let search = "";
 const pagination = reactive<PaginationOptions>({
     page: 1,
-    limit: 5,
+    perPage: 5,
 });
 const selected = ref<T | null>(props.selected);
 
@@ -32,7 +31,7 @@ async function refresh() {
 }
 
 async function select(item: T) {
-    if (selected.value?._id === item._id) {
+    if (selected.value?.id === item.id) {
         selected.value = null;
         emit('update:selected', null);
         return;
@@ -66,14 +65,14 @@ watch(() => props.selected, (newVal) => {
             </li>
 
             <!-- List Items -->
-            <li v-for="item in items" :key="item._id" class="list-row duration-300 cursor-pointer"
-                :class="{ 'bg-base-300': selected?.id === item._id }" @click="select(item)">
+            <li v-for="item in items" :key="item.id" class="list-row duration-300 cursor-pointer"
+                :class="{ 'bg-base-300': selected?.id === item.id }" @click="select(item)">
                 <slot name="row" :item="item" />
             </li>
         </ul>
 
         <!-- Pagination -->
         <Pagination class="mt-1" v-model:page="pagination.page" v-model:total="props.total"
-            v-model:capacity="pagination.limit" @change="refresh" />
+            v-model:capacity="pagination.perPage" @change="refresh" />
     </div>
 </template>

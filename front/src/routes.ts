@@ -5,6 +5,8 @@ import HomePage from '@/views/HomePage.vue';
 import UserProfilPage from '@common/views/UserProfilPage.vue';
 import LoginPage from '@common/views/LoginPage.vue';
 
+import ClientsPage from '@features/invoicing/views/clients/ClientsPage.vue';
+
 const routes: RouteRecordRaw[] = [
     {
         path: '',
@@ -22,7 +24,10 @@ const routes: RouteRecordRaw[] = [
                 path: '/user/login',
                 component: LoginPage,
             },
-
+            {
+                path: '/invoicing/clients',
+                component: ClientsPage,
+            },
             
         ]
     }
