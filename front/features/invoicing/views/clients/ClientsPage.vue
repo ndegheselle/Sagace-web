@@ -89,8 +89,8 @@ async function refresh(search: string, pagination: PaginationOptions) {
                 <th>Nom</th>
                 <th>Email</th>
                 <th>Téléphone</th>
-                <th>Crée le</th>
-                <th class="text-right">Actions</th>
+                <th data-sort-field="created">Crée le</th>
+                <th></th>
             </template>
             <template #row="{ item: client }">
                 <td>

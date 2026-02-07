@@ -24,10 +24,10 @@ function toggleTheme(dark: boolean) {
                     <ul tabindex="-1"
                         class="menu menu-sm dropdown-content bg-base-200 rounded-box z-1 mt-3 w-52 p-2 shadow">
                         <li>
-                            <h2 class="menu-title">Facture</h2>
+                            <h2 class="menu-title">Facturation</h2>
                             <ul>
                                 <li>
-                                    <RouterLink to="/clients"><i class="fa-solid fa-users"></i>Clients</RouterLink>
+                                    <RouterLink to="/invoicing/clients"><i class="fa-solid fa-users"></i>Clients</RouterLink>
                                 </li>
                                 <li>
                                     <RouterLink to="/documents/estimates"><i class="fa-solid fa-file-invoice"></i>Devis
@@ -74,10 +74,10 @@ function toggleTheme(dark: boolean) {
                 <ul class="menu menu-horizontal px-1">
                     <li>
                         <details>
-                            <summary>Factures</summary>
-                            <ul class="bg-base-100 rounded-t-none p-2">
+                            <summary>Facturation</summary>
+                            <ul class="bg-base-200 rounded-t-none p-2">
                                 <li>
-                                    <RouterLink to="/clients"><i class="fa-solid fa-users"></i> Clients</RouterLink>
+                                    <RouterLink to="/invoicing/clients"><i class="fa-solid fa-users"></i> Clients</RouterLink>
                                 </li>
                                 <li>
                                     <RouterLink to="/documents/estimates"><i class="fa-solid fa-file-invoice"></i>Devis
@@ -94,7 +94,7 @@ function toggleTheme(dark: boolean) {
                     <li>
                         <details>
                             <summary>Stock</summary>
-                            <ul class="bg-base-100 rounded-t-none p-2">
+                            <ul class="bg-base-200 rounded-t-none p-2">
                                 <li>
                                     <RouterLink to="/articles"><i class="fa-solid fa-boxes-stacked"></i>Articles
                                     </RouterLink>

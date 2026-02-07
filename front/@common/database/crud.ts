@@ -9,14 +9,14 @@ export class PaginationOptions {
      */
     page: number;
     perPage: number;
-    orderBy?: string;
-    orderDirection?: SortDirection;
+    sortBy?: string;
+    sortDirection?: SortDirection;
 
-    constructor(page: number, perPage: number, orderBy: string | undefined = undefined, orderDirection: SortDirection | undefined = undefined) {
+    constructor(page: number, perPage: number, sortBy: string | undefined = undefined, sortDirection: SortDirection | undefined = undefined) {
         this.page = page;
         this.perPage = perPage;
-        this.orderBy = orderBy;
-        this.orderDirection = orderDirection;
+        this.sortBy = sortBy;
+        this.sortDirection = sortDirection;
     }
 }
 

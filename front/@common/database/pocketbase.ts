@@ -64,7 +64,7 @@ export class PocketbaseCrud<TResponse extends {id: string}> implements IDataCrud
         const collection = pb.collection(this.collectionName);
         const result = await collection.getList<TResponse>(options.page, options.perPage, {
             expand: this.expands?.join(","),
-            sort: options.orderBy ? `${options.orderDirection}${options.orderBy}` : undefined,
+            sort: options.sortBy ? `${options.sortDirection}${options.sortBy}` : undefined,
         });
 
         return new Paginated<TResponse>(result.items, result.totalItems, options);
@@ -80,7 +80,7 @@ export class PocketbaseCrud<TResponse extends {id: string}> implements IDataCrud
         const filter = this.searchFields.map(field => `${field}~'${search}'`).join(" || ");
         const result = await collection.getList<TResponse>(options.page, options.perPage, {
             expand: this.expands?.join(","),
-            sort: options.orderBy ? `${options.orderDirection}${options.orderBy}` : undefined,
+            sort: options.sortBy ? `${options.sortDirection}${options.sortBy}` : undefined,
             filter: filter,
         });
         return new Paginated<TResponse>(result.items, result.totalItems, options);

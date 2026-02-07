@@ -4,13 +4,14 @@ import { useDeferredModal } from '@common/composables/popups/modal';
 import { reactive, ref, useTemplateRef } from 'vue';
 import { clients } from '@features/invoicing/data/clients';
 import type { ClientsResponse } from '@common/database/types.g';
+import FormInput from '@common/components/data/FormInput.vue';
 
 const dialog = useTemplateRef<HTMLDialogElement>('dialog');
 const modal = useDeferredModal(dialog);
 const alert = useAlert();
 
 const form = reactive<ClientsResponse>({} as ClientsResponse);
-const error = ref('');
+const errors = ref({} as { [key in keyof ClientsResponse]?: { message: string } });
 const isLoading = ref(false);
 
 async function confirm() {
@@ -25,7 +26,7 @@ async function confirm() {
         }
         modal.confirm();
     } catch (e: any) {
-        error.value = e.data?.message || (form.id == null ? 'Création échouée' : 'Modification échouée');
+        errors.value = e.data?.data || (form.id == null ? 'Création échouée' : 'Modification échouée');
     } finally {
         isLoading.value = false;
     }
@@ -33,7 +34,7 @@ async function confirm() {
 
 function show(client: ClientsResponse): Promise<boolean> {
     Object.assign(form, client);
-    error.value = '';
+    errors.value = {};
     return modal.show();
 }
 
@@ -54,38 +55,19 @@ defineExpose({ client: form, show });
                 <!-- First & Last Name -->
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="label">Prénom</label>
-                        <input v-model="form.firstName" type="text" class="input input-bordered w-full"
-                            placeholder="John" required />
+                        <FormInput v-model="form.firstName" :error="errors?.firstName" label="Prénom" />
                     </div>
-
                     <div>
-                        <label class="label">Nom</label>
-                        <input v-model="form.lastName" type="text" class="input input-bordered w-full"
-                            placeholder="Doe" required />
+                        <FormInput v-model="form.lastName" :error="errors?.lastName" label="Nom" />
                     </div>
                 </div>
-
                 <!-- Email -->
-                <label class="label">Email</label>
-                <input v-model="form.email" type="email" class="input input-bordered w-full"
-                    placeholder="john.doe@email.com" required />
-
+                <FormInput v-model="form.email" type="email" :error="errors?.email" label="Email" />
                 <!-- Phone -->
-                <label class="label">Téléphone</label>
-                <input v-model="form.phone" type="tel" class="input input-bordered w-full"
+                <FormInput v-model="form.phone" type="tel" :error="errors?.phone" label="Téléphone"
                     placeholder="+33 03 01 02 03" />
-
                 <!-- adress -->
-                <label class="label">Adresse</label>
-                <input v-model="form.adress" type="text" class="input input-bordered w-full"
-                    placeholder="Adresse" />
-
-                <!-- Error -->
-                <small class="text-error" v-if="error">
-                    <i class="fa-solid fa-triangle-exclamation"></i>
-                    {{ error }}
-                </small>
+                <FormInput v-model="form.adress" label="Adresse" :error="errors?.adress" />
             </fieldset>
 
             <!-- Actions -->
