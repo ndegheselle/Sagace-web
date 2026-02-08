@@ -6,8 +6,8 @@ import type { ClientsResponse, EstimatesResponse } from '@common/database/types.
 import { clients } from '@features/invoicing/data/clients';
 import { estimates } from '@features/invoicing/data/estimates';
 
-import { onMounted, ref, useTemplateRef, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { ref, useTemplateRef } from 'vue';
+import { useRouter } from 'vue-router';
 import ClientModal from './ClientModal.vue';
 
 import TablePaginatedSearch from '@common/components/data/TablePaginatedSearch.vue';
@@ -15,26 +15,12 @@ import type { PaginationOptions } from '@common/database/crud';
 
 const confirmation = useConfirmation();
 const router = useRouter();
-const route = useRoute();
 const modalRef = useTemplateRef('modal');
 const tableRef = useTemplateRef('table');
 
 const list = ref<ClientsResponse[]>([]);
 const total = ref<number>(0);
 
-onMounted(() => {
-    watch(
-        () => route.params.mode,
-        async (mode) => {
-            if (!modalRef.value) return;
-
-            if (mode === 'new') {
-                await edit({} as ClientsResponse);
-            }
-        },
-        { immediate: true }
-    );
-});
 async function remove(client: ClientsResponse) {
     const confirmed = await confirmation.show(
         'Confirmer la suppression',
@@ -54,15 +40,15 @@ async function edit(client: ClientsResponse) {
         tableRef.value?.refresh();
 }
 
-async function createEstimate(client: ClientsResponse) {
-    const id = await estimates.create({client: client.id} as EstimatesResponse);
-    router.push(`/documents/estimates/${id}/items`);
-}
-
 async function refresh(search: string, pagination: PaginationOptions) {
     const result = await clients.search(search, pagination);
     list.value = result.data || [];
     total.value = result.total || 0;
+}
+
+async function createEstimate(client: ClientsResponse) {
+    const id = await estimates.create({client: client.id} as EstimatesResponse);
+    router.push(`/invoicing/estimates/${id}/items`);
 }
 </script>
 

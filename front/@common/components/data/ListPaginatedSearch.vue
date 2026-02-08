@@ -1,8 +1,9 @@
-<script setup lang="ts" generic="T extends { id: string}">
+<script setup lang="ts" generic="T extends BaseSystemFields">
 import { reactive, ref, watch, onMounted } from 'vue';
 import type { PaginationOptions } from '@common/database/crud';
 import Pagination from '@common/components/data/Pagination.vue';
 import { debounce } from '@common/utils/debounce';
+import type { BaseSystemFields } from '@common/database/types.g';
 
 const props = defineProps<{
     selected: T | null;

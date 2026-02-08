@@ -1,3 +1,5 @@
+import type { BaseSystemFields } from "@common/database/types.g";
+
 export enum SortDirection {
     ASC = '+',
     DESC = '-',
@@ -32,7 +34,7 @@ export class Paginated<T> {
     }
 }
 
-export interface IDataCrud<TResponse extends {id: string}> {
+export interface IDataCrud<TResponse extends BaseSystemFields> {
     create(data: TResponse): Promise<string>;
     update(id: string, data: TResponse): Promise<void>;
     delete(id: string): Promise<void>;

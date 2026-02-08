@@ -1,22 +1,21 @@
-<script setup lang="ts" generic="T extends { id: string }">
-import { reactive, onMounted } from 'vue';
+<script setup lang="ts" generic="T extends BaseSystemFields">
+import { onMounted } from 'vue';
 import { type PaginationOptions, SortDirection } from '@common/database/crud';
 import Pagination from '@common/components/data/Pagination.vue';
 import { debounce } from '@common/utils/debounce';
+import type { BaseSystemFields } from '@common/database/types.g';
 
 let search = "";
-const pagination = reactive<PaginationOptions>({
+const { pagination =  {
     sortBy: undefined,
     sortDirection: undefined,
     page: 1,
     perPage: 5
-});
-
-const props = defineProps<{
+}} = defineProps<{
     total: number,
-    items: T[]
+    items: T[],
+    pagination?: PaginationOptions
 }>();
-
 defineSlots<{
     actions(): any;
     /**
@@ -122,7 +121,7 @@ onMounted(refresh);
                 </tbody>
             </table>
         </div>
-        <Pagination class="mt-1" v-model:page="pagination.page" v-model:total="props.total" v-model:capacity="pagination.perPage"
+        <Pagination class="mt-1" v-model:page="pagination.page" :total="total" v-model:capacity="pagination.perPage"
             @change="refresh" />
     </div>
 </template>
