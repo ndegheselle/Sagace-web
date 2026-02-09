@@ -1,23 +1,24 @@
 <script setup lang="ts">
-import ListPaginatedSearch from '@/components/data/ListPaginatedSearch.vue';
-import { Client, api } from '@/data/clients';
-import type { PaginationOptions } from '@sagace/common';
+import ListPaginatedSearch from '@common/components/data/ListPaginatedSearch.vue';
+import { clients } from '@features/invoicing/data/clients';
+import type { ClientsResponse } from '@common/database/types.g';
+import type { PaginationOptions } from '@common/database/crud';
 import { ref } from 'vue';
 
 const props = defineProps<{
-  selected: Client | null;
+  selected: ClientsResponse | null;
 }>();
 
 const emit = defineEmits<{
-  (e: 'update:selected', value: Client | null): void;
+  (e: 'update:selected', value: ClientsResponse | null): void;
 }>();
 
-const clients = ref<Client[]>([]);
+const list = ref<ClientsResponse[]>([]);
 const total = ref(0);
 
 async function load(search: string, pagination: PaginationOptions) {
-  const result = await api.search(search, pagination);
-  clients.value = result.data || [];
+  const result = await clients.search(search, pagination);
+  list.value = result.data || [];
   total.value = result.total || 0;
 }
 </script>
@@ -26,19 +27,19 @@ async function load(search: string, pagination: PaginationOptions) {
   <ListPaginatedSearch
     v-model:selected="props.selected"
     :total="total"
-    :items="clients"
+    :items="list"
     @refresh="load"
     @update:selected="emit('update:selected', $event)"
   >
     <template #row="{ item: client }">
       <div class="my-auto">
-        <input type="checkbox" class="checkbox" :checked="props.selected?._id === client._id" readonly />
+        <input type="checkbox" class="checkbox" :checked="props.selected?.id === client.id" readonly />
       </div>
       <div class="my-auto">
         <i class="fa-regular fa-user"></i>
       </div>
       <div class="list-col-grow">
-        <div>{{ client.fullName }}</div>
+        <div>{{ client.firstName }} {{ client.lastName }}</div>
         <div class="uppercase opacity-60">{{ client.adress }}</div>
       </div>
       <div class="text-right opacity-60">
