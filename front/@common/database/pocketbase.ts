@@ -1,5 +1,5 @@
 import PocketBase from 'pocketbase';
-import type { TypedPocketBase } from './types.g.ts';
+import type { BaseSystemFields, TypedPocketBase } from './types.g.ts';
 import { type IDataCrud, Paginated, PaginationOptions } from "@common/database/crud";
 
 let pb: TypedPocketBase | null;
@@ -21,7 +21,7 @@ export function usePocketBase() {
     }
 }
 
-export class PocketbaseCrud<TResponse extends {id: string}> implements IDataCrud<TResponse> {
+export class PocketbaseCrud<TResponse extends BaseSystemFields> implements IDataCrud<TResponse> {
 
     constructor(
         protected readonly collectionName: string,

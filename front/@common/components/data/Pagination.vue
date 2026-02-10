@@ -2,40 +2,33 @@
 import { computed, watch } from 'vue';
 
 const capacityOptions = [5, 10, 25, 50, 100];
-
 const page = defineModel<number>('page', { default: 1 });
-const total = defineModel<number>('total', { default: 25 });
-const capacity = defineModel<number>('capacity', { default: 25 });
-
-const emit = defineEmits<{
-    (e: 'change', payload: { page: number; capacity: number }): void;
-}>();
+const perPage = defineModel<number>('perPage', { default: 25 });
+const total = defineModel<number>('total', { default: 25 }); 
 
 const totalPages = computed(() =>
-    Math.max(1, Math.ceil(total.value / capacity.value))
+    Math.max(1, Math.ceil(total.value / perPage.value))
 );
 
 const firstElement = computed(() => {
-  return (page.value - 1) * capacity.value + 1;
+  return (page.value - 1) * perPage.value + 1;
 });
+
 const lastElement = computed(() => {
-  return Math.min(page.value * capacity.value, total.value);
+  return Math.min(page.value * perPage.value, total.value);
 });
 
-watch(capacity, () => {
-    if (page.value > totalPages.value) {
-        page.value = totalPages.value;
+// Guard to ensure page never exceeds totalPages
+watch(
+  [() => page.value, totalPages],
+  ([currentPage, maxPages]) => {
+    if (currentPage > maxPages) {
+      page.value = maxPages;
     }
-});
-
-watch([page, capacity], () => {
-    emit('change', {
-        page: page.value,
-        capacity: capacity.value,
-    });
-});
+  },
+  { immediate: true }
+);
 </script>
-
 
 <template>
     <div class="flex w-full">
@@ -62,7 +55,7 @@ watch([page, capacity], () => {
         </div>
 
         <span class="ms-auto opacity-50 text-sm my-auto hidden md:inline">{{ firstElement }} - {{ lastElement }} de {{ total }}</span>
-        <select v-model="capacity" class="select w-18 select-sm ms-auto md:ms-2">
+        <select v-model="perPage" class="select w-18 select-sm ms-auto md:ms-2">
             <option v-for="option in capacityOptions" :key="option" :value="option">
                 {{ option }}
             </option>

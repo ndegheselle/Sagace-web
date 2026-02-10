@@ -1,44 +1,21 @@
 <script setup lang="ts">
-import TablePaginatedSearch from '@/components/data/TablePaginatedSearch.vue';
-import { useConfirmation } from '@/composables/popups/confirmation';
-import { api, Estimate } from '@/data/documents/estimates';
-import { formatDate } from '@/base/DateUtils';
-import EstimateStatusBadge from '@/views/documents/estimates/EstimateStatusBadge.vue';
-import { PaginationOptions } from '@sagace/common';
+import TablePaginatedSearch from '@common/components/data/TablePaginatedSearch.vue';
+import { useConfirmation } from '@common/composables/popups/confirmation';
+import { formatDate } from '@common/utils/date';
+import EstimateStatusBadge from './EstimateStatusBadge.vue';
+import { PaginationOptions } from '@common/database/crud';
 import { ref, useTemplateRef } from 'vue';
 import { useRouter } from 'vue-router';
+import { usePageActions } from '@common/composables/data/pageActions';
+import { estimates } from '@features/invoicing/data/estimates';
+import type { EstimatesResponse } from '@common/database/types.g';
 
-const confirmation = useConfirmation();
 const router = useRouter();
-const tableRef = useTemplateRef('table');
-
-const total = ref<number>(0);
-const estimates = ref<Estimate[]>([]);
-
-async function remove(estimate: Estimate) {
-    const confirmed = await confirmation.show(
-        'Confirmer la suppression',
-        `Êtes-vous sûr de vouloir supprimer le devis <b>${estimate.reference}</b> ?`,
-        'fa-solid fa-triangle-exclamation text-warning'
-    );
-
-    if (!confirmed) {
-        return;
-    }
-
-    await api.delete(estimate._id);
-    tableRef.value?.refresh();
-}
+const { list, total, remove, refresh } = usePageActions(estimates);
 
 async function create() {
-    const id = await api.create(new Estimate());
+    const id = await estimates.create({} as EstimatesResponse);
     router.push(`/documents/estimates/${id}/items`);
-}
-
-async function refresh(search: string, pagination: PaginationOptions) {
-    const result = await api.search(search, pagination);
-    estimates.value = result.data || [];
-    total.value = result.total || 0;
 }
 </script>
 
@@ -49,7 +26,7 @@ async function refresh(search: string, pagination: PaginationOptions) {
             Devis
         </h1>
 
-        <TablePaginatedSearch class="flex-1 mt-1" ref="table" @refresh="refresh" :total="total" :items="estimates">
+        <TablePaginatedSearch class="flex-1 mt-1" ref="table" @refresh="refresh" :total="total" :items="list">
             <template #actions>
                 <button class="btn btn-sm ms-1" @click="create">
                     <i class="fa-solid fa-plus"></i>
@@ -68,16 +45,16 @@ async function refresh(search: string, pagination: PaginationOptions) {
             <template #row="{ item: estimate }">
                 <td>{{ estimate.reference }}</td>
                 <td>
-                    {{ estimate.client?.fullName }}
+                    {{ estimate.expand.client.firstName }} {{ estimate.expand.client.lastName }}
                 </td>
                 <td class="text-right">
-                    {{ estimate.lines.length }}
+                    {{ estimate.expand.services.length + estimate.expand.articles.length }}
                 </td>
                 <td class="text-right">{{ estimate.totalTTC.toFixed(2) }} €</td>
                 <td class="text-right">
                     <EstimateStatusBadge :status="estimate.status" />
                 </td>
-                <td class="text-right">{{ formatDate(estimate.createdAt) }}</td>
+                <td class="text-right">{{ formatDate(estimate.created) }}</td>
                 <td class="text-right">
                     <details class="dropdown dropdown-end">
                         <summary class="btn btn-circle btn-xs">
@@ -85,7 +62,7 @@ async function refresh(search: string, pagination: PaginationOptions) {
                         </summary>
                         <ul class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
                             <li>
-                                <RouterLink :to="`/documents/estimates/${estimate._id}/items`"><i
+                                <RouterLink :to="`/documents/estimates/${estimate.id}/items`"><i
                                         class="fa-solid fa-pen"></i> Modifier</RouterLink>
                             </li>
                             <li><a class="text-error" href="#" @click.prevent="remove(estimate)"><i

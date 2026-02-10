@@ -1,12 +1,11 @@
 <script setup lang="ts" generic="T extends BaseSystemFields">
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { type PaginationOptions, SortDirection } from '@common/database/crud';
 import Pagination from '@common/components/data/Pagination.vue';
 import { debounce } from '@common/utils/debounce';
 import type { BaseSystemFields } from '@common/database/types.g';
 
-let search = "";
-const { pagination =  {
+const { pagination = {
     sortBy: undefined,
     sortDirection: undefined,
     page: 1,
@@ -16,6 +15,9 @@ const { pagination =  {
     items: T[],
     pagination?: PaginationOptions
 }>();
+
+const search = ref('');
+
 defineSlots<{
     actions(): any;
     /**
@@ -40,8 +42,6 @@ defineSlots<{
 const emit = defineEmits<{
   refresh: [search: string, pagination: PaginationOptions]
 }>()
-
-defineExpose({ refresh });
 
 function handleHeaderClick(event: MouseEvent) {
     const target = event.target as HTMLElement;
@@ -82,7 +82,7 @@ function handleHeaderClick(event: MouseEvent) {
 }
 
 async function refresh() {
-    emit('refresh', search, pagination);
+    emit('refresh', search.value, pagination);
 }
 
 const debouncedLoad = debounce(refresh, 300);
@@ -121,8 +121,7 @@ onMounted(refresh);
                 </tbody>
             </table>
         </div>
-        <Pagination class="mt-1" v-model:page="pagination.page" :total="total" v-model:capacity="pagination.perPage"
-            @change="refresh" />
+        <Pagination class="mt-1" :page="pagination.page" :perPage="pagination.perPage" :total="total" @change="refresh" />
     </div>
 </template>
 
