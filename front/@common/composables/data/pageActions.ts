@@ -27,6 +27,10 @@ export function usePageActions<T extends BaseSystemFields>(data: IDataCrud<T>, e
         refresh(_search, _pagination);
     }
 
+    async function create() {
+        return await edit({} as T);
+    }
+
     async function edit(element: T) {
         if (editCallback == undefined) 
             return;
@@ -47,6 +51,7 @@ export function usePageActions<T extends BaseSystemFields>(data: IDataCrud<T>, e
         list,
         total,
         remove,
+        create,
         edit,
         refresh
     };

@@ -1,21 +1,22 @@
 <script setup lang="ts">
 import TablePaginatedSearch from '@common/components/data/TablePaginatedSearch.vue';
-import { useConfirmation } from '@common/composables/popups/confirmation';
 import { formatDate } from '@common/utils/date';
 import EstimateStatusBadge from './EstimateStatusBadge.vue';
 import { PaginationOptions } from '@common/database/crud';
-import { ref, useTemplateRef } from 'vue';
-import { useRouter } from 'vue-router';
 import { usePageActions } from '@common/composables/data/pageActions';
-import { estimates } from '@features/invoicing/data/estimates';
-import type { EstimatesResponse } from '@common/database/types.g';
+import { estimates, totalTTC, type EstimateData } from '@features/invoicing/data/estimates';
+import { useRouter } from 'vue-router';
 
-const router = useRouter();
 const { list, total, remove, refresh } = usePageActions(estimates);
+const router = useRouter();
 
-async function create() {
-    const id = await estimates.create({} as EstimatesResponse);
-    router.push(`/documents/estimates/${id}/items`);
+async function create(clientId?: string) {
+    const id = await estimates.create({ client: clientId } as EstimateData);
+    router.push(`/invoicing/estimates/${id}/items`);
+}
+
+function edit(estimate: EstimateData) {
+    router.push(`/invoicing/estimates/${estimate.id}/items`);
 }
 </script>
 
@@ -28,7 +29,8 @@ async function create() {
 
         <TablePaginatedSearch class="flex-1 mt-1" ref="table" @refresh="refresh" :total="total" :items="list">
             <template #actions>
-                <button class="btn btn-sm ms-1" @click="create">
+                <button class="btn btn-sm ms-1" @click="() => estimates.createAndNavigate()
+                    ">
                     <i class="fa-solid fa-plus"></i>
                     Nouveau
                 </button>
@@ -50,7 +52,7 @@ async function create() {
                 <td class="text-right">
                     {{ estimate.expand.services.length + estimate.expand.articles.length }}
                 </td>
-                <td class="text-right">{{ estimate.totalTTC.toFixed(2) }} €</td>
+                <td class="text-right">{{ totalTTC(estimate).toFixed(2) }} €</td>
                 <td class="text-right">
                     <EstimateStatusBadge :status="estimate.status" />
                 </td>
@@ -61,10 +63,8 @@ async function create() {
                             <i class="fa-solid fa-ellipsis-vertical"></i>
                         </summary>
                         <ul class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                            <li>
-                                <RouterLink :to="`/documents/estimates/${estimate.id}/items`"><i
-                                        class="fa-solid fa-pen"></i> Modifier</RouterLink>
-                            </li>
+                            <li><a class="text-error" href="#" @click.prevent="estimates.navigateToEdit(estimate)"><i
+                                        class="fa-solid fa-pen"></i> Modifier</a></li>
                             <li><a class="text-error" href="#" @click.prevent="remove(estimate)"><i
                                         class="fa-solid fa-trash"></i> Supprimer</a></li>
                         </ul>

@@ -1,4 +1,5 @@
 import { PocketbaseCrud } from '@common/database/pocketbase';
 import type { ClientsResponse } from '@common/database/types.g';
 
-export const clients = new PocketbaseCrud<ClientsResponse>('clients', ['firstName', 'lastName', 'email']);
+export type ClientData = ClientsResponse;
+export const clients = new PocketbaseCrud<ClientData>('clients', ['firstName', 'lastName', 'email']);

@@ -1,14 +1,16 @@
 import { usePocketBase } from "@common/database/pocketbase.ts";
-import { type CompaniesRecord, Collections } from "@common/database/types.g";
+import { type CompaniesResponse, Collections } from "@common/database/types.g";
 
-export function getLogo(record: CompaniesRecord): string
+export type CompanyData = CompaniesResponse;
+
+export function getLogo(record: CompanyData): string
 {
     if (!record.logo) return '';
     const { pb } = usePocketBase();
     return pb.files.getURL(record, record.logo);
 }
 
-async function update(record: CompaniesRecord) : Promise<CompaniesRecord>
+async function update(record: CompanyData) : Promise<CompanyData>
 {
     const { pb } = usePocketBase();
     const collection = pb.collection(Collections.Companies);

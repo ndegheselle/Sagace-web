@@ -1,11 +1,10 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { users, type UserExpand } from '@common/data/users';
-import type { UsersResponse } from '@common/database/types.g';
+import { users, type UserData } from '@common/data/users';
 
 const isLoggedIn = ref(false);
-const user = ref<UsersResponse<UserExpand> | null>();
+const user = ref<UserData | null>();
 export const useAuth = () => {
     const router = useRouter();
 
