@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useTemplateRef, computed } from 'vue';
 import EditModal from '@common/components/data/EditModal.vue';
-import { clients } from '@features/invoicing/data/clients';
-import type { ClientsResponse } from '@common/database/types.g';
 import FormInput from '@common/components/data/FormInput.vue';
+import type { ClientsResponse } from '@common/database/types.g';
+import { clients } from '@features/invoicing/data/clients';
+import { computed, useTemplateRef } from 'vue';
 
 const dialog = useTemplateRef('dialog');
 
@@ -21,16 +21,16 @@ defineExpose({ client: data, show });
             <fieldset class="fieldset">
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <FormInput v-model="data.firstName" :error="errors?.firstName" label="Prénom" />
+                        <FormInput v-model="data.firstName" :error="errors?.firstName" label="Prénom *" />
                     </div>
                     <div>
-                        <FormInput v-model="data.lastName" :error="errors?.lastName" label="Nom" />
+                        <FormInput v-model="data.lastName" :error="errors?.lastName" label="Nom *" />
                     </div>
                 </div>
                 <FormInput v-model="data.email" type="email" :error="errors?.email" label="Email" />
                 <FormInput v-model="data.phone" type="tel" :error="errors?.phone" label="Téléphone"
                     placeholder="+33 03 01 02 03" />
-                <FormInput v-model="data.adress" label="Adresse" :error="errors?.adress" />
+                <FormInput v-model="data.adress" label="Adresse *" :error="errors?.adress" />
             </fieldset>
         </template>
     </EditModal>

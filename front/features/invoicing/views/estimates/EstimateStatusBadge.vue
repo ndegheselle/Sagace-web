@@ -1,28 +1,28 @@
 <script setup lang="ts">
-import { EstimateStatus } from '@/data/documents/estimates';
+import { EstimatesStatusOptions } from '@common/database/types.g';
 import { computed } from 'vue';
 
 const props = defineProps<{
-    status: EstimateStatus | undefined
+    status: EstimatesStatusOptions | undefined
 }>();
 
-const statusClassMap: Record<EstimateStatus, string> = {
-    [EstimateStatus.Template]: 'badge-primary',
-    [EstimateStatus.Draft]: 'badge-neutral',
-    [EstimateStatus.Sent]: 'badge-warning',
-    [EstimateStatus.Accepted]: 'badge-success',
-    [EstimateStatus.Refused]: 'badge-error'
+const statusClassMap: Record<EstimatesStatusOptions, string> = {
+    [EstimatesStatusOptions.TEMPLATE]: 'badge-primary',
+    [EstimatesStatusOptions.DRAFT]: 'badge-neutral',
+    [EstimatesStatusOptions.SENT]: 'badge-warning',
+    [EstimatesStatusOptions.ACCEPTED]: 'badge-success',
+    [EstimatesStatusOptions.REFUSED]: 'badge-error'
 }
-const badgeClass = computed(() => statusClassMap[props.status || EstimateStatus.Draft]);
+const badgeClass = computed(() => statusClassMap[props.status || EstimatesStatusOptions.DRAFT]);
 
-const statusLabelMap: Record<EstimateStatus, string> = {
-    [EstimateStatus.Template]: 'Modèle',
-    [EstimateStatus.Draft]: 'Brouillon',
-    [EstimateStatus.Sent]: 'Imprimé',
-    [EstimateStatus.Accepted]: 'Accepté',
-    [EstimateStatus.Refused]: 'Refusé'
+const statusLabelMap: Record<EstimatesStatusOptions, string> = {
+    [EstimatesStatusOptions.TEMPLATE]: 'Modèle',
+    [EstimatesStatusOptions.DRAFT]: 'Brouillon',
+    [EstimatesStatusOptions.SENT]: 'Imprimé',
+    [EstimatesStatusOptions.ACCEPTED]: 'Accepté',
+    [EstimatesStatusOptions.REFUSED]: 'Refusé'
 }
-const statusLabel = computed(() => statusLabelMap[props.status || EstimateStatus.Draft]);
+const statusLabel = computed(() => statusLabelMap[props.status || EstimatesStatusOptions.DRAFT]);
 </script>
 
 <template>

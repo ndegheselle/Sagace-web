@@ -1,11 +1,12 @@
-import type { RouteRecordRaw } from 'vue-router';
 import Default from '@/layouts/Default.vue';
+import type { RouteRecordRaw } from 'vue-router';
 
 import HomePage from '@/views/HomePage.vue';
-import UserProfilPage from '@common/views/UserProfilPage.vue';
 import LoginPage from '@common/views/LoginPage.vue';
+import UserProfilPage from '@common/views/UserProfilPage.vue';
 
 import ClientsPage from '@features/invoicing/views/clients/ClientsPage.vue';
+import EstimatesPage from '@features/invoicing/views/estimates/EstimatesPage.vue';
 
 const routes: RouteRecordRaw[] = [
     {
@@ -28,7 +29,10 @@ const routes: RouteRecordRaw[] = [
                 path: '/invoicing/clients',
                 component: ClientsPage,
             },
-            
+            {
+                path: '/invoicing/estimates',
+                component: EstimatesPage,
+            },
         ]
     }
 ];

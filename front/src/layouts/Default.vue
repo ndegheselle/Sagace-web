@@ -30,11 +30,11 @@ function toggleTheme(dark: boolean) {
                                     <RouterLink to="/invoicing/clients"><i class="fa-solid fa-users"></i>Clients</RouterLink>
                                 </li>
                                 <li>
-                                    <RouterLink to="/documents/estimates"><i class="fa-solid fa-file-invoice"></i>Devis
+                                    <RouterLink to="/invoicing/estimates"><i class="fa-solid fa-file-invoice"></i>Devis
                                     </RouterLink>
                                 </li>
                                 <li>
-                                    <RouterLink to="/documents/invoices"><i
+                                    <RouterLink to="/invoicing/invoices"><i
                                             class="fa-solid fa-file-invoice-dollar"></i>Factures
                                     </RouterLink>
                                 </li>
@@ -80,11 +80,11 @@ function toggleTheme(dark: boolean) {
                                     <RouterLink to="/invoicing/clients"><i class="fa-solid fa-users"></i> Clients</RouterLink>
                                 </li>
                                 <li>
-                                    <RouterLink to="/documents/estimates"><i class="fa-solid fa-file-invoice"></i>Devis
+                                    <RouterLink to="/invoicing/estimates"><i class="fa-solid fa-file-invoice"></i>Devis
                                     </RouterLink>
                                 </li>
                                 <li>
-                                    <RouterLink to="/documents/invoices"><i
+                                    <RouterLink to="/invoicing/invoices"><i
                                             class="fa-solid fa-file-invoice-dollar"></i>Factures
                                     </RouterLink>
                                 </li>

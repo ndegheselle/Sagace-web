@@ -1,23 +1,25 @@
 <script setup lang="ts">
 import TablePaginatedSearch from '@common/components/data/TablePaginatedSearch.vue';
 import { formatDate } from '@common/utils/date';
+import { useEstimatesActions } from '@features/invoicing/composables/estimatesActions';
+import { totalTTC } from '@features/invoicing/data/estimates';
+import ClientSelectionModal from '@features/invoicing/views/clients/ClientSelectionModal.vue';
+import { useTemplateRef } from 'vue';
 import EstimateStatusBadge from './EstimateStatusBadge.vue';
-import { PaginationOptions } from '@common/database/crud';
-import { usePageActions } from '@common/composables/data/pageActions';
-import { estimates, totalTTC, type EstimateData } from '@features/invoicing/data/estimates';
-import { useRouter } from 'vue-router';
 
-const { list, total, remove, refresh } = usePageActions(estimates);
-const router = useRouter();
+const modalClientRef = useTemplateRef('modalSelectionClient');
+const { list, total, remove, refresh, createAndNavigate, navigateToEdit } = useEstimatesActions();
 
-async function create(clientId?: string) {
-    const id = await estimates.create({ client: clientId } as EstimateData);
-    router.push(`/invoicing/estimates/${id}/items`);
+async function create()
+{
+    if (modalClientRef.value == null)
+        return;
+
+    if (await modalClientRef.value.show() == true && modalClientRef.value.selected) {
+        createAndNavigate(modalClientRef.value.selected.id);
+    }
 }
 
-function edit(estimate: EstimateData) {
-    router.push(`/invoicing/estimates/${estimate.id}/items`);
-}
 </script>
 
 <template>
@@ -29,8 +31,7 @@ function edit(estimate: EstimateData) {
 
         <TablePaginatedSearch class="flex-1 mt-1" ref="table" @refresh="refresh" :total="total" :items="list">
             <template #actions>
-                <button class="btn btn-sm ms-1" @click="() => estimates.createAndNavigate()
-                    ">
+                <button class="btn btn-sm ms-1" @click="create()">
                     <i class="fa-solid fa-plus"></i>
                     Nouveau
                 </button>
@@ -38,11 +39,11 @@ function edit(estimate: EstimateData) {
             <template #header>
                 <th>Référence</th>
                 <th>Client</th>
-                <th class="text-right">Élements</th>
-                <th class="text-right">Total TTC</th>
-                <th class="text-right" data-sort-field="status">Statut</th>
-                <th class="text-right" data-sort-field="createdAt">Créé le</th>
-                <th class="text-right">Actions</th>
+                <th>Élements</th>
+                <th>Total TTC</th>
+                <th data-sort-field="status">Statut</th>
+                <th data-sort-field="createdAt">Créé le</th>
+                <th></th>
             </template>
             <template #row="{ item: estimate }">
                 <td>{{ estimate.reference }}</td>
@@ -50,7 +51,7 @@ function edit(estimate: EstimateData) {
                     {{ estimate.expand.client.firstName }} {{ estimate.expand.client.lastName }}
                 </td>
                 <td class="text-right">
-                    {{ estimate.expand.services.length + estimate.expand.articles.length }}
+                    {{ (estimate.expand.services?.length ?? 0) + (estimate.expand.articles?.length ?? 0) }}
                 </td>
                 <td class="text-right">{{ totalTTC(estimate).toFixed(2) }} €</td>
                 <td class="text-right">
@@ -63,7 +64,7 @@ function edit(estimate: EstimateData) {
                             <i class="fa-solid fa-ellipsis-vertical"></i>
                         </summary>
                         <ul class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                            <li><a class="text-error" href="#" @click.prevent="estimates.navigateToEdit(estimate)"><i
+                            <li><a class="text-error" href="#" @click.prevent="navigateToEdit(estimate)"><i
                                         class="fa-solid fa-pen"></i> Modifier</a></li>
                             <li><a class="text-error" href="#" @click.prevent="remove(estimate)"><i
                                         class="fa-solid fa-trash"></i> Supprimer</a></li>
@@ -72,5 +73,7 @@ function edit(estimate: EstimateData) {
                 </td>
             </template>
         </TablePaginatedSearch>
+
+        <ClientSelectionModal ref="modalSelectionClient" />
     </div>
 </template>

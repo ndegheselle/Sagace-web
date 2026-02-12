@@ -1,23 +1,19 @@
 <script setup lang="ts">
 import { formatDate } from '@common/utils/date';
-import type { ClientsResponse } from '@common/database/types.g';
 import { clients } from '@features/invoicing/data/clients';
-import { estimates } from '@features/invoicing/data/estimates';
 
 import { useTemplateRef } from 'vue';
 import ClientModal from './ClientModal.vue';
 
 import TablePaginatedSearch from '@common/components/data/TablePaginatedSearch.vue';
 import { usePageActions } from '@common/composables/data/pageActions';
-import type { PaginationOptions } from '@common/database/crud';
+import { useEstimatesActions } from '@features/invoicing/composables/estimatesActions';
 
 const modalRef = useTemplateRef('modal');
 
 const { list, total, remove, create, edit, refresh } = usePageActions(clients, (el) => modalRef?.value?.show(el));
+const estimatesActions = useEstimatesActions();
 
-async function createEstimate(client: ClientsResponse) {
-    await estimates.createAndNavigate(client.id);
-}
 </script>
 
 <template>
@@ -79,7 +75,7 @@ async function createEstimate(client: ClientsResponse) {
                         <ul class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
                             <li>
                                 <a href="#"
-                                   @click.prevent="createEstimate(client)">
+                                   @click.prevent="estimatesActions.createAndNavigate(client.id)">
                                     <i class="fa-solid fa-file-invoice"></i>
                                     Nouveau devis
                                 </a>
