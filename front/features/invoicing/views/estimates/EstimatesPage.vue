@@ -50,14 +50,14 @@ async function create()
                 <td>
                     {{ estimate.expand.client.firstName }} {{ estimate.expand.client.lastName }}
                 </td>
-                <td class="text-right">
+                <td>
                     {{ (estimate.expand.services?.length ?? 0) + (estimate.expand.articles?.length ?? 0) }}
                 </td>
-                <td class="text-right">{{ totalTTC(estimate).toFixed(2) }} €</td>
-                <td class="text-right">
+                <td>{{ totalTTC(estimate).toFixed(2) }} €</td>
+                <td>
                     <EstimateStatusBadge :status="estimate.status" />
                 </td>
-                <td class="text-right">{{ formatDate(estimate.created) }}</td>
+                <td>{{ formatDate(estimate.created) }}</td>
                 <td class="text-right">
                     <details class="dropdown dropdown-end">
                         <summary class="btn btn-circle btn-xs">

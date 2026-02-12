@@ -1,16 +1,16 @@
-<script setup lang="ts" generic="T extends BaseSystemFields">
+<script setup lang="ts" generic="T extends BaseEntity">
 import { onMounted, ref } from 'vue';
 import { type PaginationOptions, SortDirection } from '@common/database/crud';
 import Pagination from '@common/components/data/Pagination.vue';
 import { debounce } from '@common/utils/debounce';
-import type { BaseSystemFields } from '@common/database/types.g';
+import type { BaseEntity } from '@common/data/base';
 
 const { pagination = {
     sortBy: undefined,
     sortDirection: undefined,
     page: 1,
     perPage: 5
-}} = defineProps<{
+} } = defineProps<{
     total: number,
     items: T[],
     pagination?: PaginationOptions
@@ -40,20 +40,20 @@ defineSlots<{
 }>();
 
 const emit = defineEmits<{
-  refresh: [search: string, pagination: PaginationOptions]
+    refresh: [search: string, pagination: PaginationOptions]
 }>()
 
 function handleHeaderClick(event: MouseEvent) {
     const target = event.target as HTMLElement;
     const th = target.closest('th[data-sort-field]') as HTMLElement;
-    
+
     if (th) {
         const field = th.dataset.sortField;
         if (field) {
             // Remove data-sort from all th elements
             const allHeaders = th.parentElement?.querySelectorAll('th[data-sort-field]');
             allHeaders?.forEach(header => header.removeAttribute('data-sort'));
-            
+
             // Update sort state
             if (pagination.sortBy === field) {
                 if (pagination.sortDirection === SortDirection.ASC) {
@@ -68,14 +68,14 @@ function handleHeaderClick(event: MouseEvent) {
                 pagination.sortBy = field;
                 pagination.sortDirection = SortDirection.ASC;
             }
-            
+
             // Set data-sort on the clicked header
             if (pagination.sortBy === field) {
                 th.setAttribute('data-sort', pagination.sortDirection === SortDirection.ASC ? '+' : '-');
             } else {
                 th.removeAttribute('data-sort');
             }
-            
+
             refresh();
         }
     }
@@ -121,7 +121,8 @@ onMounted(refresh);
                 </tbody>
             </table>
         </div>
-        <Pagination class="mt-1" :page="pagination.page" :perPage="pagination.perPage" :total="total" @change="refresh" />
+        <Pagination class="mt-1" :page="pagination.page" :perPage="pagination.perPage" :total="total"
+            @change="refresh" />
     </div>
 </template>
 

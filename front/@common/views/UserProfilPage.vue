@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { useAuth } from '@common/composables/auth';
-import { getLogo } from '@common/data/companies';
+import { getLogo, type CompanyData } from '@common/data/companies';
 import { ref, reactive, watch } from 'vue';
-import type { CompaniesRecord } from '@common/database/types.g';
 
 import { companies } from '@common/data/companies';
 
 const { user } = useAuth();
-const company = reactive<CompaniesRecord>({} as CompaniesRecord);
+const company = reactive<CompanyData>({} as CompanyData);
 const fileInput = ref<HTMLInputElement | null>(null);
 
 watch(

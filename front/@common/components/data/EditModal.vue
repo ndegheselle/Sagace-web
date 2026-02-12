@@ -1,9 +1,9 @@
-<script setup lang="ts" generic="T extends BaseSystemFields">
+<script setup lang="ts" generic="T extends BaseEntity">
 import { useAlert } from '@common/composables/popups/alert';
 import { useDeferredModal } from '@common/composables/popups/modal';
 import { reactive, ref, useTemplateRef } from 'vue';
 import type { IDataCrud } from '@common/database/crud';
-import type { BaseSystemFields } from '@common/database/types.g';
+import type { BaseEntity } from '@common/data/base';
 
 const dialog = useTemplateRef<HTMLDialogElement>('dialog');
 const modal = useDeferredModal(dialog);

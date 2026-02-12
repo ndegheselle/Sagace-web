@@ -7,6 +7,7 @@ import UserProfilPage from '@common/views/UserProfilPage.vue';
 
 import ClientsPage from '@features/invoicing/views/clients/ClientsPage.vue';
 import EstimatesPage from '@features/invoicing/views/estimates/EstimatesPage.vue';
+import LayoutEdit from '@features/invoicing/views/estimates/edit/LayoutEdit.vue';
 
 const routes: RouteRecordRaw[] = [
     {
@@ -32,6 +33,11 @@ const routes: RouteRecordRaw[] = [
             {
                 path: '/invoicing/estimates',
                 component: EstimatesPage,
+            },
+            
+            {
+                path: '/invoicing/estimates/:id',
+                component: LayoutEdit,
             },
         ]
     }

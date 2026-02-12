@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import { useAlert } from '@/composables/popups/alert';
-import { Estimate, api } from '@/data/documents/estimates';
+import { useAlert } from '@common/composables/popups/alert';
+import { type EstimateData, estimates } from '@features/invoicing/data/estimates';
 import { ref, watch } from 'vue';
 import { RouterView, useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
 const router = useRouter();
 const alert = useAlert();
-const estimate = ref<Estimate>();
+const estimate = ref<EstimateData>();
 
 watch(() => route.params.id, async (id) => {
-    let estimateApi: Estimate | null = null;
+    let estimateApi: EstimateData | null = null;
     if (id && typeof id == 'string') {
-        estimateApi = await api.getById(id);
+        estimateApi = await estimates.getById(id);
     }
 
     if (!estimateApi) {
-        router.push('/documents/estimates');
+        router.push('/invoicing/estimates');
         alert.error(`Aucun devis trouvé pour l'id [${id}].`);
         return;
     }

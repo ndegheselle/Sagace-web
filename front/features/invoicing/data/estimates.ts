@@ -1,11 +1,14 @@
 import { PocketbaseCrud } from '@common/database/pocketbase';
 import type { ClientsResponse, EstimatesArticlesResponse, EstimatesResponse, EstimatesServicesResponse } from '@common/database/types.g';
+import { EstimatesStatusOptions } from '@common/database/types.g';
 
 type EstimateExpand = {
     client: ClientsResponse;
     services?: EstimatesServicesResponse[];
     articles?: EstimatesArticlesResponse[];
 };
+
+export { EstimatesStatusOptions as EnumEstimateStatus };
 
 export type EstimateData = EstimatesResponse<EstimateExpand>;
 

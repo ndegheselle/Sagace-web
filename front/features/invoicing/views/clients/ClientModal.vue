@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import EditModal from '@common/components/data/EditModal.vue';
 import FormInput from '@common/components/data/FormInput.vue';
-import type { ClientsResponse } from '@common/database/types.g';
-import { clients } from '@features/invoicing/data/clients';
+import { clients, type ClientData } from '@features/invoicing/data/clients';
 import { computed, useTemplateRef } from 'vue';
 
 const dialog = useTemplateRef('dialog');
 
 const data = computed(() => dialog.value?.data);
-function show(client: ClientsResponse) {
+function show(client: ClientData) {
   return dialog.value!.show(client)
 }
 

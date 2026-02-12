@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Estimate, api as estimateApi } from "@/data/documents/estimates";
-import ArticleSelectModal from "@/views/billable/articles/ArticleSelectModal.vue";
-import ServiceSelectModal from "@/views/billable/services/ServiceSelectModal.vue";
+import ArticleSelectModal from "@common/views/billable/articles/ArticleSelectModal.vue";
+import ServiceSelectModal from "@common/views/billable/services/ServiceSelectModal.vue";
 import { useTemplateRef } from "vue";
 import { useRouter } from "vue-router";
 
