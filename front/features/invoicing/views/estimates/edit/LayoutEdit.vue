@@ -23,7 +23,6 @@ watch(() => route.params.id, async (id) => {
 
     estimate.value = estimateApi;
 }, { immediate: true });
-
 </script>
 
 <template>

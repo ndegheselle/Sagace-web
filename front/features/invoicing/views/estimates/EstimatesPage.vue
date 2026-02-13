@@ -3,7 +3,7 @@ import TablePaginatedSearch from '@common/components/data/TablePaginatedSearch.v
 import { formatDate } from '@common/utils/date';
 import { useEstimatesActions } from '@features/invoicing/composables/estimatesActions';
 import { totalTTC } from '@features/invoicing/data/estimates';
-import ClientSelectionModal from '@features/invoicing/views/clients/ClientSelectionModal.vue';
+import ClientSelectModal from '@features/invoicing/views/clients/ClientSelectModal.vue';
 import { useTemplateRef } from 'vue';
 import EstimateStatusBadge from './EstimateStatusBadge.vue';
 
@@ -64,7 +64,7 @@ async function create()
                             <i class="fa-solid fa-ellipsis-vertical"></i>
                         </summary>
                         <ul class="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                            <li><a class="text-error" href="#" @click.prevent="navigateToEdit(estimate)"><i
+                            <li><a href="#" @click.prevent="navigateToEdit(estimate)"><i
                                         class="fa-solid fa-pen"></i> Modifier</a></li>
                             <li><a class="text-error" href="#" @click.prevent="remove(estimate)"><i
                                         class="fa-solid fa-trash"></i> Supprimer</a></li>
@@ -74,6 +74,6 @@ async function create()
             </template>
         </TablePaginatedSearch>
 
-        <ClientSelectionModal ref="modalSelectionClient" />
+        <ClientSelectModal ref="modalSelectionClient" />
     </div>
 </template>

@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-const model = defineModel<string>();
+const model = defineModel<string | number | null>();
 
 defineProps<{
   label: string,
-  error?: {message: string}
+  error?: { message: string }
 }>();
 
 defineOptions({
@@ -13,16 +13,16 @@ defineOptions({
 
 <template>
   <div class="form-control w-full">
-    <label v-if="label" class="label">
+    <label v-if="label"
+           class="label">
       <span class="label-text">{{ label }}</span>
     </label>
-    <input
-      class="input input-bordered w-full"
-      :class="{ 'input-error': error }"
-      v-bind="$attrs"
-      v-model="model"
-    />
-    <small v-if="error" class="text-error mt-1">
+    <input class="input input-bordered w-full"
+           :class="{ 'input-error': error }"
+           v-bind="$attrs"
+           v-model="model" />
+    <small v-if="error"
+           class="text-error mt-1">
       <i class="fa-solid fa-triangle-exclamation"></i>
       {{ error.message }}
     </small>

@@ -44,11 +44,11 @@ function toggleTheme(dark: boolean) {
                             <h2 class="menu-title">Stock</h2>
                             <ul>
                                 <li>
-                                    <RouterLink to="/articles"><i class="fa-solid fa-boxes-stacked"></i>Articles
+                                    <RouterLink to="/stock/articles"><i class="fa-solid fa-boxes-stacked"></i>Articles
                                     </RouterLink>
                                 </li>
                                 <li>
-                                    <RouterLink to="/services"><i class="fa-solid fa-screwdriver-wrench"></i>Services
+                                    <RouterLink to="/stock/services"><i class="fa-solid fa-screwdriver-wrench"></i>Services
                                     </RouterLink>
                                 </li>
                             </ul>
@@ -96,11 +96,11 @@ function toggleTheme(dark: boolean) {
                             <summary>Stock</summary>
                             <ul class="bg-base-200 rounded-t-none p-2">
                                 <li>
-                                    <RouterLink to="/articles"><i class="fa-solid fa-boxes-stacked"></i>Articles
+                                    <RouterLink to="/stock/articles"><i class="fa-solid fa-boxes-stacked"></i>Articles
                                     </RouterLink>
                                 </li>
                                 <li>
-                                    <RouterLink to="/services"><i class="fa-solid fa-screwdriver-wrench"></i>Services
+                                    <RouterLink to="/stock/services"><i class="fa-solid fa-screwdriver-wrench"></i>Services
                                     </RouterLink>
                                 </li>
                             </ul>

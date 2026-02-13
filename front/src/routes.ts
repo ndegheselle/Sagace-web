@@ -9,6 +9,9 @@ import ClientsPage from '@features/invoicing/views/clients/ClientsPage.vue';
 import EstimatesPage from '@features/invoicing/views/estimates/EstimatesPage.vue';
 import LayoutEdit from '@features/invoicing/views/estimates/edit/LayoutEdit.vue';
 
+import ArticlesPage from '@features/stock/views/articles/ArticlesPage.vue';
+import ServicesPage from '@features/stock/views/services/ServicesPage.vue';
+
 const routes: RouteRecordRaw[] = [
     {
         path: '',
@@ -26,6 +29,7 @@ const routes: RouteRecordRaw[] = [
                 path: '/user/login',
                 component: LoginPage,
             },
+
             {
                 path: '/invoicing/clients',
                 component: ClientsPage,
@@ -34,10 +38,18 @@ const routes: RouteRecordRaw[] = [
                 path: '/invoicing/estimates',
                 component: EstimatesPage,
             },
-            
             {
                 path: '/invoicing/estimates/:id',
                 component: LayoutEdit,
+            },
+
+            {
+                path: '/stock/articles',
+                component: ArticlesPage,
+            },
+            {
+                path: '/stock/services',
+                component: ServicesPage,
             },
         ]
     }

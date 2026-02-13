@@ -73,7 +73,8 @@ defineExpose({ selected, show: modal.show });
           </button>
           <button class="btn btn-primary"
                   @click="modal.confirm()">
-            Confirmer
+          <i class="fa-solid fa-plus"></i>
+            Sélectionner
           </button>
         </slot>
       </div>
