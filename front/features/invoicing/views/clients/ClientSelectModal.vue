@@ -33,7 +33,6 @@ defineExpose({ selected, show: modal.show });
         Sélectionner un client
       </h3>
 
-
       <ListPaginatedSearch v-model:selected="selected"
                            :total="total"
                            :items="list"

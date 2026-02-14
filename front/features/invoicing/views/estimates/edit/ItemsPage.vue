@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { Estimate, api as estimateApi } from "@/data/documents/estimates";
-import ArticleSelectModal from "@common/views/billable/articles/ArticleSelectModal.vue";
-import ServiceSelectModal from "@common/views/billable/services/ServiceSelectModal.vue";
+import ArticleSelectModal from "@features/stock/views/articles/ArticleSelectModal.vue";
+import ServiceSelectModal from "@features/stock/views/services/ServiceSelectModal.vue";
+import { type EstimateData, estimates, Estimate } from '@features/invoicing/data/estimates';
 import { useTemplateRef } from "vue";
 import { useRouter } from "vue-router";
 
@@ -11,18 +11,18 @@ const modalserviceRef = useTemplateRef('serviceModal');
 
 async function addArticle() {
     if (await modalArticleRef.value?.show() && modalArticleRef.value?.selected) {
-        props.estimate?.addItem(modalArticleRef.value?.selected, 1);
+        Estimate.addArticle(estimate, modalArticleRef.value?.selected, 1);
     }
 }
 
 async function addService() {
     if (await modalserviceRef.value?.show() && modalserviceRef.value?.selected) {
-        props.estimate?.addItem(modalserviceRef.value?.selected, 1);
+        Estimate.addService(estimate, modalserviceRef.value?.selected, 1);
     }
 }
 
 function remove(index: number) {
-    props.estimate?.lines.splice(index, 1);
+    estimate?.lines.splice(index, 1);
 }
 
 function previous() {
@@ -32,21 +32,17 @@ function previous() {
 
 function next() {
     save();
-    if (props.estimate?.client)
-        router.push(`/documents/estimates/${props.estimate?._id}/invoice`);
+    if (estimate?.client)
+        router.push(`/documents/estimates/${estimate?.id}/invoice`);
     else
-        router.push(`/documents/estimates/${props.estimate?._id}/client`);
+        router.push(`/documents/estimates/${estimate?.id}/client`);
 }
 
 function save() {
-    if (!props.estimate)
-        return;
-    estimateApi.update(props.estimate._id, props.estimate);
+    estimates.update(estimate.id, estimate);
 }
 
-const props = defineProps({
-    estimate: Estimate
-});
+const { estimate } = defineProps<{estimate: EstimateData}>();
 </script>
 
 <template>
@@ -56,9 +52,9 @@ const props = defineProps({
                 <span><i class="fa-solid fa-file-invoice"></i> Devis</span>
             </li>
             <li class="step">
-                <div v-if="props.estimate?.client" class="indicator">
+                <div v-if="estimate?.client" class="indicator">
                     <span class="indicator-item text-success"><i class="fa-solid fa-check"></i></span>
-                    <span><i class="fa-solid fa-user"></i> {{ props.estimate?.client.fullName }}</span>
+                    <span><i class="fa-solid fa-user"></i> {{ estimate.expand.client.firstName }} {{ estimate.expand.client.lastName }}</span>
                 </div>
                 <div v-else>
                     <span><i class="fa-solid fa-user"></i> Client</span>
@@ -91,7 +87,7 @@ const props = defineProps({
                     </thead>
 
                     <tbody>
-                        <tr v-for="(line, index) in props.estimate?.lines" :key="line.item._id">
+                        <tr v-for="(line, index) in estimate?.lines" :key="line.item._id">
                             <td>
                                 <div class="font-medium">
                                     {{ line.item.name }}
@@ -119,7 +115,7 @@ const props = defineProps({
                             </td>
                         </tr>
 
-                        <tr v-if="props.estimate?.lines.length === 0">
+                        <tr v-if="estimate?.lines.length === 0">
                             <td colspan="5" class="text-center text-base-content/50">
                                 Aucune lignes
                             </td>
@@ -152,17 +148,17 @@ const props = defineProps({
                     <tfoot>
                         <tr>
                             <td colspan="3" class="text-right">Total HT</td>
-                            <td class="text-right">{{ props.estimate?.totalHT.toFixed(2) }} €</td>
+                            <td class="text-right">{{ Estimate.totalHT(estimate).toFixed(2) }} €</td>
                             <td></td>
                         </tr>
                         <tr>
                             <td colspan="3" class="text-right">TVA (20%)</td>
-                            <td class="text-right">{{ props.estimate?.tva.toFixed(2) }} €</td>
+                            <td class="text-right">{{ Estimate.totalTax(estimate).toFixed(2) }} €</td>
                             <td></td>
                         </tr>
                         <tr class="font-bold">
                             <td colspan="3" class="text-right">Total TTC</td>
-                            <td class="text-right">{{ props.estimate?.totalTTC.toFixed(2) }} €</td>
+                            <td class="text-right">{{ Estimate.totalTTC(estimate).toFixed(2) }} €</td>
                             <td></td>
                         </tr>
                     </tfoot>
