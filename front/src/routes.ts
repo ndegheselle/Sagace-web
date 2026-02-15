@@ -7,7 +7,7 @@ import UserProfilPage from '@common/views/UserProfilPage.vue';
 
 import ClientsPage from '@features/invoicing/views/clients/ClientsPage.vue';
 import EstimatesPage from '@features/invoicing/views/estimates/EstimatesPage.vue';
-import LayoutEdit from '@features/invoicing/views/estimates/edit/LayoutEdit.vue';
+import EstimateItemsPage from '@features/invoicing/views/estimates/edit/ItemsPage.vue';
 
 import ArticlesPage from '@features/stock/views/articles/ArticlesPage.vue';
 import ServicesPage from '@features/stock/views/services/ServicesPage.vue';
@@ -34,13 +34,14 @@ const routes: RouteRecordRaw[] = [
                 path: '/invoicing/clients',
                 component: ClientsPage,
             },
+            
             {
                 path: '/invoicing/estimates',
                 component: EstimatesPage,
             },
             {
-                path: '/invoicing/estimates/:id',
-                component: LayoutEdit,
+                path: '/invoicing/estimates/:id/items',
+                component: EstimateItemsPage,
             },
 
             {

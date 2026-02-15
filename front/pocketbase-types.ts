@@ -15,8 +15,7 @@ export enum Collections {
 	Clients = "clients",
 	Companies = "companies",
 	Estimates = "estimates",
-	EstimatesArticles = "estimates_articles",
-	EstimatesServices = "estimates_services",
+	EstimatesLines = "estimates_lines",
 	Invoices = "invoices",
 	InvoicesArticles = "invoices_articles",
 	InvoicesServices = "invoices_services",
@@ -102,13 +101,6 @@ export type SuperusersRecord = {
 	verified?: boolean
 }
 
-export enum ArticlesVatRateTypeOptions {
-	"STANDARD" = "STANDARD",
-	"INTERMEDIATE" = "INTERMEDIATE",
-	"REDUCED" = "REDUCED",
-	"SPECIAL" = "SPECIAL",
-	"EXEMPT" = "EXEMPT",
-}
 export type ArticlesRecord = {
 	created: IsoAutoDateString
 	description?: string
@@ -118,7 +110,7 @@ export type ArticlesRecord = {
 	sku?: string
 	unitPrice: number
 	updated: IsoAutoDateString
-	vatRateType: ArticlesVatRateTypeOptions
+	vatRate?: number
 }
 
 export type ClientsRecord = {
@@ -153,35 +145,24 @@ export enum EstimatesStatusOptions {
 	"REFUSED" = "REFUSED",
 }
 export type EstimatesRecord = {
-	articles?: RecordIdString[]
 	client: RecordIdString
 	created: IsoAutoDateString
 	id: string
+	lines?: RecordIdString[]
 	notes?: string
 	reference: string
-	services?: RecordIdString[]
 	status?: EstimatesStatusOptions
 	updated: IsoAutoDateString
 }
 
-export type EstimatesArticlesRecord = {
+export type EstimatesLinesRecord = {
 	article?: RecordIdString
 	created: IsoAutoDateString
-	id: string
-	quantity?: number
-	unitPrice?: number
-	updated: IsoAutoDateString
-	vatRate?: number
-}
-
-export type EstimatesServicesRecord = {
-	created: IsoAutoDateString
+	estimate: RecordIdString
 	id: string
 	quantity?: number
 	service?: RecordIdString
-	unitPrice?: number
 	updated: IsoAutoDateString
-	vatRate?: number
 }
 
 export enum InvoicesStatusOptions {
@@ -227,13 +208,6 @@ export type InvoicesServicesRecord = {
 	vatRate?: number
 }
 
-export enum ServicesVatRateTypeOptions {
-	"STANDARD" = "STANDARD",
-	"INTERMEDIATE" = "INTERMEDIATE",
-	"REDUCED" = "REDUCED",
-	"SPECIAL" = "SPECIAL",
-	"EXEMPT" = "EXEMPT",
-}
 export type ServicesRecord = {
 	code?: string
 	created: IsoAutoDateString
@@ -243,7 +217,7 @@ export type ServicesRecord = {
 	name: string
 	unitPrice?: number
 	updated: IsoAutoDateString
-	vatRateType: ServicesVatRateTypeOptions
+	vatRate?: number
 }
 
 export type UsersRecord = {
@@ -270,8 +244,7 @@ export type ArticlesResponse<Texpand = unknown> = Required<ArticlesRecord> & Bas
 export type ClientsResponse<Texpand = unknown> = Required<ClientsRecord> & BaseSystemFields<Texpand>
 export type CompaniesResponse<Texpand = unknown> = Required<CompaniesRecord> & BaseSystemFields<Texpand>
 export type EstimatesResponse<Texpand = unknown> = Required<EstimatesRecord> & BaseSystemFields<Texpand>
-export type EstimatesArticlesResponse<Texpand = unknown> = Required<EstimatesArticlesRecord> & BaseSystemFields<Texpand>
-export type EstimatesServicesResponse<Texpand = unknown> = Required<EstimatesServicesRecord> & BaseSystemFields<Texpand>
+export type EstimatesLinesResponse<Texpand = unknown> = Required<EstimatesLinesRecord> & BaseSystemFields<Texpand>
 export type InvoicesResponse<Texpand = unknown> = Required<InvoicesRecord> & BaseSystemFields<Texpand>
 export type InvoicesArticlesResponse<Texpand = unknown> = Required<InvoicesArticlesRecord> & BaseSystemFields<Texpand>
 export type InvoicesServicesResponse<Texpand = unknown> = Required<InvoicesServicesRecord> & BaseSystemFields<Texpand>
@@ -290,8 +263,7 @@ export type CollectionRecords = {
 	clients: ClientsRecord
 	companies: CompaniesRecord
 	estimates: EstimatesRecord
-	estimates_articles: EstimatesArticlesRecord
-	estimates_services: EstimatesServicesRecord
+	estimates_lines: EstimatesLinesRecord
 	invoices: InvoicesRecord
 	invoices_articles: InvoicesArticlesRecord
 	invoices_services: InvoicesServicesRecord
@@ -309,8 +281,7 @@ export type CollectionResponses = {
 	clients: ClientsResponse
 	companies: CompaniesResponse
 	estimates: EstimatesResponse
-	estimates_articles: EstimatesArticlesResponse
-	estimates_services: EstimatesServicesResponse
+	estimates_lines: EstimatesLinesResponse
 	invoices: InvoicesResponse
 	invoices_articles: InvoicesArticlesResponse
 	invoices_services: InvoicesServicesResponse

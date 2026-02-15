@@ -8,8 +8,8 @@ export function useEstimatesActions() {
     const { list, total, remove, refresh } = usePageActions(estimates);
 
     async function createAndNavigate(clientId: string) {
-        const id = await estimates.create({ client: clientId } as EstimateData);
-        router.push(`/invoicing/estimates/${id}/items`);
+        const estimate = await estimates.create({ client: clientId } as EstimateData);
+        router.push(`/invoicing/estimates/${estimate.id}/items`);
     }
 
     function navigateToEdit(estimate: EstimateData) {

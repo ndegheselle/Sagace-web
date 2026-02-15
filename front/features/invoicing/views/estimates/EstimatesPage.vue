@@ -2,7 +2,7 @@
 import TablePaginatedSearch from '@common/components/data/TablePaginatedSearch.vue';
 import { formatDate } from '@common/utils/date';
 import { useEstimatesActions } from '@features/invoicing/composables/estimatesActions';
-import { totalTTC } from '@features/invoicing/data/estimates';
+import { Estimate } from '@features/invoicing/data/estimates';
 import ClientSelectModal from '@features/invoicing/views/clients/ClientSelectModal.vue';
 import { useTemplateRef } from 'vue';
 import EstimateStatusBadge from './EstimateStatusBadge.vue';
@@ -53,7 +53,7 @@ async function create()
                 <td>
                     {{ (estimate.expand.services?.length ?? 0) + (estimate.expand.articles?.length ?? 0) }}
                 </td>
-                <td>{{ totalTTC(estimate).toFixed(2) }} €</td>
+                <td>{{ Estimate.totalTTC(estimate).toFixed(2) }} €</td>
                 <td>
                     <EstimateStatusBadge :status="estimate.status" />
                 </td>

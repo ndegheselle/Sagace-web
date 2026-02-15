@@ -43,7 +43,6 @@ export function usePageActions<T extends BaseSystemFields>(data: IDataCrud<T>, e
         _pagination = pagination;
 
         const result = await data.search(search, pagination);
-        console.log(result);
         list.value = result.data || [];
         total.value = result.total || 0;
     }
