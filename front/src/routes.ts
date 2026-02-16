@@ -6,8 +6,8 @@ import LoginPage from '@common/views/LoginPage.vue';
 import UserProfilPage from '@common/views/UserProfilPage.vue';
 
 import ClientsPage from '@features/invoicing/views/clients/ClientsPage.vue';
+import EstimateEditPage from '@features/invoicing/views/estimates/EstimateEditPage.vue';
 import EstimatesPage from '@features/invoicing/views/estimates/EstimatesPage.vue';
-import EstimateItemsPage from '@features/invoicing/views/estimates/edit/ItemsPage.vue';
 
 import ArticlesPage from '@features/stock/views/articles/ArticlesPage.vue';
 import ServicesPage from '@features/stock/views/services/ServicesPage.vue';
@@ -40,8 +40,8 @@ const routes: RouteRecordRaw[] = [
                 component: EstimatesPage,
             },
             {
-                path: '/invoicing/estimates/:id/items',
-                component: EstimateItemsPage,
+                path: '/invoicing/estimates/:id',
+                component: EstimateEditPage,
             },
 
             {

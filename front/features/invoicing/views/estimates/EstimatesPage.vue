@@ -46,12 +46,12 @@ async function create()
                 <th></th>
             </template>
             <template #row="{ item: estimate }">
-                <td>{{ estimate.reference }}</td>
+                <td><RouterLink :to="`/invoicing/estimates/${estimate.id}`">{{ estimate.reference }}</RouterLink></td>
                 <td>
                     {{ estimate.expand.client.firstName }} {{ estimate.expand.client.lastName }}
                 </td>
                 <td>
-                    {{ (estimate.expand.services?.length ?? 0) + (estimate.expand.articles?.length ?? 0) }}
+                    {{ estimate.expand.lines?.length ?? 0 }}
                 </td>
                 <td>{{ Estimate.totalTTC(estimate).toFixed(2) }} €</td>
                 <td>

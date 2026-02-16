@@ -9,11 +9,11 @@ export function useEstimatesActions() {
 
     async function createAndNavigate(clientId: string) {
         const estimate = await estimates.create({ client: clientId } as EstimateData);
-        router.push(`/invoicing/estimates/${estimate.id}/items`);
+        router.push(`/invoicing/estimates/${estimate.id}`);
     }
 
     function navigateToEdit(estimate: EstimateData) {
-        router.push(`/invoicing/estimates/${estimate.id}/items`);
+        router.push(`/invoicing/estimates/${estimate.id}`);
     }
 
     return {
