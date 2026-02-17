@@ -17,8 +17,7 @@ export enum Collections {
 	Estimates = "estimates",
 	EstimatesLines = "estimates_lines",
 	Invoices = "invoices",
-	InvoicesArticles = "invoices_articles",
-	InvoicesServices = "invoices_services",
+	InvoicesLines = "invoices_lines",
 	Services = "services",
 	Users = "users",
 }
@@ -158,8 +157,8 @@ export type EstimatesRecord = {
 export type EstimatesLinesRecord = {
 	article?: RecordIdString
 	created: IsoAutoDateString
-	id: string
 	estimate: RecordIdString
+	id: string
 	quantity?: number
 	service?: RecordIdString
 	updated: IsoAutoDateString
@@ -172,7 +171,6 @@ export enum InvoicesStatusOptions {
 	"CANCELLED" = "CANCELLED",
 }
 export type InvoicesRecord = {
-	articles?: RecordIdString[]
 	client: RecordIdString
 	created: IsoAutoDateString
 	dueDate: IsoDateString
@@ -183,27 +181,18 @@ export type InvoicesRecord = {
 	notes?: string
 	paidAt?: IsoDateString
 	reference?: string
-	services?: RecordIdString[]
 	status?: InvoicesStatusOptions
 	updated: IsoAutoDateString
 }
 
-export type InvoicesArticlesRecord = {
-	article?: RecordIdString
+export type InvoicesLinesRecord = {
 	created: IsoAutoDateString
+	description?: string
 	id: string
+	invoice: RecordIdString
+	name?: string
 	quantity?: number
-	unitPrice?: number
-	updated: IsoAutoDateString
-	vatRate?: number
-}
-
-export type InvoicesServicesRecord = {
-	created: IsoAutoDateString
-	id: string
-	quantity?: number
-	service?: RecordIdString
-	unitPrice?: number
+	unitPrice: number
 	updated: IsoAutoDateString
 	vatRate?: number
 }
@@ -246,8 +235,7 @@ export type CompaniesResponse<Texpand = unknown> = Required<CompaniesRecord> & B
 export type EstimatesResponse<Texpand = unknown> = Required<EstimatesRecord> & BaseSystemFields<Texpand>
 export type EstimatesLinesResponse<Texpand = unknown> = Required<EstimatesLinesRecord> & BaseSystemFields<Texpand>
 export type InvoicesResponse<Texpand = unknown> = Required<InvoicesRecord> & BaseSystemFields<Texpand>
-export type InvoicesArticlesResponse<Texpand = unknown> = Required<InvoicesArticlesRecord> & BaseSystemFields<Texpand>
-export type InvoicesServicesResponse<Texpand = unknown> = Required<InvoicesServicesRecord> & BaseSystemFields<Texpand>
+export type InvoicesLinesResponse<Texpand = unknown> = Required<InvoicesLinesRecord> & BaseSystemFields<Texpand>
 export type ServicesResponse<Texpand = unknown> = Required<ServicesRecord> & BaseSystemFields<Texpand>
 export type UsersResponse<Texpand = unknown> = Required<UsersRecord> & AuthSystemFields<Texpand>
 
@@ -265,8 +253,7 @@ export type CollectionRecords = {
 	estimates: EstimatesRecord
 	estimates_lines: EstimatesLinesRecord
 	invoices: InvoicesRecord
-	invoices_articles: InvoicesArticlesRecord
-	invoices_services: InvoicesServicesRecord
+	invoices_lines: InvoicesLinesRecord
 	services: ServicesRecord
 	users: UsersRecord
 }
@@ -283,8 +270,7 @@ export type CollectionResponses = {
 	estimates: EstimatesResponse
 	estimates_lines: EstimatesLinesResponse
 	invoices: InvoicesResponse
-	invoices_articles: InvoicesArticlesResponse
-	invoices_services: InvoicesServicesResponse
+	invoices_lines: InvoicesLinesResponse
 	services: ServicesResponse
 	users: UsersResponse
 }

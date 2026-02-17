@@ -49,7 +49,7 @@ const { list, total, remove, create, edit, refresh } = usePageActions(articles, 
                     {{ article.unitPrice.toFixed(2) }} €
                 </td>
                 <td>
-                    {{ article.vatRateType}}
+                    {{ article.vatRate * 100}} %
                 </td>
                 <td>
                     <span

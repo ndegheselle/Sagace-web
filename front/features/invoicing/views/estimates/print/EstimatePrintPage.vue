@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { useAuth } from '@/composables/auth';
-import { useAlert } from '@/composables/popups/alert';
-import { Estimate, api } from '@/data/documents/estimates';
-import { formatDate } from '@/base/DateUtils';
+import { useAuth } from '@common/composables/auth';
+import { useAlert } from '@common/composables/popups/alert';
+import { getLogo } from '@common/data/companies';
+import { formatDate } from '@common/utils/date';
+import { type EstimateData, estimates, Estimate } from '@features/invoicing/data/estimates';
+import { Line } from '@features/invoicing/data/item';
 import { nextTick, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -10,17 +12,17 @@ const { user } = useAuth();
 const route = useRoute();
 const router = useRouter();
 const alert = useAlert();
-const estimate = ref<Estimate>();
+const estimate = ref<EstimateData>();
 const apiUrl = import.meta.env.VITE_API_URL;
 
 watch(() => route.params.id, async (id) => {
-    let estimateApi: Estimate | null = null;
+    let estimateApi: EstimateData | null = null;
     if (id && typeof id == 'string') {
-        estimateApi = await api.getById(id);
+        estimateApi = await estimates.getById(id);
     }
 
     if (!estimateApi) {
-        router.push('/documents/estimates');
+        router.push('/invoicing/estimates');
         alert.error(`Aucun devis trouvé pour l'id [${id}].`);
         return;
     }
@@ -37,38 +39,39 @@ function addDays(date: Date | undefined, days: number) {
 }
 </script>
 <template>
-    <div data-theme="corporate"
-         class="h-full paper">
+    <div data-theme="corporate" class="h-full paper">
         <div class="print-content">
 
             <div class="flex">
-                <div v-if="user?.company.logoUrl"
-                     class="w-32 rounded-xl">
-                    <img :src="apiUrl + user?.company.logoUrl" />
+                <div v-if="user?.expand.company.logo" class="w-32 rounded-xl">
+                    <img :src="getLogo(user?.expand.company)" />
                 </div>
 
-                <h1 class="text-5xl my-auto">Devis {{ estimate?.reference }}</h1>
+                <div class="my-auto">
+                    <h1 class="text-4xl">{{ estimate?.reference }}</h1>
+                    <span class="opacity-60">DEVIS</span>
+                </div>
             </div>
 
             <div class="opacity-80 mt-1 space-y-1">
-                <div>Date d’émission : {{ formatDate(estimate?.generatedAt) }}</div>
-                <div>Date d’échéance : {{ formatDate(addDays(estimate?.generatedAt, 30)) }}</div>
+                <div>Date d’émission : {{ formatDate(new Date()) }}</div>
+                <div>Date d’échéance : {{ formatDate(addDays(new Date(), 30)) }}</div>
             </div>
 
             <div class="grid grid-cols-2 gap-1 mt-4">
                 <div class="rounded-box border border-base-300 py-2 px-4">
-                    <div class="font-bold uppercase">{{ user?.company.name }}</div>
-                    <div>{{ user?.company.SIRET }}</div>
-                    <div>{{ user?.company.adress }}</div>
-                    <div class="mt-2">{{ user?.company.phone }}</div>
-                    <div>{{ user?.company.email }}</div>
+                    <div class="font-bold uppercase">{{ user?.expand.company.name }}</div>
+                    <div>{{ user?.expand.company.SIRET }}</div>
+                    <div>{{ user?.expand.company.adress }}</div>
+                    <div class="mt-2">{{ user?.expand.company.phone }}</div>
+                    <div>{{ user?.expand.company.email }}</div>
                 </div>
                 <div class="rounded-box border border-base-300 py-2 px-4 text-right">
                     <div class="font-bold uppercase">A l'attention de</div>
-                    <div>{{ estimate?.client?.fullName }}</div>
-                    <div>{{ estimate?.client?.adress }}</div>
-                    <div class="mt-2">{{ estimate?.client?.phone }}</div>
-                    <div>{{ estimate?.client?.email }}</div>
+                    <div>{{ estimate?.expand.client.firstName }} {{ estimate?.expand.client.lastName }}</div>
+                    <div>{{ estimate?.expand.client.adress }}</div>
+                    <div class="mt-2">{{ estimate?.expand.client.phone }}</div>
+                    <div>{{ estimate?.expand.client.email }}</div>
                 </div>
             </div>
 
@@ -92,35 +95,34 @@ function addDays(date: Date | undefined, days: number) {
                     </thead>
 
                     <tbody>
-                        <tr v-for="line in estimate?.lines"
-                            :key="line.item._id">
+                        <tr v-for="line in estimate?.expand.lines" :key="line.id">
                             <td class="border-base-300">
                                 <div class="font-medium">
-                                    {{ line.item.name }}
+                                    {{ line.expand.article?.name ?? line.expand.service?.name }}
                                 </div>
                                 <div class="text-sm opacity-60">
-                                    {{ line.item.description || '—' }}
+                                    {{ line.expand.article?.description ?? line.expand.service?.description ?? '—' }}
                                 </div>
                             </td>
 
                             <td class="text-right border-base-300">
-                                {{ line.item.vatRateType * 100 }} %
+                                {{ (line.expand.article?.vatRate ?? line.expand.service?.vatRate ?? 0) * 100 }} %
                             </td>
                             <td class="text-right border-base-300">
-                                {{ line.item.unitPrice.toFixed(2) }} €
+                                {{ (line.expand.article?.unitPrice ?? line.expand.service?.unitPrice ?? 0).toFixed(2) }}
+                                €
                             </td>
                             <td class="text-right border-base-300">
                                 {{ line.quantity }}
                             </td>
 
                             <td class="text-right font-medium border-base-300">
-                                {{ line.totalHT.toFixed(2) }} €
+                                {{ Line.totalHT(line).toFixed(2) }} €
                             </td>
                         </tr>
 
                         <tr v-if="estimate?.lines.length === 0">
-                            <td colspan="100"
-                                class="text-center text-base-content/50 border-base-300">
+                            <td colspan="100" class="text-center text-base-content/50 border-base-300">
                                 Aucune lignes
                             </td>
                         </tr>
@@ -129,19 +131,16 @@ function addDays(date: Date | undefined, days: number) {
                     <!-- Totals -->
                     <tfoot>
                         <tr>
-                            <td colspan="4"
-                                class="text-right border-base-300">Total HT</td>
-                            <td class="text-right border-base-300">{{ estimate?.totalHT.toFixed(2) }} €</td>
+                            <td colspan="4" class="text-right border-base-300">Total HT</td>
+                            <td class="text-right border-base-300">{{ Estimate.totalHT(estimate).toFixed(2) }} €</td>
                         </tr>
                         <tr>
-                            <td colspan="4"
-                                class="text-right border-base-300">TVA</td>
-                            <td class="text-right border-base-300">{{ estimate?.tva.toFixed(2) }} €</td>
+                            <td colspan="4" class="text-right border-base-300">TVA</td>
+                            <td class="text-right border-base-300">{{ Estimate.totalTax(estimate).toFixed(2) }} €</td>
                         </tr>
                         <tr class="font-bold">
-                            <td colspan="4"
-                                class="text-right border-base-300">Total TTC</td>
-                            <td class="text-right border-base-300">{{ estimate?.totalTTC.toFixed(2) }} €</td>
+                            <td colspan="4" class="text-right border-base-300">Total TTC</td>
+                            <td class="text-right border-base-300">{{ Estimate.totalTTC(estimate).toFixed(2) }} €</td>
                         </tr>
                     </tfoot>
                 </table>
@@ -180,11 +179,11 @@ function addDays(date: Date | undefined, days: number) {
         <footer class="print-footer border-t border-base-300 pt-2 mt-2">
             <div class="text-xs text-center opacity-60">
                 <p>
-                    {{ user?.company.name }} —
-                    {{ user?.company.adress }}
+                    {{ user?.expand.company.name }} —
+                    {{ user?.expand.company.adress }}
                 </p>
                 <p>
-                    SIRET : {{ user?.company.SIRET }}
+                    SIRET : {{ user?.expand.company.SIRET }}
                 </p>
             </div>
         </footer>

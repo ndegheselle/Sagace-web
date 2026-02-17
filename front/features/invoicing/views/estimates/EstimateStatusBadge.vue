@@ -18,7 +18,7 @@ const badgeClass = computed(() => statusClassMap[props.status || EnumEstimateSta
 const statusLabelMap: Record<EnumEstimateStatus, string> = {
     [EnumEstimateStatus.TEMPLATE]: 'Modèle',
     [EnumEstimateStatus.DRAFT]: 'Brouillon',
-    [EnumEstimateStatus.SENT]: 'Imprimé',
+    [EnumEstimateStatus.SENT]: 'Envoyé',
     [EnumEstimateStatus.ACCEPTED]: 'Accepté',
     [EnumEstimateStatus.REFUSED]: 'Refusé'
 }

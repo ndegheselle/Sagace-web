@@ -84,9 +84,13 @@ async function updateLineQuantity(line: EstimateLineData) {
 async function print() {
     if (!estimate.value)
         return;
-
-    estimate.value.status = EnumEstimateStatus.SENT;
     window.open(`/invoicing/estimates/${estimate.value.id}/print`, '_blank');
+}
+
+async function isSent() {
+    if (!estimate.value)
+        return;
+    estimate.value.status = EnumEstimateStatus.SENT;
     await estimates.update(estimate.value.id, {status: estimate.value.status});
 }
 
@@ -129,8 +133,9 @@ async function toInvoice() {
                     </summary>
                     <ul class="menu dropdown-content bg-base-200 rounded-box z-1 w-52 p-2 shadow-sm">
                         <li><a href="#" @click.prevent="print()"><i class="fa-solid fa-print"></i> Imprimer</a></li>
+                        <li><a href="#" @click.prevent="isSent()" class="text-success"><i class="fa-solid fa-envelope-circle-check"></i> Est envoyé</a></li>
                         <li><a href="#" @click.prevent="reject()" class="text-error"><i class="fa-solid fa-ban"></i> Rejeter le devis</a></li>
-                        <li><a href="#" @click.prevent="toInvoice()" class="text-success"><i class="fa-solid fa-file-invoice-dollar"></i> Convertir en facture</a></li>
+                        <li><a href="#" @click.prevent="toInvoice()"><i class="fa-solid fa-file-invoice-dollar"></i> Convertir en facture</a></li>
                     </ul>
                 </details>
             </div>

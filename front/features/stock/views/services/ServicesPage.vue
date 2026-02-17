@@ -54,7 +54,7 @@ const { list, total, remove, create, edit, refresh } = usePageActions(services, 
                     {{ service.unitPrice.toFixed(2) }} €
                 </td>
                 <td>
-                    {{ service.vatRateType }}
+                    {{ service.vatRate * 100 }} %
                 </td>
                 <td>
                     <span v-if="service.durationHours">
