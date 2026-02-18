@@ -3,12 +3,19 @@ package main
 import (
 	"log"
 
+	_ "backend/migrations"
+
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
+	"github.com/pocketbase/pocketbase/plugins/migratecmd"
 )
 
 func main() {
 	app := pocketbase.New()
+
+	migratecmd.MustRegister(app, app.RootCmd, migratecmd.Config{
+		Automigrate: false,
+	})
 
 	app.OnRecordCreate("invoices").BindFunc(func(e *core.RecordEvent) error {
 		app.RunInTransaction(func(txApp core.App) error {

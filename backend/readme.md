@@ -10,12 +10,18 @@ admin@test.local
 test1234admin
 ```
 
-Migrate collections :
+## Migrations
+Mirgate changes :
+```bash
+go run . migrate create 
 ```
-pocketbase collections migrate
+
+Migrate all collections :
+```bash
+go run . migrate collections
 ```
 
 Generate typescript types :
-```
+```bash
 npx pocketbase-typegen --url http://127.0.0.1:8090 --email admin@test.local --password 'test1234admin'
 ```

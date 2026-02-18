@@ -16,10 +16,10 @@ class InvoiceCrud extends PocketbaseCrud<InvoiceData> {
         const invoice = {
             client: estimate.client,
             notes: '',
-            dueDate: InvoicesStatusOptions.ISSUED,
-            paidAt: new Date(),
+            status: InvoicesStatusOptions.ISSUED,
             estimate: estimate.id,
-        };
+            paidAt: new Date().toISOString()
+        } as InvoiceData;
 
         for(const line in estimate.expand.lines)
         {
