@@ -2,44 +2,46 @@
 import { useAuth } from '@common/composables/auth';
 import { useAlert } from '@common/composables/popups/alert';
 import { getLogo } from '@common/data/companies';
-import { formatDate } from '@common/utils/date';
-import { type EstimateData, estimates, Estimate } from '@features/invoicing/data/estimates';
-import { EstimateLine } from '@features/invoicing/data/estimatesLine';
+import { invoices, type InvoiceData } from '@features/invoicing/data/invoices';
+import { InvoiceLine } from '@features/invoicing/data/invoicesLine';
 import { nextTick, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { Invoice } from '@features/invoicing/data/invoices';
+import { formatDate } from '@common/utils/date';
 
 const { user } = useAuth();
 const route = useRoute();
 const router = useRouter();
 const alert = useAlert();
-const estimate = ref<EstimateData>();
-const apiUrl = import.meta.env.VITE_API_URL;
 
-watch(() => route.params.id, async (id) => {
-    let estimateApi: EstimateData | null = null;
-    if (id && typeof id == 'string') {
-        estimateApi = await estimates.getById(id);
-    }
+const invoice = ref<InvoiceData>();
 
-    if (!estimateApi) {
-        router.push('/invoicing/estimates');
-        alert.error(`Aucun devis trouvé pour l'id [${id}].`);
-        return;
-    }
+watch(
+    () => route.params.id,
+    async (id) => {
+        let invoiceApi: InvoiceData | null = null
 
-    estimate.value = estimateApi;
-    await nextTick();
-    window.print();
-}, { immediate: true });
+        if (id && typeof id === 'string') {
+            invoiceApi = await invoices.getById(id)
+        }
 
-function addDays(date: Date | undefined, days: number) {
-    var result = new Date(date || new Date());
-    result.setDate(result.getDate() + days);
-    return result;
-}
+        if (!invoiceApi) {
+            router.push('/invoicing/invoices')
+            alert.error(`Aucune facture trouvée pour l'id [${id}].`)
+            return
+        }
+
+        invoice.value = invoiceApi;
+        await nextTick();
+        window.print();
+    },
+    { immediate: true }
+)
+
 </script>
 <template>
-    <div data-theme="corporate" class="h-full paper">
+    <div data-theme="corporate"
+         class="h-full paper">
         <div class="print-content">
 
             <div class="flex">
@@ -47,34 +49,38 @@ function addDays(date: Date | undefined, days: number) {
                     <img :src="getLogo(user?.expand.company)" />
                 </div>
 
-                <div class="my-auto">
-                    <h1 class="text-4xl">{{ estimate?.reference }}</h1>
-                    <span class="opacity-60">DEVIS</span>
-                </div>
+                <h1 class="text-5xl my-auto">
+                    Facture {{ invoice?.number }}
+                </h1>
             </div>
 
             <div class="opacity-80 mt-1 space-y-1">
-                <div>Date d’émission : {{ formatDate(new Date()) }}</div>
-                <div>Date d’échéance : {{ formatDate(addDays(new Date(), 30)) }}</div>
+                <div>Date d’émission : {{ formatDate(invoice?.issuedAt) }}</div>
+                <div>Date d’échéance : {{ formatDate(invoice?.dueDate) }}</div>
             </div>
 
+            <!-- Parties -->
             <div class="grid grid-cols-2 gap-1 mt-4">
                 <div class="rounded-box border border-base-300 py-2 px-4">
-                    <div class="font-bold uppercase">{{ user?.expand.company.name }}</div>
+                    <div class="font-bold uppercase">
+                        {{ user?.expand.company.name }}
+                    </div>
                     <div>{{ user?.expand.company.SIRET }}</div>
                     <div>{{ user?.expand.company.adress }}</div>
                     <div class="mt-2">{{ user?.expand.company.phone }}</div>
                     <div>{{ user?.expand.company.email }}</div>
                 </div>
+
                 <div class="rounded-box border border-base-300 py-2 px-4 text-right">
-                    <div class="font-bold uppercase">A l'attention de</div>
-                    <div>{{ estimate?.expand.client.firstName }} {{ estimate?.expand.client.lastName }}</div>
-                    <div>{{ estimate?.expand.client.adress }}</div>
-                    <div class="mt-2">{{ estimate?.expand.client.phone }}</div>
-                    <div>{{ estimate?.expand.client.email }}</div>
+                    <div class="font-bold uppercase">Facturé à</div>
+                    <div>{{ invoice?.expand.client.firstName }} {{ invoice?.expand.client.lastName }}</div>
+                    <div>{{ invoice?.expand.client.adress }}</div>
+                    <div class="mt-2">{{ invoice?.expand.client.phone }}</div>
+                    <div>{{ invoice?.expand.client.email }}</div>
                 </div>
             </div>
 
+            <!-- Lines -->
             <div class="overflow-x-auto rounded-box border border-base-300 bg-base-100 mt-1">
                 <table class="table table-sm">
                     <colgroup>
@@ -84,46 +90,50 @@ function addDays(date: Date | undefined, days: number) {
                         <col style="width: 4rem">
                         <col style="width: 6rem">
                     </colgroup>
+
                     <thead>
                         <tr>
                             <th class="border-base-300">Désignation</th>
                             <th class="text-right border-base-300">TVA</th>
-                            <th class="text-right border-base-300">PU HT</th>
+                            <th class="text-right border-base-300">
+                                PU HT
+                            </th>
                             <th class="text-right border-base-300">Qte</th>
                             <th class="text-right border-base-300">Total HT</th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        <tr v-for="line in estimate?.expand.lines" :key="line.id">
+                        <tr v-for="line in invoice?.expand.lines"
+                            :key="line.id">
                             <td class="border-base-300">
                                 <div class="font-medium">
-                                    {{ EstimateLine.getInfos(line).name }}
+                                    {{ line.name }}
                                 </div>
                                 <div class="text-sm opacity-60">
-                                    {{ EstimateLine.getInfos(line).description }}
+                                    {{ line.description || '—' }}
                                 </div>
                             </td>
+                            <td class="text-right border-base-300">
+                                {{ line.vatRate * 100 }} %
+                            </td>
+                            <td class="text-right border-base-300">
+                                {{ line.unitPrice.toFixed(2) }} €
+                            </td>
 
-                            <td class="text-right border-base-300">
-                                {{ EstimateLine.getInfos(line).vatRate * 100 }} %
-                            </td>
-                            <td class="text-right border-base-300">
-                                {{ EstimateLine.getInfos(line).unitPrice.toFixed(2) }}
-                                €
-                            </td>
                             <td class="text-right border-base-300">
                                 {{ line.quantity }}
                             </td>
 
                             <td class="text-right font-medium border-base-300">
-                                {{ EstimateLine.totalHT(line).toFixed(2) }} €
+                                {{ InvoiceLine.totalHT(line).toFixed(2) }} €
                             </td>
                         </tr>
 
-                        <tr v-if="estimate?.lines.length === 0">
-                            <td colspan="100" class="text-center text-base-content/50 border-base-300">
-                                Aucune lignes
+                        <tr v-if="invoice?.lines.length === 0">
+                            <td colspan="100"
+                                class="text-center text-base-content/50 border-base-300">
+                                Aucune ligne
                             </td>
                         </tr>
                     </tbody>
@@ -131,51 +141,66 @@ function addDays(date: Date | undefined, days: number) {
                     <!-- Totals -->
                     <tfoot>
                         <tr>
-                            <td colspan="4" class="text-right border-base-300">Total HT</td>
-                            <td class="text-right border-base-300">{{ Estimate.totalHT(estimate).toFixed(2) }} €</td>
+                            <td colspan="4"
+                                class="text-right border-base-300">
+                                Total HT
+                            </td>
+                            <td class="text-right border-base-300">
+                                {{ Invoice.totalHT(invoice).toFixed(2) }} €
+                            </td>
                         </tr>
                         <tr>
-                            <td colspan="4" class="text-right border-base-300">TVA</td>
-                            <td class="text-right border-base-300">{{ Estimate.totalTax(estimate).toFixed(2) }} €</td>
+                            <td colspan="4"
+                                class="text-right border-base-300">
+                                TVA
+                            </td>
+                            <td class="text-right border-base-300">
+                                {{ Invoice.totalTax(invoice).toFixed(2) }} €
+                            </td>
                         </tr>
                         <tr class="font-bold">
-                            <td colspan="4" class="text-right border-base-300">Total TTC</td>
-                            <td class="text-right border-base-300">{{ Estimate.totalTTC(estimate).toFixed(2) }} €</td>
+                            <td colspan="4"
+                                class="text-right border-base-300">
+                                Total TTC
+                            </td>
+                            <td class="text-right border-base-300">
+                                {{ Invoice.totalTTC(invoice).toFixed(2) }} €
+                            </td>
                         </tr>
                     </tfoot>
                 </table>
             </div>
 
+            <!-- Payment info -->
             <div class="flex mt-2">
                 <div class="text-xs opacity-70 space-y-2 mt-2 flex-1">
                     <p class="m-0">
-                        <strong>Validité du devis :</strong>
-                        Devis valable <strong>30 jours</strong> à compter de sa date d’émission.
-                    </p>
-                    <p class="m-0">
                         <strong>Conditions de paiement :</strong>
-                        Paiement à réception du devis. Aucun escompte accordé pour paiement anticipé.
+                        Paiement exigible à la date d’échéance indiquée.
                     </p>
+
+                    <p v-if="invoice?.paidAt"
+                       class="m-0">
+                        <strong>Facture réglée le :</strong>
+                        {{ formatDate(invoice?.paidAt) }}
+                    </p>
+
                     <p class="m-0">
-                        En cas de retard de paiement, des pénalités seront exigibles sans qu’un rappel
-                        soit nécessaire, au taux légal en vigueur, ainsi qu’une indemnité forfaitaire
-                        pour frais de recouvrement de <strong>40 €</strong>
+                        En cas de retard de paiement, des pénalités seront exigibles
+                        au taux légal en vigueur ainsi qu’une indemnité forfaitaire
+                        de <strong>40 €</strong> pour frais de recouvrement
                         (articles L441-10 et D441-5 du Code de commerce).
                     </p>
-                    <p class="m-0">
-                        La signature du présent devis vaut acceptation pleine et entière des prestations
-                        décrites ci-dessus.
-                    </p>
                 </div>
+
                 <div class="w-48 ml-4">
                     <p class="text-end">Signature</p>
-                    <div class="w-full h-24 rounded-box border border-base-300">
-                    </div>
+                    <div class="w-full h-24 rounded-box border border-base-300"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Footer entreprise -->
+        <!-- Footer -->
         <footer class="print-footer border-t border-base-300 pt-2 mt-2">
             <div class="text-xs text-center opacity-60">
                 <p>
@@ -189,7 +214,6 @@ function addDays(date: Date | undefined, days: number) {
         </footer>
     </div>
 </template>
-
 <style>
 .paper {
     padding: 2rem;

@@ -8,21 +8,19 @@ const props = defineProps<{
 
 const statusClassMap: Record<EnumEstimateStatus, string> = {
     [EnumEstimateStatus.TEMPLATE]: 'badge-primary',
-    [EnumEstimateStatus.DRAFT]: 'badge-neutral',
-    [EnumEstimateStatus.SENT]: 'badge-warning',
+    [EnumEstimateStatus.WAITING]: 'badge-neutral',
     [EnumEstimateStatus.ACCEPTED]: 'badge-success',
     [EnumEstimateStatus.REFUSED]: 'badge-error'
 }
-const badgeClass = computed(() => statusClassMap[props.status || EnumEstimateStatus.DRAFT]);
+const badgeClass = computed(() => statusClassMap[props.status || EnumEstimateStatus.WAITING]);
 
 const statusLabelMap: Record<EnumEstimateStatus, string> = {
     [EnumEstimateStatus.TEMPLATE]: 'Modèle',
-    [EnumEstimateStatus.DRAFT]: 'Brouillon',
-    [EnumEstimateStatus.SENT]: 'Envoyé',
+    [EnumEstimateStatus.WAITING]: 'En attente',
     [EnumEstimateStatus.ACCEPTED]: 'Accepté',
     [EnumEstimateStatus.REFUSED]: 'Refusé'
 }
-const statusLabel = computed(() => statusLabelMap[props.status || EnumEstimateStatus.DRAFT]);
+const statusLabel = computed(() => statusLabelMap[props.status || EnumEstimateStatus.WAITING]);
 </script>
 
 <template>

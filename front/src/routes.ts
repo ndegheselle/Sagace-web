@@ -10,6 +10,9 @@ import EstimatesPage from '@features/invoicing/views/estimates/EstimatesPage.vue
 import EstimateEditPage from '@features/invoicing/views/estimates/EstimateEditPage.vue';
 import EstimatePrintPage from '@features/invoicing/views/estimates/print/EstimatePrintPage.vue';
 
+import InvoicesPage from '@features/invoicing/views/invoices/InvoicesPage.vue';
+import InvoicePrintPage from '@features/invoicing/views/invoices/print/InvoicePrintPage.vue';
+
 import ArticlesPage from '@features/stock/views/articles/ArticlesPage.vue';
 import ServicesPage from '@features/stock/views/services/ServicesPage.vue';
 
@@ -17,6 +20,10 @@ const routes: RouteRecordRaw[] = [
     {
         path: '/invoicing/estimates/:id/print',
         component: EstimatePrintPage,
+    },
+    {
+        path: '/invoicing/invoices/:id/print',
+        component: InvoicePrintPage,
     },
     {
         path: '',
@@ -47,6 +54,10 @@ const routes: RouteRecordRaw[] = [
             {
                 path: '/invoicing/estimates/:id',
                 component: EstimateEditPage,
+            },
+            {
+                path: '/invoicing/invoices',
+                component: InvoicesPage,
             },
 
             {

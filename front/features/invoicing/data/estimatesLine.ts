@@ -6,11 +6,24 @@ type EstimateLineExpand = {
     service?: ServicesResponse
 };
 
+export type LineInfos = {
+    name: string,
+    description: string,
+    vatRate: number,
+    unitPrice: number,
+}
+
 class EstimateLineCrud extends PocketbaseCrud<EstimateLineData> {
     constructor() {
         super(Collections.EstimatesLines, undefined, ['service', 'article']);
     }
 
+    /**
+     * Check if a line exist for an item in an estimate.
+     * @param parentId id of the estimate
+     * @param itemId id of the item
+     * @returns the line or null if doesn't exist
+     */
     async getByParentAndItem(parentId: string, itemId: string): Promise<EstimateLineData | null> {
         const { pb } = usePocketBase();
         const collection = pb.collection(this.collectionName);
@@ -25,7 +38,7 @@ class EstimateLineCrud extends PocketbaseCrud<EstimateLineData> {
 
 export type EstimateLineData = EstimatesLinesResponse<EstimateLineExpand>;
 
-export const Line = {
+export const EstimateLine = {
     isArticle(item: EstimateLineData) : boolean
     {
         return !!item.article;
@@ -44,6 +57,15 @@ export const Line = {
     totalTax(item: EstimateLineData): number {
         const vatRate = item.expand.article?.vatRate ?? item.expand.service?.vatRate ?? 0;
         return this.totalHT(item) * vatRate;
+    },
+    getInfos(line?: EstimateLineData): LineInfos
+    {
+        return {
+            name: line?.expand.article?.name ?? line?.expand.service?.name ?? "",
+            description: line?.expand.article?.description ?? line?.expand.service?.description ?? "—",
+            vatRate: line?.expand.article?.vatRate ?? line?.expand.service?.vatRate ?? 0,
+            unitPrice: line?.expand.article?.unitPrice ?? line?.expand.service?.unitPrice ?? 0,
+        } as LineInfos;
     }
 }
 

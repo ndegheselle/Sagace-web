@@ -1,7 +1,7 @@
 import { PocketbaseCrud } from '@common/database/pocketbase';
 import type { ClientsResponse, EstimatesResponse } from '@common/database/types.g';
 import { Collections, EstimatesStatusOptions } from '@common/database/types.g';
-import { estimatesLines, Line, type EstimateLineData } from '@features/invoicing/data/item';
+import { estimatesLines, EstimateLine, type EstimateLineData } from '@features/invoicing/data/estimatesLine';
 import type { ArticleData } from '@features/stock/data/articles';
 import type { ServiceData } from '@features/stock/data/services';
 
@@ -61,13 +61,13 @@ export const Estimate = {
         if (!estimate)
             return 0;
 
-        return estimate.expand.lines?.reduce((sum, line) => sum + Line.totalHT(line), 0) ?? 0;
+        return estimate.expand.lines?.reduce((sum, line) => sum + EstimateLine.totalHT(line), 0) ?? 0;
     },
     totalTax(estimate?: EstimateData): number {
         if (!estimate)
             return 0;
 
-        return estimate.expand.lines?.reduce((sum, line) => sum + Line.totalTax(line), 0) ?? 0;
+        return estimate.expand.lines?.reduce((sum, line) => sum + EstimateLine.totalTax(line), 0) ?? 0;
     },
     totalTTC(estimate?: EstimateData): number {
         return this.totalHT(estimate) + this.totalTax(estimate);

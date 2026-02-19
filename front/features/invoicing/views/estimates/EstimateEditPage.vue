@@ -2,7 +2,7 @@
 import { useAlert } from "@common/composables/popups/alert";
 import { EnumEstimateStatus, Estimate, estimates, type EstimateData } from '@features/invoicing/data/estimates';
 import { invoices } from "@features/invoicing/data/invoices";
-import { estimatesLines, Line, type EstimateLineData } from "@features/invoicing/data/item";
+import { estimatesLines, EstimateLine, type EstimateLineData } from "@features/invoicing/data/estimatesLine";
 import EstimateStatusBadge from "@features/invoicing/views/estimates/EstimateStatusBadge.vue";
 import ArticleSelectModal from "@features/stock/views/articles/ArticleSelectModal.vue";
 import ServiceSelectModal from "@features/stock/views/services/ServiceSelectModal.vue";
@@ -80,35 +80,36 @@ async function updateLineQuantity(line: EstimateLineData) {
     await estimatesLines.update(line.id, { quantity: line.quantity });
 }
 
-// Estimate action
+/**
+ * Navigate to the print page of the estimate
+ */
 async function print() {
     if (!estimate.value)
         return;
     window.open(`/invoicing/estimates/${estimate.value.id}/print`, '_blank');
 }
 
-async function isSent() {
-    if (!estimate.value)
-        return;
-    estimate.value.status = EnumEstimateStatus.SENT;
-    await estimates.update(estimate.value.id, {status: estimate.value.status});
-}
-
+/**
+ * Set the status of the estimate to REFUSED
+ */
 async function reject() {
     if (!estimate.value)
         return;
     estimate.value.status = EnumEstimateStatus.REFUSED;
-    await estimates.update(estimate.value.id, {status: estimate.value.status});
+    await estimates.update(estimate.value.id, { status: estimate.value.status });
 }
 
+/**
+ * Convert the current estimate to invoice
+ */
 async function toInvoice() {
     if (!estimate.value)
         return;
     estimate.value.status = EnumEstimateStatus.ACCEPTED;
     const invoiceId = await invoices.fromEstimate(estimate.value);
-    router.push(`/invoicing/invoices/${invoiceId}`);
+    await estimates.update(estimate.value.id, { status: estimate.value.status });
+    router.push(`/invoicing/invoices/${invoiceId}/print`);
 }
-
 </script>
 
 <template>
@@ -133,9 +134,11 @@ async function toInvoice() {
                     </summary>
                     <ul class="menu dropdown-content bg-base-200 rounded-box z-1 w-52 p-2 shadow-sm">
                         <li><a href="#" @click.prevent="print()"><i class="fa-solid fa-print"></i> Imprimer</a></li>
-                        <li><a href="#" @click.prevent="isSent()" class="text-success"><i class="fa-solid fa-envelope-circle-check"></i> Est envoyé</a></li>
-                        <li><a href="#" @click.prevent="reject()" class="text-error"><i class="fa-solid fa-ban"></i> Rejeter le devis</a></li>
-                        <li><a href="#" @click.prevent="toInvoice()"><i class="fa-solid fa-file-invoice-dollar"></i> Convertir en facture</a></li>
+                        <li v-if="estimate?.status == EnumEstimateStatus.WAITING"><a href="#" @click.prevent="reject()" class="text-error"><i class="fa-solid fa-ban"></i>
+                                Rejeter le devis</a></li>
+                        <li v-if="estimate?.status != EnumEstimateStatus.ACCEPTED"><a href="#"
+                                @click.prevent="toInvoice()" class="text-success"><i
+                                    class="fa-solid fa-file-invoice-dollar"></i> Convertir en facture</a></li>
                     </ul>
                 </details>
             </div>
@@ -162,60 +165,50 @@ async function toInvoice() {
                     </thead>
 
                     <tbody>
-                        <tr v-for="line in estimate?.expand.lines"
-                            :key="line.id">
+                        <tr v-for="line in estimate?.expand.lines" :key="line.id">
                             <td>
                                 <div class="font-medium">
-                                    {{ line.expand.article?.name ?? line.expand.service?.name }}
+                                    {{ EstimateLine.getInfos(line).name }}
                                 </div>
                                 <div class="text-sm opacity-60">
-                                    {{ line.expand.article?.description ?? line.expand.service?.description ?? '—' }}
+                                    {{ EstimateLine.getInfos(line).description }}
                                 </div>
                             </td>
 
                             <td class="text-right">
-                                {{ (line.expand.article?.unitPrice ?? line.expand.service?.unitPrice ?? 0).toFixed(2) }}
+                                {{ EstimateLine.getInfos(line).unitPrice.toFixed(2) }}
                                 €
                             </td>
 
                             <td class="text-right">
-                                <input class="input input-sm"
-                                       type="number"
-                                       min="1"
-                                       v-model="line.quantity"
-                                       @change="updateLineQuantity(line)" />
+                                <input class="input input-sm" type="number" min="1" v-model="line.quantity"
+                                    @change="updateLineQuantity(line)" />
                             </td>
 
                             <td class="text-right font-medium">
-                                {{ Line.totalHT(line).toFixed(2) }} €
+                                {{ EstimateLine.totalHT(line).toFixed(2) }} €
                             </td>
                             <td>
-                                <button class="btn btn-sm btn-error btn-soft btn-circle"
-                                        @click="removeLine(line)">
+                                <button class="btn btn-sm btn-error btn-soft btn-circle" @click="removeLine(line)">
                                     <i class="fa-solid fa-trash-can"></i>
                                 </button>
                             </td>
                         </tr>
 
                         <tr v-if="!estimate?.expand.lines?.length">
-                            <td colspan="5"
-                                class="text-center text-base-content/50">
+                            <td colspan="5" class="text-center text-base-content/50">
                                 Aucune lignes
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="5"
-                                class="p-0">
+                            <td colspan="5" class="p-0">
                                 <div class="flex bg-base-200 p-2">
-                                    <button class="btn btn-soft btn-xs mx-auto my-1"
-                                            popovertarget="add-line-popover"
-                                            style="anchor-name:--anchor-add-line"><i
-                                           class="fa-solid fa-plus"></i>Ajouter
+                                    <button class="btn btn-soft btn-xs mx-auto my-1" popovertarget="add-line-popover"
+                                        style="anchor-name:--anchor-add-line"><i class="fa-solid fa-plus"></i>Ajouter
                                         une
                                         ligne</button>
                                     <ul id="add-line-popover"
-                                        class="dropdown menu bg-base-100 rounded-box w-52 p-2 shadow-sm"
-                                        popover
+                                        class="dropdown menu bg-base-100 rounded-box w-52 p-2 shadow-sm" popover
                                         style="position-anchor:--anchor-add-line">
                                         <li><a @click="addArticle"><i class="fa-solid fa-box"></i>Ajouter un
                                                 article</a>
@@ -234,20 +227,17 @@ async function toInvoice() {
                     <!-- Totals -->
                     <tfoot>
                         <tr>
-                            <td colspan="3"
-                                class="text-right">Total HT</td>
+                            <td colspan="3" class="text-right">Total HT</td>
                             <td class="text-right">{{ Estimate.totalHT(estimate).toFixed(2) }} €</td>
                             <td></td>
                         </tr>
                         <tr>
-                            <td colspan="3"
-                                class="text-right">TVA (20%)</td>
+                            <td colspan="3" class="text-right">TVA (20%)</td>
                             <td class="text-right">{{ Estimate.totalTax(estimate).toFixed(2) }} €</td>
                             <td></td>
                         </tr>
                         <tr class="font-bold">
-                            <td colspan="3"
-                                class="text-right">Total TTC</td>
+                            <td colspan="3" class="text-right">Total TTC</td>
                             <td class="text-right">{{ Estimate.totalTTC(estimate).toFixed(2) }} €</td>
                             <td></td>
                         </tr>

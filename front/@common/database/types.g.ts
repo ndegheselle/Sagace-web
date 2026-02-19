@@ -138,8 +138,7 @@ export type CompaniesRecord = {
 
 export enum EstimatesStatusOptions {
 	"TEMPLATE" = "TEMPLATE",
-	"DRAFT" = "DRAFT",
-	"SENT" = "SENT",
+	"WAITING" = "WAITING",
 	"ACCEPTED" = "ACCEPTED",
 	"REFUSED" = "REFUSED",
 }
@@ -150,7 +149,7 @@ export type EstimatesRecord = {
 	lines?: RecordIdString[]
 	notes?: string
 	reference: string
-	status?: EstimatesStatusOptions
+	status: EstimatesStatusOptions
 	updated: IsoAutoDateString
 }
 
@@ -167,8 +166,7 @@ export type EstimatesLinesRecord = {
 export enum InvoicesStatusOptions {
 	"ISSUED" = "ISSUED",
 	"PAID" = "PAID",
-	"OVERDUE" = "OVERDUE",
-	"CANCELLED" = "CANCELLED",
+	"OVERDUE" = "OVERDUE"
 }
 export type InvoicesRecord = {
 	client: RecordIdString
@@ -176,12 +174,12 @@ export type InvoicesRecord = {
 	dueDate: IsoDateString
 	estimate: RecordIdString
 	id: string
-	invoiceNumber: string
 	issuedAt: IsoDateString
+	lines?: RecordIdString[]
 	notes?: string
+	number: number
 	paidAt?: IsoDateString
-	reference?: string
-	status?: InvoicesStatusOptions
+	status: InvoicesStatusOptions
 	updated: IsoAutoDateString
 }
 

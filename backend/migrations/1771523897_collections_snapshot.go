@@ -1469,13 +1469,12 @@ func init() {
 						"maxSelect": 1,
 						"name": "status",
 						"presentable": false,
-						"required": false,
+						"required": true,
 						"system": false,
 						"type": "select",
 						"values": [
 							"TEMPLATE",
-							"DRAFT",
-							"SENT",
+							"WAITING",
 							"ACCEPTED",
 							"REFUSED"
 						]
@@ -1549,7 +1548,7 @@ func init() {
 						"name": "number",
 						"onlyInt": false,
 						"presentable": false,
-						"required": false,
+						"required": true,
 						"system": false,
 						"type": "number"
 					},
@@ -1597,14 +1596,13 @@ func init() {
 						"maxSelect": 1,
 						"name": "status",
 						"presentable": false,
-						"required": false,
+						"required": true,
 						"system": false,
 						"type": "select",
 						"values": [
 							"ISSUED",
 							"PAID",
-							"OVERDUE",
-							"CANCELLED"
+							"OVERDUE"
 						]
 					},
 					{
@@ -1643,6 +1641,19 @@ func init() {
 						"type": "relation"
 					},
 					{
+						"cascadeDelete": true,
+						"collectionId": "pbc_1375329062",
+						"hidden": false,
+						"id": "relation1325501590",
+						"maxSelect": 999,
+						"minSelect": 0,
+						"name": "lines",
+						"presentable": false,
+						"required": false,
+						"system": false,
+						"type": "relation"
+					},
+					{
 						"hidden": false,
 						"id": "autodate2990389176",
 						"name": "created",
@@ -1664,7 +1675,9 @@ func init() {
 					}
 				],
 				"id": "pbc_2703029140",
-				"indexes": [],
+				"indexes": [
+					"CREATE UNIQUE INDEX ` + "`" + `idx_9rYhwQB8tc` + "`" + ` ON ` + "`" + `invoices` + "`" + ` (` + "`" + `number` + "`" + `)"
+				],
 				"listRule": "",
 				"name": "invoices",
 				"system": false,
