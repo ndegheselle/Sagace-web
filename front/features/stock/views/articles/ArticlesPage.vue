@@ -35,9 +35,9 @@ const { list, total, remove, create, edit, refresh } = usePageActions(articles, 
             </template>
             <template #row="{ item: article }">
                 <td>
-                    <div class="font-medium">
+                    <a class="font-medium" href="#" @click="edit(article)">
                         {{ article.name }}
-                    </div>
+                    </a>
                     <div class="text-sm opacity-60">
                         {{ article.description || '—' }}
                     </div>

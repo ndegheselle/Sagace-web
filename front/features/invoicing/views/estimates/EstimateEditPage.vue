@@ -8,6 +8,8 @@ import ArticleSelectModal from "@features/stock/views/articles/ArticleSelectModa
 import ServiceSelectModal from "@features/stock/views/services/ServiceSelectModal.vue";
 import { ref, useTemplateRef, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import Modal from "@common/components/popups/Modal.vue";
+import ClientSummary from "@features/invoicing/views/clients/ClientSummary.vue";
 
 // Composables
 const router = useRouter();
@@ -17,6 +19,7 @@ const alert = useAlert();
 // Template refs
 const modalArticleRef = useTemplateRef('articleModal');
 const modalserviceRef = useTemplateRef('serviceModal');
+const modalClientRef = useTemplateRef('clientModal');
 
 // Reactive state
 const estimate = ref<EstimateData>();
@@ -126,15 +129,21 @@ async function toInvoice() {
                     <li>{{ estimate?.reference }}</li>
                 </ul>
             </div>
+
+            <button class="ms-2 my-auto btn btn-sm" @click="modalClientRef?.showModal()">
+                <i class="fa-solid fa-user"></i>{{ estimate?.expand.client.firstName }} {{
+                    estimate?.expand.client.lastName }}
+            </button>
             <div class="ms-auto my-auto">
-                <EstimateStatusBadge :status="estimate?.status" />
+                <EstimateStatusBadge class="ms-1" :status="estimate?.status" />
                 <details class="dropdown dropdown-end ms-1">
                     <summary class="btn btn-circle btn-sm">
                         <i class="fa-solid fa-ellipsis-vertical"></i>
                     </summary>
                     <ul class="menu dropdown-content bg-base-200 rounded-box z-1 w-52 p-2 shadow-sm">
                         <li><a href="#" @click.prevent="print()"><i class="fa-solid fa-print"></i> Imprimer</a></li>
-                        <li v-if="estimate?.status == EnumEstimateStatus.WAITING"><a href="#" @click.prevent="reject()" class="text-error"><i class="fa-solid fa-ban"></i>
+                        <li v-if="estimate?.status == EnumEstimateStatus.WAITING"><a href="#" @click.prevent="reject()"
+                                class="text-error"><i class="fa-solid fa-ban"></i>
                                 Rejeter le devis</a></li>
                         <li v-if="estimate?.status != EnumEstimateStatus.ACCEPTED"><a href="#"
                                 @click.prevent="toInvoice()" class="text-success"><i
@@ -248,5 +257,17 @@ async function toInvoice() {
 
         <ArticleSelectModal ref="articleModal" />
         <ServiceSelectModal ref="serviceModal" />
+
+        <dialog ref="clientModal" class="modal">
+            <div class="modal-box p-0">
+                <ClientSummary :client="estimate?.expand.client" />
+                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" @click="modalClientRef?.close()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form method="dialog" class="modal-backdrop">
+                <button>close</button>
+            </form>
+        </dialog>
     </div>
 </template>

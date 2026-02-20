@@ -44,9 +44,9 @@ const estimatesActions = useEstimatesActions();
             </template>
             <template #row="{ item: client }">
                 <td>
-                    <div class="font-medium">
+                    <a class="font-medium" href="#" @click="edit(client)">
                         {{ client.firstName }} {{ client.lastName }}
-                    </div>
+                    </a>
                     <div class="text-sm opacity-60">
                         {{ client.adress || '—' }}
                     </div>

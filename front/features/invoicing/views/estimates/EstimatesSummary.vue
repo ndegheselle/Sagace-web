@@ -12,7 +12,7 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div class="stats w-full stats-vertical lg:stats-horizontal border-base-300 border bg-base-200">
+    <div class="stats w-full stats-vertical lg:stats-horizontal border-base-300 border bg-base-200 rounded-sm">
         <div class="stat">
             <div class="stat-figure text-secondary">
                 <i class="fa-regular fa-circle-question text-4xl"></i>

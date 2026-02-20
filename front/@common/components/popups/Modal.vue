@@ -6,6 +6,9 @@ import { useTemplateRef } from 'vue';
 const dialog = useTemplateRef<HTMLDialogElement>('dialog');
 const modal = useDeferredModal<T>(dialog);
 
+const {withActions = true} = defineProps<{
+    withActions?: boolean
+}>();
 defineExpose({ confirm: modal.confirm, show: modal.show });
 defineSlots<{
     title: any;
@@ -29,7 +32,7 @@ defineSlots<{
             <slot name="body" />
 
             <!-- Actions -->
-            <div class="modal-action">
+            <div class="modal-action" v-if="withActions">
                 <slot name="actions">
                     <button class="btn btn-neutral"
                             @click="modal.cancel()">

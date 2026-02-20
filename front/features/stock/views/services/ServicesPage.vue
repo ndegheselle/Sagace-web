@@ -40,9 +40,9 @@ const { list, total, remove, create, edit, refresh } = usePageActions(services, 
             </template>
             <template #row="{ item: service }">
                 <td>
-                    <div class="font-medium">
+                    <a class="font-medium" href="#" @click="edit(service)">
                         {{ service.name }}
-                    </div>
+                    </a>
                     <div class="text-sm opacity-60">
                         {{ service.description || '—' }}
                     </div>
